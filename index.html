@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WEINERVILLESTORE — Pantaloni spediti a casa tua</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Archivo:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --nero:#181410;
+    --crema:#EDE4D3;
+    --arancio:#F25100;
+    --portra-verde:#66714F;
+    --portra-blu:#54677D;
+    --portra-rosa:#C88A6E;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--crema);
+    color:var(--nero);
+    font-family:'Archivo',sans-serif;
+    overflow-x:hidden;
+  }
+  body.bloccato{overflow:hidden;}
+  .grana{
+    position:fixed;inset:0;pointer-events:none;z-index:999;
+    opacity:.5;mix-blend-mode:multiply;
+  }
+  /* ---- SCHERMATA D'INGRESSO ---- */
+  #ingresso{
+    position:fixed;inset:0;z-index:500;
+    background:#000;
+    display:flex;flex-direction:column;
+    align-items:center;justify-content:center;gap:30px;
+    transition:opacity .4s;
+    touch-action:none;
+  }
+  #ingresso.chiuso{opacity:0;pointer-events:none;}
+  #logo-spin{
+    width:min(78vw,560px);
+    cursor:grab;
+    user-select:none;-webkit-user-select:none;
+    -webkit-touch-callout:none;
+    touch-action:none;
+    outline-offset:6px;
+    will-change:transform;
+  }
+  #logo-spin:active{cursor:grabbing;}
+  #logo-spin img{width:100%;display:block;pointer-events:none;}
+  .hint{
+    font-family:'Space Mono',monospace;
+    font-size:.78rem;letter-spacing:.22em;text-transform:uppercase;
+    color:#EDE4D3;opacity:.65;
+    text-align:center;
+  }
+  #entra-fallback{
+    display:none;
+    font-family:'Space Mono',monospace;font-weight:700;
+    font-size:1rem;letter-spacing:.2em;text-transform:uppercase;
+    background:var(--arancio);color:#fff;
+    border:none;cursor:pointer;
+    padding:16px 54px;
+  }
+  #entra-fallback:hover{background:var(--crema);color:var(--nero);}
+  @media (prefers-reduced-motion: reduce){
+    #ingresso{transition:none}
+    #logo-spin{cursor:default}
+    #entra-fallback{display:block}
+    .hint{display:none}
+  }
+  /* ---- NAV ---- */
+  nav{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    display:flex;justify-content:space-between;align-items:center;
+    padding:14px 22px;
+    background:var(--crema);
+    border-bottom:3px solid var(--nero);
+  }
+  .logo{
+    font-family:'Anton',sans-serif;
+    font-size:1.2rem;letter-spacing:.05em;
+    color:var(--nero);text-decoration:none;
+  }
+  .logo span{color:var(--arancio);}
+  nav ul{display:flex;gap:20px;list-style:none;}
+  nav a.voce{
+    font-family:'Space Mono',monospace;font-size:.72rem;
+    text-transform:uppercase;letter-spacing:.12em;
+    color:var(--nero);text-decoration:none;
+  }
+  nav a.voce:hover{color:var(--arancio);}
+  header{
+    min-height:100svh;
+    background:var(--arancio);
+    color:#fff;
+    display:flex;flex-direction:column;justify-content:center;
+    padding:110px 6vw 60px;
+    position:relative;
+  }
+  .manifesto{
+    font-family:'Anton',sans-serif;
+    font-size:clamp(1.6rem,4.6vw,3.6rem);
+    line-height:1.14;
+    text-transform:uppercase;
+    max-width:20ch;
+  }
+  .manifesto .riga{display:block;opacity:0;transform:translateY(14px);animation:sale .5s forwards;}
+  .manifesto .riga:nth-child(1){animation-delay:.1s}
+  .manifesto .riga:nth-child(2){animation-delay:.5s}
+  .manifesto .riga:nth-child(3){animation-delay:.9s}
+  .manifesto .riga:nth-child(4){animation-delay:1.3s}
+  .manifesto .riga:nth-child(5){animation-delay:1.8s}
+  .manifesto .riga.finale{color:var(--nero);animation-delay:2.4s}
+  @keyframes sale{to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion: reduce){
+    .manifesto .riga{animation:none;opacity:1;transform:none}
+  }
+  .hero-nota{
+    margin-top:34px;
+    font-family:'Space Mono',monospace;
+    font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;
+  }
+  .hero-cta{
+    display:inline-block;margin-top:18px;
+    font-family:'Space Mono',monospace;font-weight:700;
+    font-size:.85rem;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--arancio);background:var(--nero);
+    padding:14px 26px;text-decoration:none;
+    border:3px solid var(--nero);
+  }
+  .hero-cta:hover{background:#fff;color:var(--nero);}
+  .timbro{
+    position:absolute;right:5vw;bottom:5vh;
+    font-family:'Space Mono',monospace;font-size:.68rem;
+    letter-spacing:.14em;text-transform:uppercase;
+    border:2px solid #fff;padding:8px 12px;
+    transform:rotate(-6deg);
+  }
+  .pellicola{
+    background:var(--nero);
+    display:flex;gap:26px;justify-content:center;
+    padding:10px 0;overflow:hidden;
+  }
+  .pellicola i{
+    width:16px;height:22px;background:var(--crema);
+    border-radius:3px;flex:none;
+  }
+  section{padding:70px 6vw;}
+  .titolo-sezione{
+    font-family:'Anton',sans-serif;
+    font-size:clamp(1.8rem,5vw,3rem);
+    text-transform:uppercase;margin-bottom:8px;
+  }
+  .sotto{
+    font-family:'Space Mono',monospace;font-size:.75rem;
+    letter-spacing:.12em;text-transform:uppercase;margin-bottom:44px;
+  }
+  .griglia{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:34px;max-width:1080px;
+  }
+  .fotogramma{
+    background:var(--nero);padding:14px 10px;
+    display:flex;flex-direction:column;gap:10px;
+    transform:rotate(var(--rot,0deg));
+    transition:transform .25s;
+  }
+  .fotogramma:hover{transform:rotate(0) scale(1.02);}
+  .fori{display:flex;justify-content:space-between;}
+  .fori i{width:10px;height:14px;background:var(--crema);border-radius:2px;}
+  .foto{
+    aspect-ratio:3/4;display:flex;align-items:center;justify-content:center;
+    position:relative;overflow:hidden;
+  }
+  .foto svg{width:52%;height:auto;}
+  .foto .num{
+    position:absolute;top:8px;left:10px;
+    font-family:'Anton',sans-serif;color:#fff;
+    font-size:2rem;opacity:.85;
+  }
+  .v1{background:linear-gradient(160deg,var(--portra-verde),#3d452f);}
+  .v2{background:linear-gradient(160deg,var(--portra-blu),#33404f);}
+  .v3{background:linear-gradient(160deg,var(--portra-rosa),#7d5340);}
+  .dati{
+    font-family:'Space Mono',monospace;color:var(--crema);
+    font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;
+    display:flex;justify-content:space-between;align-items:baseline;
+  }
+  .dati b{font-family:'Anton',sans-serif;font-size:1rem;letter-spacing:.05em;color:#fff;}
+  .prezzo{color:var(--arancio);font-weight:700;}
+  .taglie{display:flex;gap:6px;margin-top:4px;}
+  .taglie button{
+    flex:1;padding:8px 0;cursor:pointer;
+    font-family:'Space Mono',monospace;font-size:.72rem;font-weight:700;
+    background:transparent;color:var(--crema);
+    border:2px solid var(--crema);
+  }
+  .taglie button[aria-pressed="true"]{
+    background:var(--arancio);border-color:var(--arancio);color:#fff;
+  }
+  .compra{
+    margin-top:6px;padding:13px 0;width:100%;cursor:pointer;
+    font-family:'Space Mono',monospace;font-weight:700;
+    font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;
+    background:var(--arancio);color:#fff;border:none;
+  }
+  .compra:hover{background:#fff;color:var(--nero);}
+  .avviso{
+    font-family:'Space Mono',monospace;font-size:.66rem;
+    color:var(--crema);opacity:.7;text-align:center;min-height:1em;
+  }
+  .spedizione{
+    max-width:1080px;margin-top:40px;
+    font-family:'Space Mono',monospace;font-size:.72rem;
+    letter-spacing:.08em;text-transform:uppercase;
+    display:flex;gap:24px;flex-wrap:wrap;
+  }
+  .spedizione span{border:2px solid var(--nero);padding:8px 12px;}
+  .storia{background:var(--nero);color:var(--crema);}
+  .storia p{
+    max-width:58ch;font-size:1.05rem;line-height:1.7;margin-bottom:1.2em;
+  }
+  .storia .evidenza{color:var(--arancio);font-weight:600;}
+  .contatti a{
+    font-family:'Anton',sans-serif;font-size:clamp(1.4rem,4vw,2.4rem);
+    color:var(--nero);text-decoration:none;text-transform:uppercase;
+    border-bottom:4px solid var(--arancio);
+  }
+  .contatti a:hover{color:var(--arancio);}
+  footer{
+    border-top:3px solid var(--nero);
+    padding:18px 6vw;
+    font-family:'Space Mono',monospace;font-size:.68rem;
+    letter-spacing:.12em;text-transform:uppercase;
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;
+  }
+  a:focus-visible,button:focus-visible,#logo-spin:focus-visible{outline:3px solid var(--arancio);outline-offset:3px;}
+  @media(max-width:560px){
+    nav ul{gap:12px}
+    .timbro{display:none}
+  }
+</style>
+</head>
+<body class="bloccato">
+
+<svg class="grana" aria-hidden="true"><filter id="g"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2"/><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncA type="linear" slope="0.14"/></feComponentTransfer></filter><rect width="100%" height="100%" filter="url(#g)"/></svg>
+
+<!-- SCHERMATA D'INGRESSO -->
+<div id="ingresso">
+  <div id="logo-spin" tabindex="0" role="button" aria-label="Spinna il logo per entrare nel sito">
+    <img src="logo.jpg" alt="Logo Weinerville" draggable="false">
+  </div>
+  <p class="hint">🌀 Spinna il logo per entrare</p>
+  <button id="entra-fallback">Entra</button>
+</div>
+
+<nav>
+  <a class="logo" href="#">WEINERVILLE<span>STORE</span></a>
+  <ul>
+    <li><a class="voce" href="#modelli">Modelli</a></li>
+    <li><a class="voce" href="#storia">Storia</a></li>
+    <li><a class="voce" href="#contatti">Contatti</a></li>
+  </ul>
+</nav>
+
+<header>
+  <h2 class="manifesto">
+    <span class="riga">Scegli la vita.</span>
+    <span class="riga">Scegli un lavoro.</span>
+    <span class="riga">Scegli una carriera.</span>
+    <span class="riga">Scegli una TV gigante.</span>
+    <span class="riga finale">Scegli dei pantaloni Weinerville.</span>
+  </h2>
+  <p class="hero-nota">Girato in 35mm — Spedito a casa tua — Nessun compromesso</p>
+  <a class="hero-cta" href="#modelli">Compra ora</a>
+  <div class="timbro">SEMPRE APERTO · 24/7</div>
+</header>
+
+<div class="pellicola" aria-hidden="true">
+  <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+</div>
+
+<section id="modelli">
+  <h2 class="titolo-sezione">I modelli</h2>
+  <p class="sotto">Bobina 01 · Scegli la taglia · Paghi con carta · Arriva a casa</p>
+  <div class="griglia">
+
+    <article class="fotogramma" style="--rot:-1.5deg" data-prodotto="cargo">
+      <div class="fori"><i></i><i></i><i></i><i></i></div>
+      <div class="foto v1">
+        <span class="num">01</span>
+        <svg viewBox="0 0 100 140" fill="none" stroke="#EDE4D3" stroke-width="3">
+          <path d="M25 5 h50 l6 40 -2 90 h-18 l-9 -80 -9 80 h-18 l-2 -90 z"/>
+          <path d="M25 22 h50" opacity=".6"/>
+        </svg>
+      </div>
+      <div class="fori"><i></i><i></i><i></i><i></i></div>
+      <div class="dati"><b>Il Cargo</b><span class="prezzo">€ 89</span></div>
+      <div class="dati"><span>Tela grezza · 6 tasche</span></div>
+      <div class="taglie" role="group" aria-label="Taglia Il Cargo">
+        <button aria-pressed="false">S</button>
+        <button aria-pressed="false">M</button>
+        <button aria-pressed="false">L</button>
+        <button aria-pressed="false">XL</button>
+      </div>
+      <button class="compra">Acquista</button>
+      <p class="avviso" aria-live="polite"></p>
+    </article>
+
+    <article class="fotogramma" style="--rot:1.2deg" data-prodotto="baggy">
+      <div class="fori"><i></i><i></i><i></i><i></i></div>
+      <div class="foto v2">
+        <span class="num">02</span>
+        <svg viewBox="0 0 100 140" fill="none" stroke="#EDE4D3" stroke-width="3">
+          <path d="M22 5 h56 l8 40 -4 90 h-20 l-12 -78 -12 78 h-20 l-4 -90 z"/>
+          <path d="M22 22 h56" opacity=".6"/>
+        </svg>
+      </div>
+      <div class="fori"><i></i><i></i><i></i><i></i></div>
+      <div class="dati"><b>Il Baggy</b><span class="prezzo">€ 79</span></div>
+      <div class="dati"><span>Denim lavato · Taglio 90s</span></div>
+      <div class="taglie" role="group" aria-label="Taglia Il Baggy">
+        <button aria-pressed="false">S</button>
+        <button aria-pressed="false">M</button>
+        <button aria-pressed="false">L</button>
+        <button aria-pressed="false">XL</button>
+      </div>
+      <button class="compra">Acquista</button>
+      <p class="avviso" aria-live="polite"></p>
+    </article>
+
+    <article class="fotogramma" style="--rot:-0.8deg" data-prodotto="worker">
+      <div class="fori"><i></i><i></i><i></i><i></i></div>
+      <div class="foto v3">
+        <span class="num">03</span>
+        <svg viewBox="0 0 100 140" fill="none" stroke="#EDE4D3" stroke-width="3">
+          <path d="M28 5 h44 l5 40 -1 90 h-16 l-10 -84 -10 84 h-16 l-1 -90 z"/>
+          <path d="M28 22 h44" opacity=".6"/>
+        </svg>
+      </div>
+      <div class="fori"><i></i><i></i><i></i><i></i></div>
+      <div class="dati"><b>Il Worker</b><span class="prezzo">€ 85</span></div>
+      <div class="dati"><span>Cotone pesante · Doppio ginocchio</span></div>
+      <div class="taglie" role="group" aria-label="Taglia Il Worker">
+        <button aria-pressed="false">S</button>
+        <button aria-pressed="false">M</button>
+        <button aria-pressed="false">L</button>
+        <button aria-pressed="false">XL</button>
+      </div>
+      <button class="compra">Acquista</button>
+      <p class="avviso" aria-live="polite"></p>
+    </article>
+
+  </div>
+
+  <div class="spedizione">
+    <span>📦 Spedizione in tutta Italia</span>
+    <span>💳 Pagamento sicuro con Stripe</span>
+    <span>🏠 Consegna a casa tua</span>
+  </div>
+</section>
+
+<div class="pellicola" aria-hidden="true">
+  <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+</div>
+
+<section id="storia" class="storia">
+  <h2 class="titolo-sezione">La storia</h2>
+  <p class="sotto" style="color:var(--crema)">Da dove veniamo</p>
+  <p>Weinerville nasce da un'idea semplice: i pantaloni migliori non si vedono nelle vetrine patinate. Si vedono nei fotogrammi sgranati dei film che ci hanno cresciuto — <span class="evidenza">pellicola 35mm, luce vera, strade vere</span>.</p>
+  <p>Ogni modello è pensato per durare, muoversi e invecchiare bene. Niente logo urlato, niente stagioni usa e getta. Solo tagli onesti e tessuti che raccontano qualcosa dopo un anno che li porti.</p>
+</section>
+
+<div class="pellicola" aria-hidden="true">
+  <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+</div>
+
+<section id="contatti" class="contatti">
+  <h2 class="titolo-sezione">Contatti</h2>
+  <p class="sotto">Ordini · Collaborazioni · Domande</p>
+  <a href="mailto:ordini@weinervillestar.com">ordini@weinervillestar.com</a>
+</section>
+
+<footer>
+  <span>© 2026 Weinervillestore</span>
+  <span>Girato in 35mm · Sempre aperto</span>
+</footer>
+
+<script>
+/* ---- INGRESSO CON SPIN (stile manopola) ---- */
+const ingresso = document.getElementById('ingresso');
+const logoSpin = document.getElementById('logo-spin');
+const SOGLIA = 300;           // gradi da accumulare per entrare (quasi un giro)
+let rotazione = 0;            // rotazione attuale
+let accumulo = 0;             // gradi totali spinnati
+let trascinando = false;
+let angoloPrec = 0;
+let entrato = false;
+
+function entraNelSito(){
+  if (entrato) return;
+  entrato = true;
+  ingresso.classList.add('chiuso');
+  document.body.classList.remove('bloccato');
+}
+
+/* angolo del dito rispetto al centro del logo */
+function angoloDa(x, y){
+  const r = logoSpin.getBoundingClientRect();
+  const cx = r.left + r.width / 2;
+  const cy = r.top + r.height / 2;
+  return Math.atan2(y - cy, x - cx) * 180 / Math.PI;
+}
+
+function inizio(x, y){
+  trascinando = true;
+  angoloPrec = angoloDa(x, y);
+  logoSpin.style.transition = '';
+}
+
+function muovi(x, y){
+  if (!trascinando) return;
+  const angolo = angoloDa(x, y);
+  let delta = angolo - angoloPrec;
+  /* correzione del salto -180/+180 */
+  if (delta > 180) delta -= 360;
+  if (delta < -180) delta += 360;
+  angoloPrec = angolo;
+  rotazione += delta;
+  accumulo += Math.abs(delta);
+  logoSpin.style.transform = 'rotate(' + rotazione + 'deg)';
+  if (accumulo >= SOGLIA) entraNelSito();
+}
+
+function fine(){
+  if (!trascinando) return;
+  trascinando = false;
+  if (!entrato){
+    /* torna dritto se non hai spinnato abbastanza */
+    logoSpin.style.transition = 'transform .5s';
+    rotazione = 0;
+    accumulo = 0;
+    logoSpin.style.transform = 'rotate(0deg)';
+    setTimeout(() => logoSpin.style.transition = '', 500);
+  }
+}
+
+/* touch (telefono) */
+logoSpin.addEventListener('touchstart', e => {
+  e.preventDefault();
+  const t = e.touches[0];
+  inizio(t.clientX, t.clientY);
+}, {passive:false});
+logoSpin.addEventListener('touchmove', e => {
+  e.preventDefault();
+  const t = e.touches[0];
+  muovi(t.clientX, t.clientY);
+}, {passive:false});
+logoSpin.addEventListener('touchend', fine);
+logoSpin.addEventListener('touchcancel', fine);
+
+/* mouse (computer) */
+logoSpin.addEventListener('mousedown', e => {
+  e.preventDefault();
+  inizio(e.clientX, e.clientY);
+});
+window.addEventListener('mousemove', e => muovi(e.clientX, e.clientY));
+window.addEventListener('mouseup', fine);
+
+/* accessibilità: Invio o Spazio sul logo entra comunque */
+logoSpin.addEventListener('keydown', e => {
+  if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); entraNelSito(); }
+});
+/* fallback per chi ha le animazioni ridotte */
+document.getElementById('entra-fallback').addEventListener('click', entraNelSito);
+
+/* ============================================================
+   CONFIGURAZIONE STRIPE — DA COMPILARE
+   Per ogni prodotto e taglia, incolla il Payment Link creato
+   su dashboard.stripe.com (Payment Links → Nuovo link).
+   Esempio: S: "https://buy.stripe.com/xxxxxx"
+   Finché un link è vuoto, il bottone avvisa che la taglia
+   non è ancora disponibile.
+   ============================================================ */
+const STRIPE_LINKS = {
+  cargo:  { S:"", M:"", L:"", XL:"" },
+  baggy:  { S:"", M:"", L:"", XL:"" },
+  worker: { S:"", M:"", L:"", XL:"" }
+};
+
+document.querySelectorAll('.fotogramma').forEach(card => {
+  const prodotto = card.dataset.prodotto;
+  const bottoniTaglia = card.querySelectorAll('.taglie button');
+  const bottoneCompra = card.querySelector('.compra');
+  const avviso = card.querySelector('.avviso');
+  let tagliaScelta = null;
+
+  bottoniTaglia.forEach(b => {
+    b.addEventListener('click', () => {
+      bottoniTaglia.forEach(x => x.setAttribute('aria-pressed','false'));
+      b.setAttribute('aria-pressed','true');
+      tagliaScelta = b.textContent.trim();
+      avviso.textContent = '';
+    });
+  });
+
+  bottoneCompra.addEventListener('click', () => {
+    if (!tagliaScelta) {
+      avviso.textContent = 'Scegli prima la taglia';
+      return;
+    }
+    const link = STRIPE_LINKS[prodotto][tagliaScelta];
+    if (!link) {
+      avviso.textContent = 'Taglia non ancora disponibile';
+      return;
+    }
+    window.open(link, '_blank', 'noopener');
+  });
+});
+</script>
+
+</body>
+</html>
