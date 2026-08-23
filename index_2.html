@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WEINERVILLESTORE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --nero:#0D0A12;        /* nero-viola di fondo */
+    --card:#1A1226;        /* viola scurissimo delle card */
+    --viola:#8B5FC7;       /* viola del logo */
+    --viola-chiaro:#B98FE8;
+    --chrome:#C9CCD6;      /* argento chrome */
+    --bianco:#F2F0F7;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--nero);
+    color:var(--bianco);
+    font-family:'Space Mono',monospace;
+    overflow-x:hidden;
+  }
+  body.bloccato{overflow:hidden;}
+
+  /* ---- INGRESSO ---- */
+  #ingresso{
+    position:fixed;inset:0;z-index:500;
+    background:var(--nero);
+    display:flex;flex-direction:column;
+    align-items:center;justify-content:center;gap:34px;
+    transition:opacity .5s;
+    perspective:900px;
+    touch-action:none;
+  }
+  #ingresso.chiuso{opacity:0;pointer-events:none;}
+  #logo-spin{
+    width:min(82vw,540px);
+    cursor:grab;
+    user-select:none;-webkit-user-select:none;
+    -webkit-touch-callout:none;
+    touch-action:none;
+    will-change:transform;
+    transform-style:preserve-3d;
+  }
+  #logo-spin:active{cursor:grabbing;}
+  #logo-spin img{width:100%;display:block;pointer-events:none;}
+  .hint{
+    font-size:.75rem;letter-spacing:.24em;text-transform:uppercase;
+    color:var(--chrome);opacity:.55;text-align:center;
+  }
+  @media (prefers-reduced-motion: reduce){
+    #ingresso{transition:none}
+  }
+
+  /* ---- HEADER COL LOGO CHE GIRA ---- */
+  .testata{
+    padding:34px 20px 10px;
+    display:flex;flex-direction:column;align-items:center;gap:14px;
+    perspective:900px;
+  }
+  .logo-sito{
+    width:min(64vw,340px);
+    animation:giraY 5.5s linear infinite;
+    transform-style:preserve-3d;
+  }
+  .logo-sito img{width:100%;display:block;}
+  @keyframes giraY{
+    from{transform:rotateY(0deg)}
+    to{transform:rotateY(360deg)}
+  }
+  .nastro{
+    width:100%;max-width:640px;
+    overflow:hidden;
+    -webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);
+    mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);
+  }
+  .nastro-scorre{
+    display:flex;gap:0;width:max-content;
+    animation:scorri 22s linear infinite;
+  }
+  .nastro span{
+    flex:none;white-space:nowrap;
+    font-size:.66rem;letter-spacing:.26em;text-transform:uppercase;
+    color:var(--viola-chiaro);opacity:.85;
+    padding-right:2.2em;
+  }
+  @keyframes scorri{
+    from{transform:translateX(0)}
+    to{transform:translateX(-50%)}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .logo-sito{animation:none}
+    .nastro-scorre{animation:none}
+  }
+
+  /* ---- CATALOGO ---- */
+  .catalogo{
+    max-width:520px;margin:0 auto;
+    padding:36px 18px 60px;
+    display:flex;flex-direction:column;gap:30px;
+  }
+  .capo{
+    background:var(--card);
+    border:1px solid rgba(139,95,199,.35);
+    padding:16px;
+    display:flex;flex-direction:column;gap:12px;
+  }
+  .capo-foto{
+    aspect-ratio:4/5;
+    background:radial-gradient(ellipse at 50% 30%, rgba(139,95,199,.5), rgba(13,10,18,.9)),
+               linear-gradient(160deg,#2A1B3E,#120C1C);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .capo-foto svg{width:44%;height:auto;opacity:.9;}
+  .capo-riga{
+    display:flex;justify-content:space-between;align-items:baseline;
+  }
+  .capo-nome{
+    font-family:'Anton',sans-serif;
+    font-size:1.5rem;letter-spacing:.04em;text-transform:uppercase;
+    color:var(--chrome);
+  }
+  .capo-prezzo{
+    font-size:1rem;font-weight:700;color:var(--viola-chiaro);
+  }
+  .capo-desc{
+    font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--bianco);opacity:.55;
+  }
+  .taglie{display:flex;gap:8px;}
+  .taglie button{
+    flex:1;padding:10px 0;cursor:pointer;
+    font-family:'Space Mono',monospace;font-size:.78rem;font-weight:700;
+    background:transparent;color:var(--chrome);
+    border:1px solid rgba(201,204,214,.4);
+  }
+  .taglie button[aria-pressed="true"]{
+    background:var(--viola);border-color:var(--viola);color:var(--bianco);
+  }
+  .compra{
+    padding:14px 0;width:100%;cursor:pointer;
+    font-family:'Space Mono',monospace;font-weight:700;
+    font-size:.85rem;letter-spacing:.16em;text-transform:uppercase;
+    background:var(--viola);color:var(--bianco);border:none;
+  }
+  .compra:hover{background:var(--viola-chiaro);color:var(--nero);}
+  .avviso{
+    font-size:.66rem;color:var(--viola-chiaro);opacity:.8;
+    text-align:center;min-height:1em;
+  }
+
+  footer{
+    text-align:center;
+    padding:26px 18px 42px;
+    font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--chrome);opacity:.5;
+  }
+  footer a{color:var(--viola-chiaro);text-decoration:none;}
+  a:focus-visible,button:focus-visible,#logo-spin:focus-visible{outline:3px solid var(--viola);outline-offset:3px;}
+</style>
+</head>
+<body class="bloccato">
+
+<!-- INGRESSO -->
+<div id="ingresso">
+  <div id="logo-spin" tabindex="0" role="button" aria-label="Spinna il logo per entrare">
+    <img src="logo.png" alt="Logo Weinerville" draggable="false">
+  </div>
+  <p class="hint">Spin the logo to enter</p>
+</div>
+
+<!-- SITO -->
+<div class="testata">
+  <div class="logo-sito" aria-hidden="true"><img src="logo.png" alt=""></div>
+  <div class="nastro" aria-label="Marchio italiano, sempre aperto, fatto in casa, amici dell'ambiente, capi second-hand contro gli sprechi">
+    <div class="nastro-scorre" aria-hidden="true">
+      <span>Marchio italiano ✦</span>
+      <span>Sempre aperto ✦</span>
+      <span>Fatto in casa ✦</span>
+      <span>Amici dell'ambiente ✦</span>
+      <span>Capi second-hand contro gli sprechi ✦</span>
+      <span>Marchio italiano ✦</span>
+      <span>Sempre aperto ✦</span>
+      <span>Fatto in casa ✦</span>
+      <span>Amici dell'ambiente ✦</span>
+      <span>Capi second-hand contro gli sprechi ✦</span>
+    </div>
+  </div>
+</div>
+
+<main class="catalogo">
+
+  <article class="capo" data-prodotto="cargo">
+    <div class="capo-foto">
+      <svg viewBox="0 0 100 140" fill="none" stroke="#C9CCD6" stroke-width="3">
+        <path d="M25 5 h50 l6 40 -2 90 h-18 l-9 -80 -9 80 h-18 l-2 -90 z"/>
+        <path d="M25 22 h50" opacity=".5"/>
+      </svg>
+    </div>
+    <div class="capo-riga">
+      <h2 class="capo-nome">Il Cargo</h2>
+      <span class="capo-prezzo">€ 89</span>
+    </div>
+    <p class="capo-desc">Tela grezza · 6 tasche</p>
+    <div class="taglie" role="group" aria-label="Taglia Il Cargo">
+      <button aria-pressed="false">S</button>
+      <button aria-pressed="false">M</button>
+      <button aria-pressed="false">L</button>
+      <button aria-pressed="false">XL</button>
+    </div>
+    <button class="compra">Acquista</button>
+    <p class="avviso" aria-live="polite"></p>
+  </article>
+
+  <article class="capo" data-prodotto="baggy">
+    <div class="capo-foto">
+      <svg viewBox="0 0 100 140" fill="none" stroke="#C9CCD6" stroke-width="3">
+        <path d="M22 5 h56 l8 40 -4 90 h-20 l-12 -78 -12 78 h-20 l-4 -90 z"/>
+        <path d="M22 22 h56" opacity=".5"/>
+      </svg>
+    </div>
+    <div class="capo-riga">
+      <h2 class="capo-nome">Il Baggy</h2>
+      <span class="capo-prezzo">€ 79</span>
+    </div>
+    <p class="capo-desc">Denim lavato · Taglio 90s</p>
+    <div class="taglie" role="group" aria-label="Taglia Il Baggy">
+      <button aria-pressed="false">S</button>
+      <button aria-pressed="false">M</button>
+      <button aria-pressed="false">L</button>
+      <button aria-pressed="false">XL</button>
+    </div>
+    <button class="compra">Acquista</button>
+    <p class="avviso" aria-live="polite"></p>
+  </article>
+
+  <article class="capo" data-prodotto="worker">
+    <div class="capo-foto">
+      <svg viewBox="0 0 100 140" fill="none" stroke="#C9CCD6" stroke-width="3">
+        <path d="M28 5 h44 l5 40 -1 90 h-16 l-10 -84 -10 84 h-16 l-1 -90 z"/>
+        <path d="M28 22 h44" opacity=".5"/>
+      </svg>
+    </div>
+    <div class="capo-riga">
+      <h2 class="capo-nome">Il Worker</h2>
+      <span class="capo-prezzo">€ 85</span>
+    </div>
+    <p class="capo-desc">Cotone pesante · Doppio ginocchio</p>
+    <div class="taglie" role="group" aria-label="Taglia Il Worker">
+      <button aria-pressed="false">S</button>
+      <button aria-pressed="false">M</button>
+      <button aria-pressed="false">L</button>
+      <button aria-pressed="false">XL</button>
+    </div>
+    <button class="compra">Acquista</button>
+    <p class="avviso" aria-live="polite"></p>
+  </article>
+
+</main>
+
+<footer>
+  © 2026 Weinervillestore · <a href="mailto:ordini@weinervillestar.com">ordini@weinervillestar.com</a>
+</footer>
+
+<script>
+/* ---- INGRESSO: SPIN ORIZZONTALE CON FISICA ---- */
+const ingresso = document.getElementById('ingresso');
+const logoSpin = document.getElementById('logo-spin');
+const SOGLIA = 1440;         // gradi totali per entrare (~4 giri)
+const ATTRITO = 0.965;       // quanto rallenta a ogni frame (piu' vicino a 1 = gira piu' a lungo)
+let rotY = 0;                // rotazione attuale
+let vel = 0;                 // velocita' (gradi per frame)
+let accumulo = 0;
+let trascinando = false;
+let ultimaX = 0;
+let entrato = false;
+
+function entraNelSito(){
+  if (entrato) return;
+  entrato = true;
+  ingresso.classList.add('chiuso');
+  document.body.classList.remove('bloccato');
+}
+
+function frame(){
+  if (!entrato){
+    if (!trascinando && Math.abs(vel) > 0.05){
+      rotY += vel;
+      accumulo += Math.abs(vel);
+      vel *= ATTRITO;
+      if (accumulo >= SOGLIA) entraNelSito();
+    } else if (!trascinando && Math.abs(vel) <= 0.05 && vel !== 0){
+      /* fermo: riallineo dolcemente al fronte piu' vicino */
+      vel = 0;
+      const vicino = Math.round(rotY / 360) * 360;
+      logoSpin.style.transition = 'transform .6s';
+      rotY = vicino;
+      accumulo = 0;
+      setTimeout(() => logoSpin.style.transition = '', 600);
+    }
+    logoSpin.style.transform = 'rotateY(' + rotY + 'deg)';
+    requestAnimationFrame(frame);
+  }
+}
+requestAnimationFrame(frame);
+
+function inizio(x){
+  trascinando = true;
+  ultimaX = x;
+  vel = 0;
+  logoSpin.style.transition = '';
+}
+function muovi(x){
+  if (!trascinando) return;
+  const delta = (x - ultimaX) * 0.55;
+  ultimaX = x;
+  rotY += delta;
+  accumulo += Math.abs(delta);
+  vel = delta;               // la velocita' dell'ultimo movimento diventa lo slancio
+  if (accumulo >= SOGLIA) entraNelSito();
+}
+function fine(){
+  trascinando = false;
+}
+
+logoSpin.addEventListener('touchstart', e => { e.preventDefault(); inizio(e.touches[0].clientX); }, {passive:false});
+logoSpin.addEventListener('touchmove',  e => { e.preventDefault(); muovi(e.touches[0].clientX); }, {passive:false});
+logoSpin.addEventListener('touchend', fine);
+logoSpin.addEventListener('touchcancel', fine);
+logoSpin.addEventListener('mousedown', e => { e.preventDefault(); inizio(e.clientX); });
+window.addEventListener('mousemove', e => muovi(e.clientX));
+window.addEventListener('mouseup', fine);
+
+logoSpin.addEventListener('keydown', e => {
+  if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); entraNelSito(); }
+});
+
+/* ============================================================
+   CONFIGURAZIONE STRIPE — DA COMPILARE
+   Per ogni prodotto e taglia, incolla il Payment Link creato
+   su dashboard.stripe.com (Payment Links → Nuovo link).
+   Esempio: S: "https://buy.stripe.com/xxxxxx"
+   ============================================================ */
+const STRIPE_LINKS = {
+  cargo:  { S:"", M:"", L:"", XL:"" },
+  baggy:  { S:"", M:"", L:"", XL:"" },
+  worker: { S:"", M:"", L:"", XL:"" }
+};
+
+document.querySelectorAll('.capo').forEach(card => {
+  const prodotto = card.dataset.prodotto;
+  const bottoniTaglia = card.querySelectorAll('.taglie button');
+  const bottoneCompra = card.querySelector('.compra');
+  const avviso = card.querySelector('.avviso');
+  let tagliaScelta = null;
+
+  bottoniTaglia.forEach(b => {
+    b.addEventListener('click', () => {
+      bottoniTaglia.forEach(x => x.setAttribute('aria-pressed','false'));
+      b.setAttribute('aria-pressed','true');
+      tagliaScelta = b.textContent.trim();
+      avviso.textContent = '';
+    });
+  });
+
+  bottoneCompra.addEventListener('click', () => {
+    if (!tagliaScelta) { avviso.textContent = 'Scegli prima la taglia'; return; }
+    const link = STRIPE_LINKS[prodotto][tagliaScelta];
+    if (!link) { avviso.textContent = 'Taglia non ancora disponibile'; return; }
+    window.open(link, '_blank', 'noopener');
+  });
+});
+</script>
+
+</body>
+</html>
