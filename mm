@@ -1,38 +1,6 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WEINERVILLESTORE</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --nero:#0D0A12;        /* nero-viola di fondo */
-    --card:#1A1226;        /* viola scurissimo delle card */
-    --viola:#8B5FC7;       /* viola del logo */
-    --viola-chiaro:#B98FE8;
-    --chrome:#C9CCD6;      /* argento chrome */
-    --bianco:#F2F0F7;
-  }
-  *{margin:0;padding:0;box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
-  body{
-    background:var(--nero);
-    color:var(--bianco);
-    font-family:'Space Mono',monospace;
-    overflow-x:hidden;
-  }
-  body.bloccato{overflow:hidden;}
-
-  /* ---- INGRESSO ---- */
-  #ingresso{
-    position:fixed;inset:0;z-index:500;
-    background:var(--nero);
-    display:flex;flex-direction:column;
-    align-items:center;justify-content:center;gap:34px;
-    transition:opacity .5s;
-    perspective:900px;
     touch-action:none;
   }
   #ingresso.chiuso{opacity:0;pointer-events:none;}
