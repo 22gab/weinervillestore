@@ -51,17 +51,8 @@
     font-size:.75rem;letter-spacing:.24em;text-transform:uppercase;
     color:var(--chrome);opacity:.55;text-align:center;
   }
-  #entra-fallback{
-    display:none;
-    font-family:'Space Mono',monospace;font-weight:700;
-    font-size:.95rem;letter-spacing:.2em;text-transform:uppercase;
-    background:var(--viola);color:var(--bianco);
-    border:none;cursor:pointer;padding:15px 50px;
-  }
   @media (prefers-reduced-motion: reduce){
     #ingresso{transition:none}
-    #entra-fallback{display:block}
-    .hint{display:none}
   }
 
   /* ---- HEADER COL LOGO CHE GIRA ---- */
@@ -72,7 +63,7 @@
   }
   .logo-sito{
     width:min(64vw,340px);
-    animation:giraY 4s linear infinite;
+    animation:giraY 6.5s linear infinite;
     transform-style:preserve-3d;
   }
   .logo-sito img{width:100%;display:block;}
@@ -80,12 +71,29 @@
     from{transform:rotateY(0deg)}
     to{transform:rotateY(360deg)}
   }
+  .nastro{
+    width:100%;max-width:640px;
+    overflow:hidden;
+    -webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);
+    mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);
+  }
+  .nastro-scorre{
+    display:flex;gap:0;width:max-content;
+    animation:scorri 22s linear infinite;
+  }
+  .nastro span{
+    flex:none;white-space:nowrap;
+    font-size:.66rem;letter-spacing:.26em;text-transform:uppercase;
+    color:var(--viola-chiaro);opacity:.85;
+    padding-right:2.2em;
+  }
+  @keyframes scorri{
+    from{transform:translateX(0)}
+    to{transform:translateX(-50%)}
+  }
   @media (prefers-reduced-motion: reduce){
     .logo-sito{animation:none}
-  }
-  .tag{
-    font-size:.68rem;letter-spacing:.26em;text-transform:uppercase;
-    color:var(--viola-chiaro);opacity:.8;
+    .nastro-scorre{animation:none}
   }
 
   /* ---- CATALOGO ---- */
@@ -161,14 +169,26 @@
   <div id="logo-spin" tabindex="0" role="button" aria-label="Spinna il logo per entrare">
     <img src="logo.png" alt="Logo Weinerville" draggable="false">
   </div>
-  <p class="hint">Spinna il logo per entrare</p>
-  <button id="entra-fallback">Entra</button>
+  <p class="hint">Spin the logo to enter</p>
 </div>
 
 <!-- SITO -->
 <div class="testata">
   <div class="logo-sito" aria-hidden="true"><img src="logo.png" alt=""></div>
-  <p class="tag">Weinervillestore · Sempre aperto</p>
+  <div class="nastro" aria-label="Marchio italiano, sempre aperto, fatto in casa, amici dell'ambiente, capi second-hand contro gli sprechi">
+    <div class="nastro-scorre" aria-hidden="true">
+      <span>Marchio italiano ✦</span>
+      <span>Sempre aperto ✦</span>
+      <span>Fatto in casa ✦</span>
+      <span>Amici dell'ambiente ✦</span>
+      <span>Capi second-hand contro gli sprechi ✦</span>
+      <span>Marchio italiano ✦</span>
+      <span>Sempre aperto ✦</span>
+      <span>Fatto in casa ✦</span>
+      <span>Amici dell'ambiente ✦</span>
+      <span>Capi second-hand contro gli sprechi ✦</span>
+    </div>
+  </div>
 </div>
 
 <main class="catalogo">
@@ -249,7 +269,7 @@
 /* ---- INGRESSO: SPIN ORIZZONTALE CON FISICA ---- */
 const ingresso = document.getElementById('ingresso');
 const logoSpin = document.getElementById('logo-spin');
-const SOGLIA = 540;          // gradi totali per entrare (~1 giro e mezzo)
+const SOGLIA = 1440;         // gradi totali per entrare (~4 giri)
 const ATTRITO = 0.965;       // quanto rallenta a ogni frame (piu' vicino a 1 = gira piu' a lungo)
 let rotY = 0;                // rotazione attuale
 let vel = 0;                 // velocita' (gradi per frame)
@@ -317,7 +337,6 @@ window.addEventListener('mouseup', fine);
 logoSpin.addEventListener('keydown', e => {
   if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); entraNelSito(); }
 });
-document.getElementById('entra-fallback').addEventListener('click', entraNelSito);
 
 /* ============================================================
    CONFIGURAZIONE STRIPE — DA COMPILARE
