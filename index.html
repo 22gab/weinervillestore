@@ -110,7 +110,7 @@
     position:relative;
     aspect-ratio:4/5;
     overflow:hidden;
-    background:linear-gradient(160deg,#2A1B3E,#120C1C);
+    background:var(--nero);
     perspective:900px;
   }
   .slide{
@@ -124,19 +124,20 @@
   /* Slide 1: grafica 3D che gira (segnaposto = logo) */
   .grafica3d{
     width:62%;
-    animation:giraY 3.2s linear infinite;   /* medio-veloce */
+    animation:giraY 5s linear infinite;
     transform-style:preserve-3d;
   }
   .grafica3d img{width:100%;display:block;}
 
   /* Slide 2 e 3: segnaposto foto (da sostituire con <img>) */
-  .segnaposto{
-    display:flex;flex-direction:column;align-items:center;gap:10px;
-    color:var(--chrome);opacity:.45;
-    font-size:.68rem;letter-spacing:.26em;text-transform:uppercase;
+  .anteprima{
+    display:flex;flex-direction:column;align-items:center;gap:12px;
+    color:var(--chrome);
+    font-size:.62rem;letter-spacing:.3em;text-transform:uppercase;
     text-align:center;padding:0 14px;
   }
-  .segnaposto svg{width:54px;height:auto;opacity:.8;}
+  .anteprima svg{width:46%;height:auto;}
+  .anteprima span{opacity:.45;}
 
   /* Se la slide contiene una foto vera, riempie tutto il riquadro */
   .slide img.foto{
@@ -214,20 +215,36 @@
         <div class="grafica3d"><img src="logo.png" alt="Grafica del pezzo"></div>
       </div>
       <div class="slide">
-        <div class="segnaposto">
-          <svg viewBox="0 0 100 120" fill="none" stroke="currentColor" stroke-width="4">
-            <path d="M30 15 l-20 12 8 20 12 -6 v64 h40 v-64 l12 6 8 -20 -20 -12 a15 12 0 0 1 -40 0 z"/>
+        <div class="anteprima">
+          <svg viewBox="0 0 120 130">
+            <defs>
+              <linearGradient id="cromo" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#EDEFF4"/>
+                <stop offset=".45" stop-color="#8E93A3"/>
+                <stop offset=".55" stop-color="#F5F6FA"/>
+                <stop offset="1" stop-color="#B9BDC9"/>
+              </linearGradient>
+            </defs>
+            <path d="M40 12 l-26 15 10 24 14 -7 v72 h44 v-72 l14 7 10 -24 -26 -15 a17 13 0 0 1 -40 0 z"
+                  fill="url(#cromo)" stroke="#0D0A12" stroke-width="2"/>
+            <ellipse cx="60" cy="70" rx="17" ry="9" fill="#8B5FC7" opacity=".85"/>
+            <text x="60" y="74" text-anchor="middle" font-family="Anton,sans-serif" font-size="9" fill="#F2F0F7">WV</text>
           </svg>
-          <span>Foto capo integro</span>
+          <span>Il capo</span>
         </div>
       </div>
       <div class="slide">
-        <div class="segnaposto">
-          <svg viewBox="0 0 100 120" fill="none" stroke="currentColor" stroke-width="4">
-            <circle cx="50" cy="22" r="12"/>
-            <path d="M30 45 h40 l6 40 h-12 l-4 30 h-20 l-4 -30 h-12 z"/>
+        <div class="anteprima">
+          <svg viewBox="0 0 120 130">
+            <circle cx="60" cy="20" r="13" fill="#B9BDC9"/>
+            <path d="M38 40 h44 l8 46 h-14 l-5 38 h-22 l-5 -38 h-14 z"
+                  fill="url(#cromo)" stroke="#0D0A12" stroke-width="2"/>
+            <ellipse cx="60" cy="62" rx="14" ry="8" fill="#8B5FC7" opacity=".85"/>
+            <text x="60" y="65.5" text-anchor="middle" font-family="Anton,sans-serif" font-size="8" fill="#F2F0F7">WV</text>
+            <rect x="47" y="86" width="11" height="38" fill="#2A2433"/>
+            <rect x="62" y="86" width="11" height="38" fill="#2A2433"/>
           </svg>
-          <span>Foto indossata</span>
+          <span>Indossato</span>
         </div>
       </div>
     </div>
@@ -244,20 +261,36 @@
         <div class="grafica3d"><img src="logo.png" alt="Grafica del pezzo"></div>
       </div>
       <div class="slide">
-        <div class="segnaposto">
-          <svg viewBox="0 0 100 120" fill="none" stroke="currentColor" stroke-width="4">
-            <path d="M30 15 l-20 12 8 20 12 -6 v64 h40 v-64 l12 6 8 -20 -20 -12 a15 12 0 0 1 -40 0 z"/>
+        <div class="anteprima">
+          <svg viewBox="0 0 120 130">
+            <defs>
+              <linearGradient id="cromo" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#EDEFF4"/>
+                <stop offset=".45" stop-color="#8E93A3"/>
+                <stop offset=".55" stop-color="#F5F6FA"/>
+                <stop offset="1" stop-color="#B9BDC9"/>
+              </linearGradient>
+            </defs>
+            <path d="M40 12 l-26 15 10 24 14 -7 v72 h44 v-72 l14 7 10 -24 -26 -15 a17 13 0 0 1 -40 0 z"
+                  fill="url(#cromo)" stroke="#0D0A12" stroke-width="2"/>
+            <ellipse cx="60" cy="70" rx="17" ry="9" fill="#8B5FC7" opacity=".85"/>
+            <text x="60" y="74" text-anchor="middle" font-family="Anton,sans-serif" font-size="9" fill="#F2F0F7">WV</text>
           </svg>
-          <span>Foto capo integro</span>
+          <span>Il capo</span>
         </div>
       </div>
       <div class="slide">
-        <div class="segnaposto">
-          <svg viewBox="0 0 100 120" fill="none" stroke="currentColor" stroke-width="4">
-            <circle cx="50" cy="22" r="12"/>
-            <path d="M30 45 h40 l6 40 h-12 l-4 30 h-20 l-4 -30 h-12 z"/>
+        <div class="anteprima">
+          <svg viewBox="0 0 120 130">
+            <circle cx="60" cy="20" r="13" fill="#B9BDC9"/>
+            <path d="M38 40 h44 l8 46 h-14 l-5 38 h-22 l-5 -38 h-14 z"
+                  fill="url(#cromo)" stroke="#0D0A12" stroke-width="2"/>
+            <ellipse cx="60" cy="62" rx="14" ry="8" fill="#8B5FC7" opacity=".85"/>
+            <text x="60" y="65.5" text-anchor="middle" font-family="Anton,sans-serif" font-size="8" fill="#F2F0F7">WV</text>
+            <rect x="47" y="86" width="11" height="38" fill="#2A2433"/>
+            <rect x="62" y="86" width="11" height="38" fill="#2A2433"/>
           </svg>
-          <span>Foto indossata</span>
+          <span>Indossato</span>
         </div>
       </div>
     </div>
