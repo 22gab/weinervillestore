@@ -62,7 +62,7 @@
     perspective:900px;
   }
   .logo-sito{
-    width:min(64vw,340px);
+    width:min(57.6vw,306px);   /* -10% rispetto a prima */
     animation:giraY 5.5s linear infinite;
     transform-style:preserve-3d;
   }
@@ -92,10 +92,10 @@
     to{transform:translateX(-50%)}
   }
 
-  /* ---- CATALOGO ---- */
+  /* ---- CATALOGO PEZZI UNICI ---- */
   .catalogo{
     max-width:520px;margin:0 auto;
-    padding:36px 18px 60px;
+    padding:26px 18px 60px;
     display:flex;flex-direction:column;gap:30px;
   }
   .capo{
@@ -104,13 +104,45 @@
     padding:16px;
     display:flex;flex-direction:column;gap:12px;
   }
-  .capo-foto{
+
+  /* Slideshow: 3 immagini che si alternano con dissolvenza */
+  .slideshow{
+    position:relative;
     aspect-ratio:4/5;
-    background:radial-gradient(ellipse at 50% 30%, rgba(139,95,199,.5), rgba(13,10,18,.9)),
-               linear-gradient(160deg,#2A1B3E,#120C1C);
-    display:flex;align-items:center;justify-content:center;
+    overflow:hidden;
+    background:linear-gradient(160deg,#2A1B3E,#120C1C);
+    perspective:900px;
   }
-  .capo-foto svg{width:44%;height:auto;opacity:.9;}
+  .slide{
+    position:absolute;inset:0;
+    display:flex;align-items:center;justify-content:center;
+    opacity:0;
+    transition:opacity 1s ease;
+  }
+  .slide.attiva{opacity:1;}
+
+  /* Slide 1: grafica 3D che gira (segnaposto = logo) */
+  .grafica3d{
+    width:62%;
+    animation:giraY 3.2s linear infinite;   /* medio-veloce */
+    transform-style:preserve-3d;
+  }
+  .grafica3d img{width:100%;display:block;}
+
+  /* Slide 2 e 3: segnaposto foto (da sostituire con <img>) */
+  .segnaposto{
+    display:flex;flex-direction:column;align-items:center;gap:10px;
+    color:var(--chrome);opacity:.45;
+    font-size:.68rem;letter-spacing:.26em;text-transform:uppercase;
+    text-align:center;padding:0 14px;
+  }
+  .segnaposto svg{width:54px;height:auto;opacity:.8;}
+
+  /* Se la slide contiene una foto vera, riempie tutto il riquadro */
+  .slide img.foto{
+    width:100%;height:100%;object-fit:cover;display:block;
+  }
+
   .capo-riga{
     display:flex;justify-content:space-between;align-items:baseline;
   }
@@ -125,27 +157,6 @@
   .capo-desc{
     font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;
     color:var(--bianco);opacity:.55;
-  }
-  .taglie{display:flex;gap:8px;}
-  .taglie button{
-    flex:1;padding:10px 0;cursor:pointer;
-    font-family:'Space Mono',monospace;font-size:.78rem;font-weight:700;
-    background:transparent;color:var(--chrome);
-    border:1px solid rgba(201,204,214,.4);
-  }
-  .taglie button[aria-pressed="true"]{
-    background:var(--viola);border-color:var(--viola);color:var(--bianco);
-  }
-  .compra{
-    padding:14px 0;width:100%;cursor:pointer;
-    font-family:'Space Mono',monospace;font-weight:700;
-    font-size:.85rem;letter-spacing:.16em;text-transform:uppercase;
-    background:var(--viola);color:var(--bianco);border:none;
-  }
-  .compra:hover{background:var(--viola-chiaro);color:var(--nero);}
-  .avviso{
-    font-size:.66rem;color:var(--viola-chiaro);opacity:.8;
-    text-align:center;min-height:1em;
   }
 
   footer{
@@ -189,70 +200,72 @@
 
 <main class="catalogo">
 
-  <article class="capo" data-prodotto="cargo">
-    <div class="capo-foto">
-      <svg viewBox="0 0 100 140" fill="none" stroke="#C9CCD6" stroke-width="3">
-        <path d="M25 5 h50 l6 40 -2 90 h-18 l-9 -80 -9 80 h-18 l-2 -90 z"/>
-        <path d="M25 22 h50" opacity=".5"/>
-      </svg>
+  <!-- ============================================================
+       ARTICOLO = slideshow di 3 immagini (cambio ogni 3 secondi):
+       1. grafica 3D che gira (per ora segnaposto col logo)
+       2. foto del capo integro   → sostituisci il segnaposto con:
+          <img class="foto" src="NOMEFILE.jpg" alt="...">
+       3. foto indossata          → idem
+       ============================================================ -->
+
+  <article class="capo">
+    <div class="slideshow">
+      <div class="slide attiva">
+        <div class="grafica3d"><img src="logo.png" alt="Grafica del pezzo"></div>
+      </div>
+      <div class="slide">
+        <div class="segnaposto">
+          <svg viewBox="0 0 100 120" fill="none" stroke="currentColor" stroke-width="4">
+            <path d="M30 15 l-20 12 8 20 12 -6 v64 h40 v-64 l12 6 8 -20 -20 -12 a15 12 0 0 1 -40 0 z"/>
+          </svg>
+          <span>Foto capo integro</span>
+        </div>
+      </div>
+      <div class="slide">
+        <div class="segnaposto">
+          <svg viewBox="0 0 100 120" fill="none" stroke="currentColor" stroke-width="4">
+            <circle cx="50" cy="22" r="12"/>
+            <path d="M30 45 h40 l6 40 h-12 l-4 30 h-20 l-4 -30 h-12 z"/>
+          </svg>
+          <span>Foto indossata</span>
+        </div>
+      </div>
     </div>
     <div class="capo-riga">
-      <h2 class="capo-nome">Il Cargo</h2>
-      <span class="capo-prezzo">€ 89</span>
+      <h2 class="capo-nome">Pezzo #001</h2>
+      <span class="capo-prezzo">€ 0</span>
     </div>
-    <p class="capo-desc">Tela grezza · 6 tasche</p>
-    <div class="taglie" role="group" aria-label="Taglia Il Cargo">
-      <button aria-pressed="false">S</button>
-      <button aria-pressed="false">M</button>
-      <button aria-pressed="false">L</button>
-      <button aria-pressed="false">XL</button>
-    </div>
-    <button class="compra">Acquista</button>
-    <p class="avviso" aria-live="polite"></p>
+    <p class="capo-desc">Descrizione in arrivo</p>
   </article>
 
-  <article class="capo" data-prodotto="baggy">
-    <div class="capo-foto">
-      <svg viewBox="0 0 100 140" fill="none" stroke="#C9CCD6" stroke-width="3">
-        <path d="M22 5 h56 l8 40 -4 90 h-20 l-12 -78 -12 78 h-20 l-4 -90 z"/>
-        <path d="M22 22 h56" opacity=".5"/>
-      </svg>
+  <article class="capo">
+    <div class="slideshow">
+      <div class="slide attiva">
+        <div class="grafica3d"><img src="logo.png" alt="Grafica del pezzo"></div>
+      </div>
+      <div class="slide">
+        <div class="segnaposto">
+          <svg viewBox="0 0 100 120" fill="none" stroke="currentColor" stroke-width="4">
+            <path d="M30 15 l-20 12 8 20 12 -6 v64 h40 v-64 l12 6 8 -20 -20 -12 a15 12 0 0 1 -40 0 z"/>
+          </svg>
+          <span>Foto capo integro</span>
+        </div>
+      </div>
+      <div class="slide">
+        <div class="segnaposto">
+          <svg viewBox="0 0 100 120" fill="none" stroke="currentColor" stroke-width="4">
+            <circle cx="50" cy="22" r="12"/>
+            <path d="M30 45 h40 l6 40 h-12 l-4 30 h-20 l-4 -30 h-12 z"/>
+          </svg>
+          <span>Foto indossata</span>
+        </div>
+      </div>
     </div>
     <div class="capo-riga">
-      <h2 class="capo-nome">Il Baggy</h2>
-      <span class="capo-prezzo">€ 79</span>
+      <h2 class="capo-nome">Pezzo #002</h2>
+      <span class="capo-prezzo">€ 0</span>
     </div>
-    <p class="capo-desc">Denim lavato · Taglio 90s</p>
-    <div class="taglie" role="group" aria-label="Taglia Il Baggy">
-      <button aria-pressed="false">S</button>
-      <button aria-pressed="false">M</button>
-      <button aria-pressed="false">L</button>
-      <button aria-pressed="false">XL</button>
-    </div>
-    <button class="compra">Acquista</button>
-    <p class="avviso" aria-live="polite"></p>
-  </article>
-
-  <article class="capo" data-prodotto="worker">
-    <div class="capo-foto">
-      <svg viewBox="0 0 100 140" fill="none" stroke="#C9CCD6" stroke-width="3">
-        <path d="M28 5 h44 l5 40 -1 90 h-16 l-10 -84 -10 84 h-16 l-1 -90 z"/>
-        <path d="M28 22 h44" opacity=".5"/>
-      </svg>
-    </div>
-    <div class="capo-riga">
-      <h2 class="capo-nome">Il Worker</h2>
-      <span class="capo-prezzo">€ 85</span>
-    </div>
-    <p class="capo-desc">Cotone pesante · Doppio ginocchio</p>
-    <div class="taglie" role="group" aria-label="Taglia Il Worker">
-      <button aria-pressed="false">S</button>
-      <button aria-pressed="false">M</button>
-      <button aria-pressed="false">L</button>
-      <button aria-pressed="false">XL</button>
-    </div>
-    <button class="compra">Acquista</button>
-    <p class="avviso" aria-live="polite"></p>
+    <p class="capo-desc">Descrizione in arrivo</p>
   </article>
 
 </main>
@@ -266,9 +279,9 @@
 const ingresso = document.getElementById('ingresso');
 const logoSpin = document.getElementById('logo-spin');
 const SOGLIA = 1440;         // gradi totali per entrare (~4 giri)
-const ATTRITO = 0.965;       // quanto rallenta a ogni frame (piu' vicino a 1 = gira piu' a lungo)
-let rotY = 0;                // rotazione attuale
-let vel = 0;                 // velocita' (gradi per frame)
+const ATTRITO = 0.965;       // quanto rallenta a ogni frame
+let rotY = 0;
+let vel = 0;
 let accumulo = 0;
 let trascinando = false;
 let ultimaX = 0;
@@ -289,7 +302,6 @@ function frame(){
       vel *= ATTRITO;
       if (accumulo >= SOGLIA) entraNelSito();
     } else if (!trascinando && Math.abs(vel) <= 0.05 && vel !== 0){
-      /* fermo: riallineo dolcemente al fronte piu' vicino */
       vel = 0;
       const vicino = Math.round(rotY / 360) * 360;
       logoSpin.style.transition = 'transform .6s';
@@ -315,7 +327,7 @@ function muovi(x){
   ultimaX = x;
   rotY += delta;
   accumulo += Math.abs(delta);
-  vel = delta;               // la velocita' dell'ultimo movimento diventa lo slancio
+  vel = delta;
   if (accumulo >= SOGLIA) entraNelSito();
 }
 function fine(){
@@ -334,40 +346,15 @@ logoSpin.addEventListener('keydown', e => {
   if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); entraNelSito(); }
 });
 
-/* ============================================================
-   CONFIGURAZIONE STRIPE — DA COMPILARE
-   Per ogni prodotto e taglia, incolla il Payment Link creato
-   su dashboard.stripe.com (Payment Links → Nuovo link).
-   Esempio: S: "https://buy.stripe.com/xxxxxx"
-   ============================================================ */
-const STRIPE_LINKS = {
-  cargo:  { S:"", M:"", L:"", XL:"" },
-  baggy:  { S:"", M:"", L:"", XL:"" },
-  worker: { S:"", M:"", L:"", XL:"" }
-};
-
-document.querySelectorAll('.capo').forEach(card => {
-  const prodotto = card.dataset.prodotto;
-  const bottoniTaglia = card.querySelectorAll('.taglie button');
-  const bottoneCompra = card.querySelector('.compra');
-  const avviso = card.querySelector('.avviso');
-  let tagliaScelta = null;
-
-  bottoniTaglia.forEach(b => {
-    b.addEventListener('click', () => {
-      bottoniTaglia.forEach(x => x.setAttribute('aria-pressed','false'));
-      b.setAttribute('aria-pressed','true');
-      tagliaScelta = b.textContent.trim();
-      avviso.textContent = '';
-    });
-  });
-
-  bottoneCompra.addEventListener('click', () => {
-    if (!tagliaScelta) { avviso.textContent = 'Scegli prima la taglia'; return; }
-    const link = STRIPE_LINKS[prodotto][tagliaScelta];
-    if (!link) { avviso.textContent = 'Taglia non ancora disponibile'; return; }
-    window.open(link, '_blank', 'noopener');
-  });
+/* ---- SLIDESHOW ARTICOLI: cambio ogni 3 secondi con dissolvenza ---- */
+document.querySelectorAll('.slideshow').forEach(box => {
+  const slides = box.querySelectorAll('.slide');
+  let i = 0;
+  setInterval(() => {
+    slides[i].classList.remove('attiva');
+    i = (i + 1) % slides.length;
+    slides[i].classList.add('attiva');
+  }, 3000);
 });
 </script>
 
