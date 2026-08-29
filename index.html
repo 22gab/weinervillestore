@@ -71,30 +71,17 @@
     from{transform:rotateY(0deg)}
     to{transform:rotateY(360deg)}
   }
-  .nastro{
-    width:100%;max-width:640px;
-    overflow:hidden;
-    -webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);
-    mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);
+  .lampo{
+    width:min(74vw,380px);height:72px;
+    background:var(--viola);
+    position:relative;overflow:hidden;
   }
-  .nastro-scorre{
-    display:flex;gap:0;width:max-content;
-    animation:scorri 30s linear infinite;
-  }
-  .nastro-scorre{align-items:center;gap:14px;padding:4px 0;}
-  .nastro span{
-    flex:none;white-space:nowrap;
+  .lampo span{
+    position:absolute;left:50%;top:50%;
     font-family:'Anton',sans-serif;
-    font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;
-    background:var(--viola);color:var(--nero);
-    padding:7px 14px 6px;
-  }
-  .nastro span:nth-child(even){
-    background:var(--chrome);
-  }
-  @keyframes scorri{
-    from{transform:translateX(0)}
-    to{transform:translateX(-50%)}
+    color:var(--nero);white-space:nowrap;
+    font-size:52px;line-height:1;
+    transform-origin:center;
   }
 
   /* ---- CATALOGO PEZZI UNICI ---- */
@@ -202,27 +189,8 @@
 <!-- SITO -->
 <div class="testata">
   <div class="logo-sito" aria-hidden="true"><img src="logo.png" alt=""></div>
-  <div class="nastro" aria-label="Fatto in casa, Marchio italiano, Indipendente, Piccola produzione, Fatto per durare, Fatto con cura, Tradizione italiana, Pensato in provincia, Pezzi unici">
-    <div class="nastro-scorre" aria-hidden="true">
-      <span>Fatto in casa</span>
-      <span>Marchio italiano</span>
-      <span>Indipendente</span>
-      <span>Piccola produzione</span>
-      <span>Fatto per durare</span>
-      <span>Fatto con cura</span>
-      <span>Tradizione italiana</span>
-      <span>Pensato in provincia</span>
-      <span>Pezzi unici</span>
-      <span>Fatto in casa</span>
-      <span>Marchio italiano</span>
-      <span>Indipendente</span>
-      <span>Piccola produzione</span>
-      <span>Fatto per durare</span>
-      <span>Fatto con cura</span>
-      <span>Tradizione italiana</span>
-      <span>Pensato in provincia</span>
-      <span>Pezzi unici</span>
-    </div>
+  <div class="lampo" aria-label="Fatto in casa, marchio italiano, indipendente, piccola produzione, fatto per durare, fatto con cura, tradizione italiana, pensato in provincia, pezzi unici">
+    <span id="lampo-testo" aria-hidden="true"></span>
   </div>
 </div>
 
@@ -347,6 +315,36 @@ window.addEventListener('mouseup', fine);
 logoSpin.addEventListener('keydown', e => {
   if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); entraNelSito(); }
 });
+
+/* ---- BLOCCO LAMPO: frasi scritte a raffica, sempre a tutto riquadro ---- */
+const FRASI = ["Fatto in casa","Marchio italiano","Indipendente","Piccola produzione",
+               "Fatto per durare","Fatto con cura","Tradizione italiana",
+               "Pensato in provincia","Pezzi unici"];
+const lampoBox = document.querySelector('.lampo');
+const lampoTxt = document.getElementById('lampo-testo');
+let fIdx = 0, lIdx = 0;
+
+function lampoFit(){
+  const bw = lampoBox.clientWidth - 14;
+  const bh = lampoBox.clientHeight - 10;
+  const tw = lampoTxt.offsetWidth || 1;
+  const th = lampoTxt.offsetHeight || 1;
+  lampoTxt.style.transform =
+    'translate(-50%,-50%) scale(' + (bw/tw) + ',' + (bh/th) + ')';
+}
+function lampoStep(){
+  const frase = FRASI[fIdx].toUpperCase();
+  lIdx++;
+  if (lIdx > frase.length){
+    setTimeout(() => { fIdx = (fIdx+1) % FRASI.length; lIdx = 0; lampoStep(); }, 520);
+    return;
+  }
+  lampoTxt.textContent = frase.slice(0, lIdx);
+  lampoFit();
+  setTimeout(lampoStep, 85);
+}
+lampoStep();
+window.addEventListener('resize', lampoFit);
 
 /* ---- SLIDESHOW ARTICOLI: cambio ogni 3 secondi con dissolvenza ---- */
 document.querySelectorAll('.slideshow').forEach(box => {
