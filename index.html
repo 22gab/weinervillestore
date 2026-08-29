@@ -118,10 +118,6 @@
   }
   .grafica3d img{width:100%;display:block;}
   .grafica3d.larga{width:72%;}
-  .grafica3d img.strato{
-    position:absolute;left:0;top:0;
-    filter:brightness(.42) saturate(.85);
-  }
 
   /* Slide 2 e 3: segnaposto foto (da sostituire con <img>) */
   .anteprima{
@@ -417,21 +413,6 @@ function lampoStep(){
 }
 lampoStep();
 window.addEventListener('resize', lampoFit);
-
-/* ---- SPESSORE 3D DELLE GRAFICHE: pila di strati dietro l'immagine ---- */
-document.querySelectorAll('.grafica3d').forEach(g => {
-  const img = g.querySelector('img');
-  const STRATI = 12, PASSO = 1.15;
-  for (let i = 1; i <= STRATI; i++){
-    const c = img.cloneNode();
-    c.classList.add('strato');
-    c.setAttribute('aria-hidden', 'true');
-    c.style.transform = 'translateZ(' + (-i * PASSO) + 'px)';
-    g.appendChild(c);
-  }
-  img.style.position = 'relative';
-  img.style.transform = 'translateZ(0.6px)';
-});
 
 /* ---- SLIDESHOW ARTICOLI: cambio ogni 3 secondi con dissolvenza ---- */
 document.querySelectorAll('.slideshow').forEach(box => {
