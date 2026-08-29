@@ -48,7 +48,7 @@
     transform-style:preserve-3d;
   }
   #logo-spin:active{cursor:grabbing;}
-  #logo-spin canvas{width:100%;display:block;pointer-events:none;mix-blend-mode:screen;}
+  #logo-spin canvas{width:100%;display:block;pointer-events:none;}
   .hint{
     font-size:.75rem;letter-spacing:.24em;text-transform:uppercase;
     color:var(--chrome);opacity:.55;text-align:center;
@@ -66,7 +66,7 @@
   .logo-sito{
     width:min(64vw,340px);
   }
-  .logo-sito video{width:100%;display:block;mix-blend-mode:screen;}
+  .logo-sito canvas{width:100%;display:block;}
   @keyframes giraY{
     from{transform:rotateY(0deg)}
     to{transform:rotateY(360deg)}
@@ -183,7 +183,7 @@
 <!-- INGRESSO -->
 <div id="ingresso">
   <div id="logo-spin" tabindex="0" role="button" aria-label="Spinna il logo per entrare">
-    <canvas id="spin-canvas" width="540" height="304" aria-hidden="true"></canvas>
+    <canvas id="spin-canvas" width="400" height="226" aria-hidden="true"></canvas>
   </div>
   <p class="hint">Spin the logo to enter</p>
 </div>
@@ -194,7 +194,7 @@
 </div>
 <div class="testata">
   <div class="logo-sito" aria-hidden="true">
-    <video id="logo-video" src="logo3d.mp4" autoplay muted loop playsinline></video>
+    <canvas id="logo-canvas" width="400" height="226"></canvas>
   </div>
 </div>
 
@@ -285,17 +285,41 @@ function entraNelSito(){
   document.body.classList.remove('bloccato');
 }
 
-/* scrub del render 3D: 60 fotogrammi, 6 gradi l'uno */
+/* render 3D a fotogrammi trasparenti: 120 frame, 3 gradi l'uno.
+   Ogni frame viene pre-ritagliato in una bitmap: disegno istantaneo, spin fluido. */
 const ctxSpin = document.getElementById('spin-canvas').getContext('2d');
+const ctxLogo = document.getElementById('logo-canvas').getContext('2d');
 const SPRITE = new Image();
 SPRITE.src = 'logo-spin.webp';
-const NFR = 120, COLS = 8, FW = 540, FH = 304;
-function disegna(){
-  if (!SPRITE.complete || !SPRITE.naturalWidth) return;
-  const idx = ((Math.round(rotY / 3) % NFR) + NFR) % NFR;
-  ctxSpin.drawImage(SPRITE, (idx % COLS) * FW, Math.floor(idx / COLS) * FH, FW, FH, 0, 0, FW, FH);
+const NFR = 240, COLS = 10, FW = 400, FH = 226;
+let BITMAP = null;
+
+function frameSu(ctx, idx){
+  ctx.clearRect(0, 0, FW, FH);
+  if (BITMAP) ctx.drawImage(BITMAP[idx], 0, 0);
+  else if (SPRITE.complete && SPRITE.naturalWidth)
+    ctx.drawImage(SPRITE, (idx % COLS) * FW, Math.floor(idx / COLS) * FH, FW, FH, 0, 0, FW, FH);
 }
-SPRITE.onload = disegna;
+function disegna(){
+  frameSu(ctxSpin, ((Math.round(rotY / 3) % NFR) + NFR) % NFR);
+}
+SPRITE.onload = async () => {
+  disegna();
+  try {
+    BITMAP = await Promise.all(Array.from({length: NFR}, (_, i) =>
+      createImageBitmap(SPRITE, (i % COLS) * FW, Math.floor(i / COLS) * FH, FW, FH)));
+  } catch(e) {}
+  disegna();
+};
+
+/* testata: il logo ruota da solo, un giro ogni 6 secondi, 40 fps */
+let ultimoIdxLogo = -1;
+function giraLogo(t){
+  const idx = Math.floor((t % 6000) / 6000 * NFR);
+  if (idx !== ultimoIdxLogo){ frameSu(ctxLogo, idx); ultimoIdxLogo = idx; }
+  requestAnimationFrame(giraLogo);
+}
+requestAnimationFrame(giraLogo);
 let riallineo = false, target = 0;
 
 function frame(){
@@ -351,12 +375,6 @@ window.addEventListener('mouseup', fine);
 logoSpin.addEventListener('keydown', e => {
   if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); entraNelSito(); }
 });
-
-/* il video del logo riparte al primo tocco se l'autoplay era bloccato */
-const logoVideo = document.getElementById('logo-video');
-function sbloccaVideo(){ if (logoVideo.paused) logoVideo.play().catch(()=>{}); }
-window.addEventListener('touchstart', sbloccaVideo, {once:true});
-window.addEventListener('click', sbloccaVideo, {once:true});
 
 /* ---- BLOCCO LAMPO: frasi scritte a raffica, sempre a tutto riquadro ---- */
 const FRASI = ["Fatto in casa","Marchio italiano","Indipendente","Piccola produzione",
