@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>WEINERVILLESTORE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --nero:#0D0A12;        /* nero-viola di fondo */
+    --card:#1A1226;        /* viola scurissimo delle card */
+    --viola:#8B5FC7;       /* viola del logo */
+    --viola-chiaro:#B98FE8;
+    --chrome:#C9CCD6;      /* argento chrome */
+    --bianco:#F2F0F7;
+  }
+  html{color-scheme:dark;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--nero);
+    color:var(--bianco);
+    font-family:'Space Mono',monospace;
+    overflow-x:hidden;
+  }
+  body.bloccato{overflow:hidden;}
+
+  /* ---- INGRESSO ---- */
+  #ingresso{
+    position:fixed;inset:0;z-index:500;
+    background:var(--nero);
+    display:flex;flex-direction:column;
+    align-items:center;justify-content:center;gap:34px;
+    transition:opacity .5s;
+    perspective:900px;
+    touch-action:none;
+  }
+  #ingresso.chiuso{opacity:0;pointer-events:none;}
+  #logo-spin{
+    width:min(82vw,540px);
+    cursor:grab;
+    user-select:none;-webkit-user-select:none;
+    -webkit-touch-callout:none;
+    touch-action:none;
+    will-change:transform;
+    transform-style:preserve-3d;
+  }
+  #logo-spin:active{cursor:grabbing;}
+  #logo-spin img{width:100%;display:block;pointer-events:none;}
+  .hint{
+    font-size:.75rem;letter-spacing:.24em;text-transform:uppercase;
+    color:var(--chrome);opacity:.55;text-align:center;
+  }
+  @media (prefers-reduced-motion: reduce){
+    #ingresso{transition:none}
+  }
+
+  /* ---- HEADER COL LOGO CHE GIRA ---- */
+  .testata{
+    padding:22px 20px 10px;
+    display:flex;flex-direction:column;align-items:center;gap:14px;
+    perspective:900px;
+  }
+  .logo-sito{
+    width:min(57.6vw,306px);   /* -10% rispetto a prima */
+    animation:giraY 5.5s linear infinite;
+    transform-style:preserve-3d;
+  }
+  .logo-sito img{width:100%;display:block;}
+  @keyframes giraY{
+    from{transform:rotateY(0deg)}
+    to{transform:rotateY(360deg)}
+  }
+  .lampo{
+    width:100%;height:49px;
+    background:var(--viola);
+    position:relative;overflow:hidden;
+  }
+  .lampo span{
+    position:absolute;left:50%;top:50%;
+    font-family:'Anton',sans-serif;
+    color:var(--nero);white-space:nowrap;
+    font-size:52px;line-height:1;
+    transform-origin:center;
+  }
+
+  /* ---- CATALOGO PEZZI UNICI ---- */
+  .catalogo{
+    max-width:520px;margin:0 auto;
+    padding:26px 18px 60px;
+    display:flex;flex-direction:column;gap:30px;
+  }
+  .capo{
+    display:flex;flex-direction:column;
+  }
+
+  /* Slideshow: 3 immagini che si alternano con dissolvenza */
+  .slideshow{
+    position:relative;
+    aspect-ratio:4/5;
+    overflow:hidden;
+    background:var(--nero);
+    perspective:900px;
+  }
+  .slide{
+    position:absolute;inset:0;
+    display:flex;align-items:center;justify-content:center;
+    opacity:0;
+    transition:opacity 1s ease;
+  }
+  .slide.attiva{opacity:1;}
+
+  /* Slide 1: grafica 3D che gira (segnaposto = logo) */
+  .grafica3d{
+    width:39%;
+    animation:giraY 5s linear infinite;
+    transform-style:preserve-3d;
+  }
+  .grafica3d img{width:100%;display:block;}
+
+  /* Slide 2 e 3: segnaposto foto (da sostituire con <img>) */
+  .anteprima{
+    display:flex;flex-direction:column;align-items:center;gap:12px;
+    color:var(--chrome);
+    font-size:.62rem;letter-spacing:.3em;text-transform:uppercase;
+    text-align:center;padding:0 14px;
+  }
+  .anteprima svg{width:46%;height:auto;}
+  .anteprima span{opacity:.45;}
+
+  /* Se la slide contiene una foto vera, riempie tutto il riquadro */
+  .slide img.foto{
+    width:100%;height:100%;object-fit:cover;display:block;
+  }
+  .slide img.foto.contenuta{
+    object-fit:contain;padding:6%;box-sizing:border-box;
+  }
+
+  .capo-info{
+    position:absolute;left:14px;bottom:12px;z-index:5;
+    display:flex;flex-direction:column;gap:2px;
+    pointer-events:none;
+    text-shadow:0 2px 8px rgba(13,10,18,.9);
+  }
+  .capo-nome{
+    font-family:'Anton',sans-serif;
+    font-size:1.3rem;letter-spacing:.04em;text-transform:uppercase;
+    color:var(--chrome);
+  }
+  .capo-prezzo{
+    font-size:.9rem;font-weight:700;color:var(--viola-chiaro);
+  }
+
+  .divisore{
+    position:relative;height:96px;
+    overflow:hidden;
+  }
+  .divisore img{
+    position:absolute;bottom:2px;height:88px;width:auto;
+    animation:corsa 7.5s linear infinite;
+  }
+  .divisore:last-of-type img{animation-delay:-3.7s;}
+  /* corre verso sinistra; uscita di scena -> rientra da destra (loop continuo) */
+  @keyframes corsa{
+    from{left:100%;}
+    to{left:-125px;}
+  }
+
+  footer{
+    text-align:center;
+    padding:26px 18px 42px;
+    font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--chrome);opacity:.5;
+  }
+  footer a{color:var(--viola-chiaro);text-decoration:none;}
+  a:focus-visible,button:focus-visible,#logo-spin:focus-visible{outline:3px solid var(--viola);outline-offset:3px;}
+</style>
+</head>
+<body class="bloccato">
+
+<!-- INGRESSO -->
+<div id="ingresso">
+  <div id="logo-spin" tabindex="0" role="button" aria-label="Spinna il logo per entrare">
+    <img src="logo.png" alt="Logo Weinerville" draggable="false">
+  </div>
+  <p class="hint">Spin the logo to enter</p>
+</div>
+
+<!-- SITO -->
+<div class="lampo" aria-label="Fatto in casa, marchio italiano, indipendente, piccola produzione, fatto per durare, fatto con cura, tradizione italiana, pensato in provincia, pezzi unici">
+  <span id="lampo-testo" aria-hidden="true"></span>
+</div>
+<div class="testata">
+  <div class="logo-sito" aria-hidden="true"><img src="logo.png" alt=""></div>
+</div>
+
+<main class="catalogo">
+
+  <!-- ============================================================
+       ARTICOLO = slideshow di 3 immagini (cambio ogni 3 secondi):
+       1. grafica 3D che gira (per ora segnaposto col logo)
+       2. foto del capo integro   → sostituisci il segnaposto con:
+          <img class="foto" src="NOMEFILE.jpg" alt="...">
+       3. foto indossata          → idem
+       ============================================================ -->
+
+  <article class="capo">
+    <div class="slideshow">
+      <div class="slide attiva">
+        <div class="grafica3d"><img src="pezzo1-grafica.png" alt="Grafica del pezzo 1"></div>
+      </div>
+      <div class="slide">
+        <img class="foto contenuta" src="pezzo1-capo.png" alt="Il capo steso">
+      </div>
+      <div class="capo-info">
+        <h2 class="capo-nome">Pezzo 1</h2>
+        <span class="capo-prezzo">€ 29,90</span>
+      </div>
+    </div>
+  </article>
+
+  <div class="divisore skate" aria-hidden="true"><img src="skater.png" alt=""></div>
+
+  <article class="capo">
+    <div class="slideshow">
+      <div class="slide attiva">
+        <div class="grafica3d"><img src="pezzo2-grafica.png" alt="Grafica del pezzo 2"></div>
+      </div>
+      <div class="slide">
+        <img class="foto contenuta" src="pezzo2-capo.png" alt="Il capo steso">
+      </div>
+      <div class="capo-info">
+        <h2 class="capo-nome">Pezzo 2</h2>
+        <span class="capo-prezzo">€ 29,90</span>
+      </div>
+    </div>
+  </article>
+
+  <div class="divisore skate" aria-hidden="true"><img src="skater.png" alt=""></div>
+
+</main>
+
+<footer>
+  © 2026 Weinervillestore · <a href="mailto:ordini@weinervillestar.com">ordini@weinervillestar.com</a>
+</footer>
+
+<script>
+/* ---- INGRESSO: SPIN ORIZZONTALE CON FISICA ---- */
+const ingresso = document.getElementById('ingresso');
+const logoSpin = document.getElementById('logo-spin');
+const SOGLIA = 1440;         // gradi totali per entrare (~4 giri)
+const ATTRITO = 0.965;       // quanto rallenta a ogni frame
+let rotY = 0;
+let vel = 0;
+let accumulo = 0;
+let trascinando = false;
+let ultimaX = 0;
+let entrato = false;
+
+function entraNelSito(){
+  if (entrato) return;
+  entrato = true;
+  ingresso.classList.add('chiuso');
+  document.body.classList.remove('bloccato');
+}
+
+function frame(){
+  if (!entrato){
+    if (!trascinando && Math.abs(vel) > 0.05){
+      rotY += vel;
+      accumulo += Math.abs(vel);
+      vel *= ATTRITO;
+      if (accumulo >= SOGLIA) entraNelSito();
+    } else if (!trascinando && Math.abs(vel) <= 0.05 && vel !== 0){
+      vel = 0;
+      const vicino = Math.round(rotY / 360) * 360;
+      logoSpin.style.transition = 'transform .6s';
+      rotY = vicino;
+      accumulo = 0;
+      setTimeout(() => logoSpin.style.transition = '', 600);
+    }
+    logoSpin.style.transform = 'rotateY(' + rotY + 'deg)';
+    requestAnimationFrame(frame);
+  }
+}
+requestAnimationFrame(frame);
+
+function inizio(x){
+  trascinando = true;
+  ultimaX = x;
+  vel = 0;
+  logoSpin.style.transition = '';
+}
+function muovi(x){
+  if (!trascinando) return;
+  const delta = (x - ultimaX) * 0.55;
+  ultimaX = x;
+  rotY += delta;
+  accumulo += Math.abs(delta);
+  vel = delta;
+  if (accumulo >= SOGLIA) entraNelSito();
+}
+function fine(){
+  trascinando = false;
+}
+
+logoSpin.addEventListener('touchstart', e => { e.preventDefault(); inizio(e.touches[0].clientX); }, {passive:false});
+logoSpin.addEventListener('touchmove',  e => { e.preventDefault(); muovi(e.touches[0].clientX); }, {passive:false});
+logoSpin.addEventListener('touchend', fine);
+logoSpin.addEventListener('touchcancel', fine);
+logoSpin.addEventListener('mousedown', e => { e.preventDefault(); inizio(e.clientX); });
+window.addEventListener('mousemove', e => muovi(e.clientX));
+window.addEventListener('mouseup', fine);
+
+logoSpin.addEventListener('keydown', e => {
+  if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); entraNelSito(); }
+});
+
+/* ---- BLOCCO LAMPO: frasi scritte a raffica, sempre a tutto riquadro ---- */
+const FRASI = ["Fatto in casa","Marchio italiano","Indipendente","Piccola produzione",
+               "Fatto per durare","Fatto con cura","Tradizione italiana",
+               "Pensato in provincia","Pezzi unici"];
+const lampoBox = document.querySelector('.lampo');
+const lampoTxt = document.getElementById('lampo-testo');
+let fIdx = 0, lIdx = 0;
+
+function lampoFit(){
+  const bw = lampoBox.clientWidth - 14;
+  const bh = lampoBox.clientHeight - 10;
+  const tw = lampoTxt.offsetWidth || 1;
+  const th = lampoTxt.offsetHeight || 1;
+  lampoTxt.style.transform =
+    'translate(-50%,-50%) scale(' + (bw/tw) + ',' + (bh/th) + ')';
+}
+function lampoStep(){
+  const frase = FRASI[fIdx].toUpperCase();
+  lIdx++;
+  if (lIdx > frase.length){
+    setTimeout(() => { fIdx = (fIdx+1) % FRASI.length; lIdx = 0; lampoStep(); }, 200);
+    return;
+  }
+  lampoTxt.textContent = frase.slice(0, lIdx);
+  lampoFit();
+  setTimeout(lampoStep, 62);
+}
+lampoStep();
+window.addEventListener('resize', lampoFit);
+
+/* ---- SLIDESHOW ARTICOLI: cambio ogni 3 secondi con dissolvenza ---- */
+document.querySelectorAll('.slideshow').forEach(box => {
+  const slides = box.querySelectorAll('.slide');
+  let i = 0;
+  setInterval(() => {
+    slides[i].classList.remove('attiva');
+    i = (i + 1) % slides.length;
+    slides[i].classList.add('attiva');
+  }, 3000);
+});
+</script>
+
+</body>
+</html>
