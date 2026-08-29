@@ -289,10 +289,10 @@ function entraNelSito(){
 const ctxSpin = document.getElementById('spin-canvas').getContext('2d');
 const SPRITE = new Image();
 SPRITE.src = 'logo-spin.webp';
-const NFR = 60, COLS = 6, FW = 540, FH = 304;
+const NFR = 120, COLS = 8, FW = 540, FH = 304;
 function disegna(){
   if (!SPRITE.complete || !SPRITE.naturalWidth) return;
-  const idx = ((Math.round(rotY / 6) % NFR) + NFR) % NFR;
+  const idx = ((Math.round(rotY / 3) % NFR) + NFR) % NFR;
   ctxSpin.drawImage(SPRITE, (idx % COLS) * FW, Math.floor(idx / COLS) * FH, FW, FH, 0, 0, FW, FH);
 }
 SPRITE.onload = disegna;
