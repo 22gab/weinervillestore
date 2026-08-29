@@ -183,7 +183,7 @@
 <!-- INGRESSO -->
 <div id="ingresso">
   <div id="logo-spin" tabindex="0" role="button" aria-label="Spinna il logo per entrare">
-    <canvas id="spin-canvas" width="400" height="226" aria-hidden="true"></canvas>
+    <canvas id="spin-canvas" width="480" height="270" aria-hidden="true"></canvas>
   </div>
   <p class="hint">Spin the logo to enter</p>
 </div>
@@ -194,7 +194,7 @@
 </div>
 <div class="testata">
   <div class="logo-sito" aria-hidden="true">
-    <canvas id="logo-canvas" width="400" height="226"></canvas>
+    <canvas id="logo-canvas" width="480" height="270"></canvas>
   </div>
 </div>
 
@@ -211,10 +211,10 @@
   <article class="capo">
     <div class="slideshow">
       <div class="slide attiva">
-        <div class="grafica3d"><img src="pezzo1-grafica.png" alt="Grafica del pezzo 1"></div>
+        <div class="grafica3d"><img loading="lazy" decoding="async" src="pezzo1-grafica.webp" alt="Grafica del pezzo 1"></div>
       </div>
       <div class="slide">
-        <img class="foto contenuta" src="pezzo1-capo.png" alt="Il capo steso">
+        <img class="foto contenuta" loading="lazy" decoding="async" src="pezzo1-capo.webp" alt="Il capo steso">
       </div>
       <div class="capo-info">
         <h2 class="capo-nome">Pezzo 1</h2>
@@ -223,15 +223,15 @@
     </div>
   </article>
 
-  <div class="divisore" aria-hidden="true"><img src="skater.png" alt=""></div>
+  <div class="divisore" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png" alt=""></div>
 
   <article class="capo">
     <div class="slideshow">
       <div class="slide attiva">
-        <div class="grafica3d larga"><img src="jeans-grafica.png" alt="Grafica del pezzo 2"></div>
+        <div class="grafica3d larga"><img loading="lazy" decoding="async" src="jeans-grafica.webp" alt="Grafica del pezzo 2"></div>
       </div>
       <div class="slide">
-        <img class="foto contenuta" src="jeans-capo.png" alt="Il capo steso">
+        <img class="foto contenuta" loading="lazy" decoding="async" src="jeans-capo.webp" alt="Il capo steso">
       </div>
       <div class="capo-info">
         <h2 class="capo-nome">Pezzo 2</h2>
@@ -240,15 +240,15 @@
     </div>
   </article>
 
-  <div class="divisore skate" aria-hidden="true"><img src="skater.png" alt=""></div>
+  <div class="divisore skate" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png" alt=""></div>
 
   <article class="capo">
     <div class="slideshow">
       <div class="slide attiva">
-        <div class="grafica3d"><img src="pezzo2-grafica.png" alt="Grafica del pezzo 2"></div>
+        <div class="grafica3d"><img loading="lazy" decoding="async" src="pezzo2-grafica.webp" alt="Grafica del pezzo 2"></div>
       </div>
       <div class="slide">
-        <img class="foto contenuta" src="pezzo2-capo.png" alt="Il capo steso">
+        <img class="foto contenuta" loading="lazy" decoding="async" src="pezzo2-capo.webp" alt="Il capo steso">
       </div>
       <div class="capo-info">
         <h2 class="capo-nome">Pezzo 3</h2>
@@ -257,7 +257,7 @@
     </div>
   </article>
 
-  <div class="divisore skate" aria-hidden="true"><img src="skater.png" alt=""></div>
+  <div class="divisore skate" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png" alt=""></div>
 
 </main>
 
@@ -291,7 +291,7 @@ const ctxSpin = document.getElementById('spin-canvas').getContext('2d');
 const ctxLogo = document.getElementById('logo-canvas').getContext('2d');
 const SPRITE = new Image();
 SPRITE.src = 'logo-spin.webp';
-const NFR = 240, COLS = 10, FW = 400, FH = 226;
+const NFR = 180, COLS = 10, FW = 480, FH = 270;
 let BITMAP = null;
 
 function frameSu(ctx, idx){
@@ -312,7 +312,7 @@ SPRITE.onload = async () => {
   disegna();
 };
 
-/* testata: il logo ruota da solo, un giro ogni 6 secondi, 40 fps */
+/* testata: il logo ruota da solo, un giro ogni 6 secondi, 30 fps */
 let ultimoIdxLogo = -1;
 function giraLogo(t){
   const idx = Math.floor((t % 6000) / 6000 * NFR);
