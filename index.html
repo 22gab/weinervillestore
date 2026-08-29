@@ -48,7 +48,7 @@
     transform-style:preserve-3d;
   }
   #logo-spin:active{cursor:grabbing;}
-  #logo-spin img{width:100%;display:block;pointer-events:none;}
+  #logo-spin canvas{width:100%;display:block;pointer-events:none;mix-blend-mode:screen;}
   .hint{
     font-size:.75rem;letter-spacing:.24em;text-transform:uppercase;
     color:var(--chrome);opacity:.55;text-align:center;
@@ -64,11 +64,9 @@
     perspective:900px;
   }
   .logo-sito{
-    width:min(57.6vw,306px);   /* -10% rispetto a prima */
-    animation:giraY 5.5s linear infinite;
-    transform-style:preserve-3d;
+    width:min(64vw,340px);
   }
-  .logo-sito img{width:100%;display:block;}
+  .logo-sito video{width:100%;display:block;mix-blend-mode:screen;}
   @keyframes giraY{
     from{transform:rotateY(0deg)}
     to{transform:rotateY(360deg)}
@@ -185,7 +183,7 @@
 <!-- INGRESSO -->
 <div id="ingresso">
   <div id="logo-spin" tabindex="0" role="button" aria-label="Spinna il logo per entrare">
-    <img src="logo.png" alt="Logo Weinerville" draggable="false">
+    <canvas id="spin-canvas" width="540" height="304" aria-hidden="true"></canvas>
   </div>
   <p class="hint">Spin the logo to enter</p>
 </div>
@@ -195,7 +193,9 @@
   <span id="lampo-testo" aria-hidden="true"></span>
 </div>
 <div class="testata">
-  <div class="logo-sito" aria-hidden="true"><img src="logo.png" alt=""></div>
+  <div class="logo-sito" aria-hidden="true">
+    <video id="logo-video" src="logo3d.mp4" autoplay muted loop playsinline></video>
+  </div>
 </div>
 
 <main class="catalogo">
@@ -285,6 +285,19 @@ function entraNelSito(){
   document.body.classList.remove('bloccato');
 }
 
+/* scrub del render 3D: 60 fotogrammi, 6 gradi l'uno */
+const ctxSpin = document.getElementById('spin-canvas').getContext('2d');
+const SPRITE = new Image();
+SPRITE.src = 'logo-spin.webp';
+const NFR = 60, COLS = 6, FW = 540, FH = 304;
+function disegna(){
+  if (!SPRITE.complete || !SPRITE.naturalWidth) return;
+  const idx = ((Math.round(rotY / 6) % NFR) + NFR) % NFR;
+  ctxSpin.drawImage(SPRITE, (idx % COLS) * FW, Math.floor(idx / COLS) * FH, FW, FH, 0, 0, FW, FH);
+}
+SPRITE.onload = disegna;
+let riallineo = false, target = 0;
+
 function frame(){
   if (!entrato){
     if (!trascinando && Math.abs(vel) > 0.05){
@@ -294,13 +307,15 @@ function frame(){
       if (accumulo >= SOGLIA) entraNelSito();
     } else if (!trascinando && Math.abs(vel) <= 0.05 && vel !== 0){
       vel = 0;
-      const vicino = Math.round(rotY / 360) * 360;
-      logoSpin.style.transition = 'transform .6s';
-      rotY = vicino;
+      target = Math.round(rotY / 360) * 360;
+      riallineo = true;
       accumulo = 0;
-      setTimeout(() => logoSpin.style.transition = '', 600);
     }
-    logoSpin.style.transform = 'rotateY(' + rotY + 'deg)';
+    if (riallineo){
+      rotY += (target - rotY) * 0.12;
+      if (Math.abs(target - rotY) < 0.4){ rotY = target; riallineo = false; }
+    }
+    disegna();
     requestAnimationFrame(frame);
   }
 }
@@ -310,7 +325,7 @@ function inizio(x){
   trascinando = true;
   ultimaX = x;
   vel = 0;
-  logoSpin.style.transition = '';
+  riallineo = false;
 }
 function muovi(x){
   if (!trascinando) return;
@@ -336,6 +351,12 @@ window.addEventListener('mouseup', fine);
 logoSpin.addEventListener('keydown', e => {
   if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); entraNelSito(); }
 });
+
+/* il video del logo riparte al primo tocco se l'autoplay era bloccato */
+const logoVideo = document.getElementById('logo-video');
+function sbloccaVideo(){ if (logoVideo.paused) logoVideo.play().catch(()=>{}); }
+window.addEventListener('touchstart', sbloccaVideo, {once:true});
+window.addEventListener('click', sbloccaVideo, {once:true});
 
 /* ---- BLOCCO LAMPO: frasi scritte a raffica, sempre a tutto riquadro ---- */
 const FRASI = ["Fatto in casa","Marchio italiano","Indipendente","Piccola produzione",
