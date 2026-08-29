@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark">
 <title>WEINERVILLESTORE</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -15,6 +16,7 @@
     --chrome:#C9CCD6;      /* argento chrome */
     --bianco:#F2F0F7;
   }
+  html{color-scheme:dark;}
   *{margin:0;padding:0;box-sizing:border-box;}
   html{scroll-behavior:smooth;}
   body{
@@ -336,12 +338,12 @@ function lampoStep(){
   const frase = FRASI[fIdx].toUpperCase();
   lIdx++;
   if (lIdx > frase.length){
-    setTimeout(() => { fIdx = (fIdx+1) % FRASI.length; lIdx = 0; lampoStep(); }, 520);
+    setTimeout(() => { fIdx = (fIdx+1) % FRASI.length; lIdx = 0; lampoStep(); }, 400);
     return;
   }
   lampoTxt.textContent = frase.slice(0, lIdx);
   lampoFit();
-  setTimeout(lampoStep, 85);
+  setTimeout(lampoStep, 62);
 }
 lampoStep();
 window.addEventListener('resize', lampoFit);
