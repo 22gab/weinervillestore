@@ -160,22 +160,26 @@
   }
 
   .divisore{
-    position:relative;height:70px;
+    position:relative;height:66px;
     overflow:hidden;
   }
   .divisore img{
-    position:absolute;bottom:4px;left:0;height:56px;width:auto;
-    animation:camminata 9s linear infinite;
+    position:absolute;bottom:4px;left:0;height:54px;width:auto;
+    animation:vaEVieni 16s linear infinite;
   }
-  @keyframes camminata{
-    0%   {left:-40px;transform:rotate(0deg);}
-    72%  {left:calc(100% - 30px);transform:rotate(0deg);}
-    74%  {left:calc(100% - 26px);transform:rotate(14deg);}   /* SBAM */
-    77%  {left:calc(100% - 38px);transform:rotate(-6deg);}
-    80%  {left:calc(100% - 32px);transform:rotate(4deg);}
-    83%  {left:calc(100% - 34px);transform:rotate(0deg);}
-    99%  {left:calc(100% - 34px);transform:rotate(0deg);}    /* resta un attimo stordito */
-    100% {left:-40px;transform:rotate(0deg);}
+  /* cammina -> sbatte a destra -> si gira -> cammina -> sbatte a sinistra -> si rigira */
+  @keyframes vaEVieni{
+    0%    {left:0;transform:scaleX(1) rotate(0deg);}
+    44%   {left:calc(100% - 28px);transform:scaleX(1) rotate(0deg);}
+    45.2% {left:calc(100% - 24px);transform:scaleX(1) rotate(13deg);}   /* SBAM */
+    46.6% {left:calc(100% - 33px);transform:scaleX(1) rotate(-5deg);}
+    48%   {left:calc(100% - 29px);transform:scaleX(1) rotate(0deg);}
+    50%   {left:calc(100% - 29px);transform:scaleX(-1) rotate(0deg);}   /* si gira */
+    94%   {left:0;transform:scaleX(-1) rotate(0deg);}
+    95.2% {left:-4px;transform:scaleX(-1) rotate(-13deg);}              /* SBAM */
+    96.6% {left:5px;transform:scaleX(-1) rotate(5deg);}
+    98%   {left:1px;transform:scaleX(-1) rotate(0deg);}
+    100%  {left:1px;transform:scaleX(1) rotate(0deg);}                  /* si rigira */
   }
 
   footer{
