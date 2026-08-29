@@ -168,6 +168,72 @@
     to{left:-125px;}
   }
 
+  /* ---- SCHEDA PRODOTTO ---- */
+  #scheda{
+    position:fixed;inset:0;z-index:600;
+    background:var(--nero);
+    display:none;flex-direction:column;
+    overflow-y:auto;
+  }
+  #scheda.aperta{display:flex;}
+  .scheda-chiudi{
+    position:sticky;top:0;align-self:flex-end;z-index:5;
+    background:none;border:none;color:var(--chrome);
+    font-size:1.9rem;line-height:1;padding:14px 18px;cursor:pointer;
+    font-family:'Space Mono',monospace;
+  }
+  .galleria{
+    display:flex;overflow-x:auto;
+    scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+  }
+  .galleria::-webkit-scrollbar{display:none;}
+  .galleria img{
+    flex:none;width:100%;
+    aspect-ratio:4/5;object-fit:contain;
+    scroll-snap-align:center;
+  }
+  .pallini{
+    display:flex;gap:8px;justify-content:center;padding:12px 0 4px;
+  }
+  .pallini i{
+    width:7px;height:7px;border-radius:50%;
+    background:var(--chrome);opacity:.3;transition:opacity .2s;
+  }
+  .pallini i.on{opacity:1;background:var(--viola-chiaro);}
+  .scheda-corpo{
+    padding:10px 22px 46px;max-width:520px;margin:0 auto;width:100%;
+    display:flex;flex-direction:column;gap:16px;
+  }
+  .scheda-riga1{display:flex;justify-content:space-between;align-items:baseline;}
+  .scheda-nome{
+    font-family:'Anton',sans-serif;font-size:1.9rem;
+    letter-spacing:.04em;text-transform:uppercase;color:var(--chrome);
+  }
+  .scheda-prezzo{font-size:1.25rem;font-weight:700;color:var(--viola-chiaro);}
+  .scheda-etichette{display:flex;flex-wrap:wrap;gap:8px;}
+  .scheda-etichette span{
+    font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;
+    border:1px solid rgba(139,95,199,.5);color:var(--bianco);
+    padding:6px 10px;
+  }
+  .scheda-desc{
+    font-size:.8rem;line-height:1.75;color:var(--bianco);opacity:.85;
+  }
+  .compra{
+    display:block;text-align:center;text-decoration:none;
+    font-family:'Anton',sans-serif;font-size:1.05rem;
+    letter-spacing:.14em;text-transform:uppercase;
+    background:var(--viola);color:var(--nero);
+    padding:16px 10px;margin-top:6px;
+  }
+  .compra:active{transform:scale(.985);}
+  .scheda-note{
+    font-size:.64rem;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--chrome);opacity:.55;text-align:center;
+  }
+
   footer{
     text-align:center;
     padding:26px 18px 42px;
@@ -208,7 +274,7 @@
        3. foto indossata          → idem
        ============================================================ -->
 
-  <article class="capo">
+  <article class="capo" style="cursor:pointer">
     <div class="slideshow">
       <div class="slide attiva">
         <div class="grafica3d"><img loading="lazy" decoding="async" src="pezzo1-grafica.webp" alt="Grafica del pezzo 1"></div>
@@ -225,7 +291,7 @@
 
   <div class="divisore" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png" alt=""></div>
 
-  <article class="capo">
+  <article class="capo" style="cursor:pointer">
     <div class="slideshow">
       <div class="slide attiva">
         <div class="grafica3d larga"><img loading="lazy" decoding="async" src="jeans-grafica.webp" alt="Grafica del pezzo 2"></div>
@@ -242,7 +308,7 @@
 
   <div class="divisore skate" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png" alt=""></div>
 
-  <article class="capo">
+  <article class="capo" style="cursor:pointer">
     <div class="slideshow">
       <div class="slide attiva">
         <div class="grafica3d"><img loading="lazy" decoding="async" src="pezzo2-grafica.webp" alt="Grafica del pezzo 2"></div>
@@ -260,6 +326,22 @@
   <div class="divisore skate" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png" alt=""></div>
 
 </main>
+
+<div id="scheda" role="dialog" aria-modal="true">
+  <button class="scheda-chiudi" aria-label="Chiudi">✕</button>
+  <div class="galleria" id="scheda-galleria"></div>
+  <div class="pallini" id="scheda-pallini"></div>
+  <div class="scheda-corpo">
+    <div class="scheda-riga1">
+      <h2 class="scheda-nome" id="scheda-nome"></h2>
+      <span class="scheda-prezzo" id="scheda-prezzo"></span>
+    </div>
+    <div class="scheda-etichette" id="scheda-etichette"></div>
+    <p class="scheda-desc" id="scheda-desc"></p>
+    <a class="compra" id="scheda-compra" href="#">Ordina via email</a>
+    <p class="scheda-note">Pagamento online in arrivo · Spedizione tracciata in tutta Italia</p>
+  </div>
+</div>
 
 <footer>
   © 2026 Weinervillestore · <a href="mailto:ordini@weinervillestar.com">ordini@weinervillestar.com</a>
@@ -413,6 +495,62 @@ function lampoStep(){
 }
 lampoStep();
 window.addEventListener('resize', lampoFit);
+
+/* ---- SCHEDA PRODOTTO ---- */
+const PEZZI = [
+  {
+    nome:'Pezzo 1', prezzo:'\u20ac 29,90',
+    etichette:['Taglia M','Vintage \u00b7 ottime condizioni','Pezzo unico'],
+    desc:'T-shirt Champion nera second-hand, rilavorata a mano da WEINERVILLE con grafica gotica. Un solo esemplare: quando \u00e8 venduto, \u00e8 venduto.',
+    foto:['pezzo1-grafica.webp','pezzo1-capo.webp','pezzo1-indossata.webp']
+  },
+  {
+    nome:'Pezzo 2', prezzo:'\u20ac 29,90',
+    etichette:['Taglia W32','Vintage \u00b7 ottime condizioni','Pezzo unico'],
+    desc:'Jeans grigi second-hand, rilavorati a mano da WEINERVILLE con grafica tribal sul retro. Un solo esemplare: quando \u00e8 venduto, \u00e8 venduto.',
+    foto:['jeans-grafica.webp','jeans-capo.webp']
+  },
+  {
+    nome:'Pezzo 3', prezzo:'\u20ac 29,90',
+    etichette:['Taglia M','Vintage \u00b7 ottime condizioni','Pezzo unico'],
+    desc:'Polo Levi\u2019s blu navy second-hand, rilavorata a mano da WEINERVILLE con grafica tribal ricamata. Un solo esemplare: quando \u00e8 venduto, \u00e8 venduto.',
+    foto:['pezzo2-grafica.webp','pezzo2-capo.webp']
+  }
+];
+const scheda = document.getElementById('scheda');
+const galleria = document.getElementById('scheda-galleria');
+const pallini = document.getElementById('scheda-pallini');
+
+function apriScheda(i){
+  const p = PEZZI[i];
+  document.getElementById('scheda-nome').textContent = p.nome;
+  document.getElementById('scheda-prezzo').textContent = p.prezzo;
+  document.getElementById('scheda-etichette').innerHTML =
+    p.etichette.map(e => '<span>' + e + '</span>').join('');
+  document.getElementById('scheda-desc').textContent = p.desc;
+  const oggetto = encodeURIComponent('Ordine ' + p.nome + ' - WEINERVILLE');
+  const corpo = encodeURIComponent('Ciao! Vorrei ordinare il ' + p.nome + ' (' + p.prezzo.replace('\u20ac','EUR') + ').\n\nNome e cognome:\nIndirizzo di spedizione:\nTelefono:');
+  document.getElementById('scheda-compra').href =
+    'mailto:ordini@weinervillestar.com?subject=' + oggetto + '&body=' + corpo;
+  galleria.innerHTML = p.foto.map(f => '<img src="' + f + '" alt="">').join('');
+  pallini.innerHTML = p.foto.map((_, j) => '<i' + (j === 0 ? ' class="on"' : '') + '></i>').join('');
+  galleria.scrollLeft = 0;
+  scheda.classList.add('aperta');
+  document.body.classList.add('bloccato');
+}
+function chiudiScheda(){
+  scheda.classList.remove('aperta');
+  document.body.classList.remove('bloccato');
+}
+document.querySelector('.scheda-chiudi').addEventListener('click', chiudiScheda);
+window.addEventListener('keydown', e => { if (e.key === 'Escape') chiudiScheda(); });
+document.querySelectorAll('article.capo').forEach((a, i) => {
+  a.addEventListener('click', () => apriScheda(i));
+});
+galleria.addEventListener('scroll', () => {
+  const idx = Math.round(galleria.scrollLeft / galleria.clientWidth);
+  pallini.querySelectorAll('i').forEach((p, j) => p.classList.toggle('on', j === idx));
+}, {passive:true});
 
 /* ---- SLIDESHOW ARTICOLI: cambio ogni 3 secondi con dissolvenza ---- */
 document.querySelectorAll('.slideshow').forEach(box => {
