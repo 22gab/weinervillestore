@@ -74,7 +74,7 @@
     to{transform:rotateY(360deg)}
   }
   .lampo{
-    width:100%;height:34px;
+    width:100%;height:40px;
     background:var(--viola);
     position:relative;overflow:hidden;
   }
@@ -343,7 +343,7 @@ function lampoStep(){
   }
   lampoTxt.textContent = frase.slice(0, lIdx);
   lampoFit();
-  setTimeout(lampoStep, 62);
+  setTimeout(lampoStep, 50);
 }
 lampoStep();
 window.addEventListener('resize', lampoFit);
