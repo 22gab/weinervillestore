@@ -160,26 +160,17 @@
   }
 
   .divisore{
-    position:relative;height:66px;
+    position:relative;height:76px;
     overflow:hidden;
   }
   .divisore img{
-    position:absolute;bottom:4px;left:0;height:54px;width:auto;
-    animation:vaEVieni 16s linear infinite;
+    position:absolute;bottom:2px;height:66px;width:auto;
+    animation:corsa 8s linear infinite;
   }
-  /* cammina -> sbatte a destra -> si gira -> cammina -> sbatte a sinistra -> si rigira */
-  @keyframes vaEVieni{
-    0%    {left:0;transform:scaleX(1) rotate(0deg);}
-    44%   {left:calc(100% - 28px);transform:scaleX(1) rotate(0deg);}
-    45.2% {left:calc(100% - 24px);transform:scaleX(1) rotate(13deg);}   /* SBAM */
-    46.6% {left:calc(100% - 33px);transform:scaleX(1) rotate(-5deg);}
-    48%   {left:calc(100% - 29px);transform:scaleX(1) rotate(0deg);}
-    50%   {left:calc(100% - 29px);transform:scaleX(-1) rotate(0deg);}   /* si gira */
-    94%   {left:0;transform:scaleX(-1) rotate(0deg);}
-    95.2% {left:-4px;transform:scaleX(-1) rotate(-13deg);}              /* SBAM */
-    96.6% {left:5px;transform:scaleX(-1) rotate(5deg);}
-    98%   {left:1px;transform:scaleX(-1) rotate(0deg);}
-    100%  {left:1px;transform:scaleX(1) rotate(0deg);}                  /* si rigira */
+  /* corre verso sinistra; uscita di scena -> rientra da destra (loop continuo) */
+  @keyframes corsa{
+    from{left:100%;}
+    to{left:-110px;}
   }
 
   footer{
@@ -246,7 +237,7 @@
     </div>
   </article>
 
-  <div class="divisore" aria-hidden="true"><img src="omino.gif" alt=""></div>
+  <div class="divisore" aria-hidden="true"><img src="coniglio.png" alt=""></div>
 
   <article class="capo">
     <div class="slideshow">
