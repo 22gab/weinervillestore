@@ -160,21 +160,19 @@
   }
 
   .divisore{
-    position:relative;height:86px;
+    position:relative;height:96px;
     overflow:hidden;
   }
   .divisore img{
-    position:absolute;bottom:2px;height:78px;width:auto;
-    animation:corsa 6.5s linear infinite;
+    position:absolute;bottom:2px;height:88px;width:auto;
+    animation:corsa 7.5s linear infinite;
   }
+  .divisore:last-of-type img{animation-delay:-3.7s;}
   /* corre verso sinistra; uscita di scena -> rientra da destra (loop continuo) */
   @keyframes corsa{
     from{left:100%;}
     to{left:-125px;}
   }
-
-  .divisore.skate{height:96px;}
-  .divisore.skate img{height:88px;animation-duration:7.5s;}
 
   footer{
     text-align:center;
@@ -240,7 +238,7 @@
     </div>
   </article>
 
-  <div class="divisore" aria-hidden="true"><img src="coniglio.png" alt=""></div>
+  <div class="divisore skate" aria-hidden="true"><img src="skater.png" alt=""></div>
 
   <article class="capo">
     <div class="slideshow">
