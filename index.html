@@ -119,6 +119,7 @@
     transform-style:preserve-3d;
   }
   .grafica3d img{width:100%;display:block;}
+  .grafica3d.larga{width:72%;}
 
   /* Slide 2 e 3: segnaposto foto (da sostituire con <img>) */
   .anteprima{
@@ -161,7 +162,8 @@
     position:absolute;bottom:2px;height:88px;width:auto;
     animation:corsa 7.5s linear infinite;
   }
-  .divisore:last-of-type img{animation-delay:-3.7s;}
+  .divisore:nth-of-type(2) img{animation-delay:-2.6s;}
+  .divisore:nth-of-type(3) img{animation-delay:-5.1s;}
   /* corre verso sinistra; uscita di scena -> rientra da destra (loop continuo) */
   @keyframes corsa{
     from{left:100%;}
@@ -221,6 +223,23 @@
     </div>
   </article>
 
+  <div class="divisore" aria-hidden="true"><img src="skater.png" alt=""></div>
+
+  <article class="capo">
+    <div class="slideshow">
+      <div class="slide attiva">
+        <div class="grafica3d larga"><img src="jeans-grafica.png" alt="Grafica del pezzo 2"></div>
+      </div>
+      <div class="slide">
+        <img class="foto contenuta" src="jeans-capo.png" alt="Il capo steso">
+      </div>
+      <div class="capo-info">
+        <h2 class="capo-nome">Pezzo 2</h2>
+        <span class="capo-prezzo">€ 29,90</span>
+      </div>
+    </div>
+  </article>
+
   <div class="divisore skate" aria-hidden="true"><img src="skater.png" alt=""></div>
 
   <article class="capo">
@@ -232,7 +251,7 @@
         <img class="foto contenuta" src="pezzo2-capo.png" alt="Il capo steso">
       </div>
       <div class="capo-info">
-        <h2 class="capo-nome">Pezzo 2</h2>
+        <h2 class="capo-nome">Pezzo 3</h2>
         <span class="capo-prezzo">€ 29,90</span>
       </div>
     </div>
