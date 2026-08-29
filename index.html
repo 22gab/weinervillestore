@@ -79,13 +79,18 @@
   }
   .nastro-scorre{
     display:flex;gap:0;width:max-content;
-    animation:scorri 22s linear infinite;
+    animation:scorri 30s linear infinite;
   }
+  .nastro-scorre{align-items:center;gap:14px;padding:4px 0;}
   .nastro span{
     flex:none;white-space:nowrap;
-    font-size:.66rem;letter-spacing:.26em;text-transform:uppercase;
-    color:var(--viola-chiaro);opacity:.85;
-    padding-right:2.2em;
+    font-family:'Anton',sans-serif;
+    font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;
+    background:var(--viola);color:var(--nero);
+    padding:7px 14px 6px;
+  }
+  .nastro span:nth-child(even){
+    background:var(--chrome);
   }
   @keyframes scorri{
     from{transform:translateX(0)}
@@ -197,18 +202,26 @@
 <!-- SITO -->
 <div class="testata">
   <div class="logo-sito" aria-hidden="true"><img src="logo.png" alt=""></div>
-  <div class="nastro" aria-label="Marchio italiano, sempre aperto, fatto in casa, amici dell'ambiente, capi second-hand contro gli sprechi">
+  <div class="nastro" aria-label="Fatto in casa, Marchio italiano, Indipendente, Piccola produzione, Fatto per durare, Fatto con cura, Tradizione italiana, Pensato in provincia, Pezzi unici">
     <div class="nastro-scorre" aria-hidden="true">
-      <span>Marchio italiano ✦</span>
-      <span>Sempre aperto ✦</span>
-      <span>Fatto in casa ✦</span>
-      <span>Amici dell'ambiente ✦</span>
-      <span>Capi second-hand contro gli sprechi ✦</span>
-      <span>Marchio italiano ✦</span>
-      <span>Sempre aperto ✦</span>
-      <span>Fatto in casa ✦</span>
-      <span>Amici dell'ambiente ✦</span>
-      <span>Capi second-hand contro gli sprechi ✦</span>
+      <span>Fatto in casa</span>
+      <span>Marchio italiano</span>
+      <span>Indipendente</span>
+      <span>Piccola produzione</span>
+      <span>Fatto per durare</span>
+      <span>Fatto con cura</span>
+      <span>Tradizione italiana</span>
+      <span>Pensato in provincia</span>
+      <span>Pezzi unici</span>
+      <span>Fatto in casa</span>
+      <span>Marchio italiano</span>
+      <span>Indipendente</span>
+      <span>Piccola produzione</span>
+      <span>Fatto per durare</span>
+      <span>Fatto con cura</span>
+      <span>Tradizione italiana</span>
+      <span>Pensato in provincia</span>
+      <span>Pezzi unici</span>
     </div>
   </div>
 </div>
