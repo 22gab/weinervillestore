@@ -159,6 +159,25 @@
     font-size:.9rem;font-weight:700;color:var(--viola-chiaro);
   }
 
+  .divisore{
+    position:relative;height:70px;
+    overflow:hidden;
+  }
+  .divisore img{
+    position:absolute;bottom:4px;left:0;height:56px;width:auto;
+    animation:camminata 9s linear infinite;
+  }
+  @keyframes camminata{
+    0%   {left:-40px;transform:rotate(0deg);}
+    72%  {left:calc(100% - 30px);transform:rotate(0deg);}
+    74%  {left:calc(100% - 26px);transform:rotate(14deg);}   /* SBAM */
+    77%  {left:calc(100% - 38px);transform:rotate(-6deg);}
+    80%  {left:calc(100% - 32px);transform:rotate(4deg);}
+    83%  {left:calc(100% - 34px);transform:rotate(0deg);}
+    99%  {left:calc(100% - 34px);transform:rotate(0deg);}    /* resta un attimo stordito */
+    100% {left:-40px;transform:rotate(0deg);}
+  }
+
   footer{
     text-align:center;
     padding:26px 18px 42px;
@@ -222,6 +241,8 @@
       </div>
     </div>
   </article>
+
+  <div class="divisore" aria-hidden="true"><img src="omino.gif" alt=""></div>
 
   <article class="capo">
     <div class="slideshow">
