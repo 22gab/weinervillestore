@@ -90,7 +90,7 @@
   .capo{cursor:pointer;-webkit-tap-highlight-color:transparent;}
   .slideshow{
     position:relative;aspect-ratio:4/5;overflow:hidden;
-    background:#100C16;perspective:900px;
+    background:transparent;perspective:900px;
   }
   .slide{
     position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
@@ -112,22 +112,30 @@
 
   /* ---- TASTI CHROME ---- */
   .chrome{
-    position:relative;display:block;width:100%;padding:3px;border:none;cursor:pointer;
-    font:inherit;color:var(--chrome);text-decoration:none;
-    background:linear-gradient(135deg,#b8bcc8 0%,#f5f6fa 18%,#7c8190 38%,#fafbfd 52%,#8e93a3 68%,#dfe2ea 84%,#b8bcc8 100%);
-    background-size:260% 260%;
-    animation:luccica 3.6s linear infinite;
+    position:relative;display:block;width:100%;padding:2px;border:none;cursor:pointer;
+    font:inherit;color:var(--chrome);text-decoration:none;overflow:hidden;
+    background:linear-gradient(180deg,#eef0f5 0%,#7b8090 42%,#fafbfd 50%,#969baa 62%,#c4c8d3 100%);
     -webkit-tap-highlight-color:transparent;
   }
+  /* riflesso di luce che scorre sul metallo (solo transform: leggero per il telefono) */
+  .chrome::after{
+    content:'';position:absolute;top:-60%;left:-40%;width:35%;height:220%;
+    background:linear-gradient(100deg,rgba(255,255,255,0) 0%,rgba(255,255,255,.75) 50%,rgba(255,255,255,0) 100%);
+    transform:translateX(-120%) rotate(12deg);
+    animation:luccica 3.2s ease-in-out infinite;
+    pointer-events:none;
+  }
   .chrome > span{
-    display:block;background:#100C16;
-    padding:13px 4px;font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;
+    display:block;background:#100C16;position:relative;
+    padding:10px 4px;font-size:.56rem;letter-spacing:.14em;text-transform:uppercase;
     text-align:center;line-height:1.4;
   }
+  .chrome.pieno > span{background:transparent;}
+  .chrome.pieno::after{z-index:2;}
   .chrome:active{transform:scale(.985);}
-  @keyframes luccica{from{background-position:0% 0%}to{background-position:100% 100%}}
+  @keyframes luccica{0%{transform:translateX(-140%) rotate(12deg)} 60%{transform:translateX(520%) rotate(12deg)} 100%{transform:translateX(520%) rotate(12deg)}}
   .shopnow{margin:22px auto 6px;width:min(72%,300px);}
-  .shopnow > span{font-family:'Anton',sans-serif;font-size:1.15rem;letter-spacing:.2em;padding:15px 8px;}
+  .shopnow > span{font-family:'Anton',sans-serif;font-size:1.2rem;letter-spacing:.22em;padding:14px 8px;color:var(--nero);text-shadow:0 1px 0 rgba(255,255,255,.35);}
 
   .divisore{position:relative;height:96px;overflow:hidden;}
   .divisore img{position:absolute;bottom:2px;height:88px;width:auto;animation:corsa 7.5s linear infinite;}
@@ -140,6 +148,7 @@
     display:none;flex-direction:column;overflow-y:auto;
   }
   .schermata.aperta{display:flex;}
+  .schermata > *{flex-shrink:0;}
   .schermata-testa{
     position:sticky;top:0;z-index:5;background:var(--nero);
     display:flex;align-items:center;justify-content:space-between;padding:10px 12px;
@@ -169,6 +178,7 @@
   .scheda-nome{font-family:'Anton',sans-serif;font-size:1.9rem;letter-spacing:.04em;text-transform:uppercase;color:var(--chrome);}
   .scheda-prezzo{font-size:1.2rem;font-weight:700;color:var(--viola-chiaro);white-space:nowrap;}
   .tasti3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+  .compra{padding:3px;}
   .compra > span{background:var(--viola);color:var(--nero);font-family:'Anton',sans-serif;font-size:1.15rem;letter-spacing:.16em;padding:15px 8px;}
   .pagamenti{
     display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;
@@ -231,7 +241,7 @@
 
 <main class="home">
   <div class="griglia" id="home-griglia"></div>
-  <a class="chrome shopnow" id="shopnow" href="#catalogo"><span>SHOP NOW</span></a>
+  <a class="chrome pieno shopnow" id="shopnow" href="#catalogo"><span>SHOP NOW</span></a>
 </main>
 
 <div class="divisore" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png" alt=""></div>
@@ -326,6 +336,8 @@ class Sprite3D {
         this.bitmap = await Promise.all(Array.from({length: this.nfr}, (_, i) =>
           createImageBitmap(this.img[Math.floor(i / this.perfoglio)],
             ((i % this.perfoglio) % this.cols) * this.fw, Math.floor((i % this.perfoglio) / this.cols) * this.fh, this.fw, this.fh)));
+        this.img.forEach(im => { im.src = ''; });   // libero la memoria dei fogli interi
+        this.img = [];
       } catch(e) {}
       if (cb) cb();
     });
@@ -333,13 +345,14 @@ class Sprite3D {
   disegna(ctx, idx){
     ctx.clearRect(0, 0, this.fw, this.fh);
     if (this.bitmap){ ctx.drawImage(this.bitmap[idx], 0, 0); return; }
+    if (!this.img.length) return;
     const foglio = this.img[Math.floor(idx / this.perfoglio)];
     const loc = idx % this.perfoglio;
     if (foglio && foglio.complete && foglio.naturalWidth)
       ctx.drawImage(foglio, (loc % this.cols) * this.fw, Math.floor(loc / this.cols) * this.fh, this.fw, this.fh, 0, 0, this.fw, this.fh);
   }
 }
-const LOGO = new Sprite3D({fogli:['logo-spin-a.webp','logo-spin-b.webp'], nfr:144, cols:12, perfoglio:72, fw:640, fh:360, giro:6000});
+const LOGO = new Sprite3D({fogli:['logo-spin-a.webp','logo-spin-b.webp'], nfr:120, cols:10, perfoglio:60, fw:640, fh:360, giro:6000});
 const ctxSpin = document.getElementById('spin-canvas').getContext('2d');
 const ctxLogo = document.getElementById('logo-canvas').getContext('2d');
 const NFR = LOGO.nfr;
@@ -347,10 +360,15 @@ function disegna(){ LOGO.disegna(ctxSpin, ((Math.round(rotY / (360 / NFR)) % NFR
 LOGO.carica(disegna);
 
 /* canvas che ruotano da soli (logo in testata + grafiche dei pezzi) */
-const ROTANTI = [{sprite: LOGO, ctx: ctxLogo, ultimo: -1}];
+const ROTANTI = [{sprite: LOGO, ctx: ctxLogo, ultimo: -1, visibile: true}];
+const inVista = new IntersectionObserver(e => e.forEach(x => {
+  const r = ROTANTI.find(r => r.ctx.canvas === x.target); if (r) r.visibile = x.isIntersecting;
+}), {threshold: 0});
+inVista.observe(ctxLogo.canvas);
 function giraTutti(t){
   for (const r of ROTANTI){
-    if (!r.sprite.caricato) continue;
+    if (!r.sprite.caricato || !r.visibile) continue;
+    if (entrato === false && r.sprite !== LOGO) continue;
     const idx = Math.floor((t % r.sprite.giro) / r.sprite.giro * r.sprite.nfr);
     if (idx !== r.ultimo){ r.sprite.disegna(r.ctx, idx); r.ultimo = idx; }
   }
@@ -447,7 +465,7 @@ window.addEventListener('resize', lampoFit);
 const PEZZI = [
   {
     nome:'Pezzo 1', prezzo:'\u20ac 29,90',
-    grafica:{tipo:'sprite', fogli:['pezzo1-spin-a.webp','pezzo1-spin-b.webp'], nfr:90, cols:9, perfoglio:45, fw:313, fh:520, giro:5000, larghezza:'52%'},
+    grafica:{tipo:'sprite', fogli:['pezzo1-spin-a.webp','pezzo1-spin-b.webp'], nfr:108, cols:9, perfoglio:54, fw:300, fh:617, giro:4200, larghezza:'46%'},
     foto:['pezzo1-capo.webp','pezzo1-indossata.webp'],
     misure:[['Taglia','M'],['Spalle','\u2014 cm'],['Petto','\u2014 cm'],['Lunghezza','\u2014 cm'],['Vestibilit\u00e0','Regular'],['Modello','\u2014 cm \u00b7 porta M']],
     descrizione:[
@@ -458,7 +476,7 @@ const PEZZI = [
   },
   {
     nome:'Pezzo 2', prezzo:'\u20ac 29,90',
-    grafica:{tipo:'sprite', fogli:['jeans-spin-a.webp','jeans-spin-b.webp'], nfr:96, cols:8, perfoglio:48, fw:560, fh:268, giro:5000, larghezza:'82%'},
+    grafica:{tipo:'sprite', fogli:['jeans-spin-a.webp','jeans-spin-b.webp'], nfr:108, cols:6, perfoglio:54, fw:480, fh:228, giro:4200, larghezza:'84%'},
     foto:['jeans-capo.webp'],
     misure:[['Taglia','W32'],['Vita','\u2014 cm'],['Cavallo','\u2014 cm'],['Gamba','\u2014 cm'],['Vestibilit\u00e0','Regular'],['Modello','\u2014 cm \u00b7 porta W32']],
     descrizione:[
@@ -510,7 +528,8 @@ function creaCard(i){
   const cv = art.querySelector('canvas');
   if (cv){
     const sp = spriteDi(p);
-    ROTANTI.push({sprite: sp, ctx: cv.getContext('2d'), ultimo: -1});
+    ROTANTI.push({sprite: sp, ctx: cv.getContext('2d'), ultimo: -1, visibile: false});
+    inVista.observe(cv);
     // carico i fotogrammi solo quando la card e' in vista
     new IntersectionObserver((e, obs) => {
       if (e.some(x => x.isIntersecting)){ sp.carica(); obs.disconnect(); }
