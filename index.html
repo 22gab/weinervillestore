@@ -102,13 +102,13 @@
   .grafica3d.larga{width:76%;}
   .grafica-canvas{display:block;}
   .slide img.foto{height:80%;width:auto;max-width:92%;object-fit:contain;display:block;}
+  .capo{display:flex;flex-direction:column;}
   .capo-info{
-    position:absolute;left:10px;bottom:9px;z-index:5;
-    display:flex;flex-direction:column;gap:1px;pointer-events:none;
-    text-shadow:0 2px 8px rgba(13,10,18,.9);
+    display:flex;flex-direction:column;gap:2px;
+    padding:10px 4px 0;pointer-events:none;
   }
-  .capo-nome{font-family:'Anton',sans-serif;font-size:1.05rem;letter-spacing:.05em;text-transform:uppercase;color:var(--chrome);}
-  .capo-prezzo{font-size:.72rem;font-weight:700;color:var(--viola-chiaro);}
+  .capo-nome{font-family:'Anton',sans-serif;font-size:.82rem;letter-spacing:.05em;text-transform:uppercase;color:var(--chrome);line-height:1.2;}
+  .capo-prezzo{font-size:.66rem;font-weight:700;color:var(--viola-chiaro);}
 
   /* ---- TASTI CHROME ---- */
   .chrome{
@@ -175,7 +175,7 @@
   .pallini i.on{opacity:1;background:var(--viola-chiaro);}
   .scheda-corpo{padding:8px 22px 40px;max-width:520px;margin:0 auto;width:100%;display:flex;flex-direction:column;gap:14px;}
   .scheda-riga1{display:flex;justify-content:space-between;align-items:baseline;gap:12px;}
-  .scheda-nome{font-family:'Anton',sans-serif;font-size:1.9rem;letter-spacing:.04em;text-transform:uppercase;color:var(--chrome);}
+  .scheda-nome{font-family:'Anton',sans-serif;font-size:1.3rem;letter-spacing:.04em;text-transform:uppercase;color:var(--chrome);}
   .scheda-prezzo{font-size:1.2rem;font-weight:700;color:var(--viola-chiaro);white-space:nowrap;}
   .tasti3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
   .tasti3 .chrome > span{height:42px;display:flex;align-items:center;justify-content:center;padding:0 4px;font-size:.56rem;}
@@ -199,7 +199,7 @@
   #popup.aperto{display:flex;}
   .popup-box{
     width:100%;max-width:400px;max-height:72vh;overflow-y:auto;
-    background:var(--card);border:1px solid #a4a8b6;padding:20px 20px 22px;position:relative;
+    background:var(--card);border:1px solid #a4a8b6;padding:20px 20px 22px;position:relative;border-radius:18px;
   }
   .popup-chiudi{position:absolute;top:8px;right:10px;background:none;border:none;color:var(--chrome);font-size:1.25rem;cursor:pointer;font-family:'Space Mono',monospace;}
   .popup-titolo{font-family:'Anton',sans-serif;font-size:1.3rem;letter-spacing:.08em;text-transform:uppercase;color:var(--chrome);margin-bottom:12px;}
@@ -465,7 +465,7 @@ window.addEventListener('resize', lampoFit);
 /* ---- DATI DEI PEZZI ---- */
 const PEZZI = [
   {
-    nome:'Pezzo 1', prezzo:'\u20ac 29,90',
+    nome:'Champion tee custom', prezzo:'\u20ac 29,90',
     grafica:{tipo:'sprite', fogli:['pezzo1-spin-a.webp','pezzo1-spin-b.webp'], nfr:150, cols:8, perfoglio:75, fw:320, fh:530, giro:5000, larghezza:'50%'},
     foto:['pezzo1-capo.webp','pezzo1-indossata.webp'],
     misure:[['Taglia','M'],['Spalle','\u2014 cm'],['Petto','\u2014 cm'],['Lunghezza','\u2014 cm'],['Vestibilit\u00e0','Regular'],['Modello','\u2014 cm \u00b7 porta M']],
@@ -476,7 +476,7 @@ const PEZZI = [
     ]
   },
   {
-    nome:'Pezzo 2', prezzo:'\u20ac 29,90',
+    nome:'Jeans vintage tribal love', prezzo:'\u20ac 29,90',
     grafica:{tipo:'sprite', fogli:['jeans-spin-a.webp','jeans-spin-b.webp'], nfr:200, cols:8, perfoglio:100, fw:480, fh:229, giro:5000, larghezza:'86%'},
     foto:['jeans-capo.webp'],
     misure:[['Taglia','W32'],['Vita','\u2014 cm'],['Cavallo','\u2014 cm'],['Gamba','\u2014 cm'],['Vestibilit\u00e0','Regular'],['Modello','\u2014 cm \u00b7 porta W32']],
@@ -487,7 +487,7 @@ const PEZZI = [
     ]
   },
   {
-    nome:'Pezzo 3', prezzo:'\u20ac 29,90',
+    nome:'Polo Levi\u2019s custom', prezzo:'\u20ac 29,90',
     grafica:{tipo:'img', src:'pezzo2-grafica.webp', larga:false},
     foto:['pezzo2-capo.webp'],
     misure:[['Taglia','M'],['Spalle','\u2014 cm'],['Petto','\u2014 cm'],['Lunghezza','\u2014 cm'],['Vestibilit\u00e0','Regular'],['Modello','\u2014 cm \u00b7 porta M']],
@@ -509,8 +509,16 @@ function spriteDi(p){
   if (!SPRITES.has(p)) SPRITES.set(p, new Sprite3D(p.grafica));
   return SPRITES.get(p);
 }
-function creaCard(i){
+function creaCard(i, soloFoto){
   const p = PEZZI[i];
+  if (soloFoto){
+    const a = document.createElement('article');
+    a.className = 'capo';
+    a.innerHTML = '<div class="slideshow"><div class="slide attiva"><img class="foto" loading="lazy" decoding="async" src="' + p.foto[0] + '" alt="' + p.nome + '"></div></div>' +
+                  '<div class="capo-info"><h2 class="capo-nome">' + p.nome + '</h2><span class="capo-prezzo">' + p.prezzo + '</span></div>';
+    a.addEventListener('click', () => apriScheda(i));
+    return a;
+  }
   const art = document.createElement('article');
   art.className = 'capo';
   let slide1;
@@ -523,8 +531,8 @@ function creaCard(i){
     '<div class="slideshow">' +
       '<div class="slide attiva">' + slide1 + '</div>' +
       '<div class="slide"><img class="foto" loading="lazy" decoding="async" src="' + p.foto[0] + '" alt="' + p.nome + '"></div>' +
-      '<div class="capo-info"><h2 class="capo-nome">' + p.nome + '</h2><span class="capo-prezzo">' + p.prezzo + '</span></div>' +
-    '</div>';
+    '</div>' +
+    '<div class="capo-info"><h2 class="capo-nome">' + p.nome + '</h2><span class="capo-prezzo">' + p.prezzo + '</span></div>';
   art.addEventListener('click', () => apriScheda(i));
   const cv = art.querySelector('canvas');
   if (cv){
@@ -544,7 +552,7 @@ function creaCard(i){
 const homeGriglia = document.getElementById('home-griglia');
 PEZZI.slice(0, 2).forEach((_, i) => homeGriglia.appendChild(creaCard(i)));
 const catGriglia = document.getElementById('catalogo-griglia');
-PEZZI.forEach((_, i) => catGriglia.appendChild(creaCard(i)));
+PEZZI.forEach((_, i) => catGriglia.appendChild(creaCard(i, true)));
 document.getElementById('catalogo-conta').textContent = PEZZI.length + ' pezzi unici disponibili';
 
 /* ---- SCHERMATE (catalogo, scheda) ---- */
@@ -582,8 +590,8 @@ function apriScheda(i){
     if (j === i) return;
     const a = document.createElement('article');
     a.className = 'capo';
-    a.innerHTML = '<div class="slideshow"><div class="slide attiva"><img class="foto" loading="lazy" src="' + q.foto[0] + '" alt="' + q.nome + '"></div>' +
-                  '<div class="capo-info"><h2 class="capo-nome">' + q.nome + '</h2><span class="capo-prezzo">' + q.prezzo + '</span></div></div>';
+    a.innerHTML = '<div class="slideshow"><div class="slide attiva"><img class="foto" loading="lazy" src="' + q.foto[0] + '" alt="' + q.nome + '"></div></div>' +
+                  '<div class="capo-info"><h2 class="capo-nome">' + q.nome + '</h2><span class="capo-prezzo">' + q.prezzo + '</span></div>';
     a.addEventListener('click', () => { apriScheda(j); scheda.scrollTop = 0; });
     altri.appendChild(a);
   });
