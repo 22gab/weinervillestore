@@ -101,7 +101,7 @@
   .grafica3d img{width:100%;display:block;}
   .grafica3d.larga{width:76%;}
   .grafica-canvas{display:block;}
-  .slide img.foto{width:100%;height:100%;object-fit:contain;padding:7%;display:block;}
+  .slide img.foto{height:80%;width:auto;max-width:92%;object-fit:contain;display:block;}
   .capo-info{
     position:absolute;left:10px;bottom:9px;z-index:5;
     display:flex;flex-direction:column;gap:1px;pointer-events:none;
@@ -169,15 +169,16 @@
   /* ---- SCHEDA PRODOTTO ---- */
   .galleria{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
   .galleria::-webkit-scrollbar{display:none;}
-  .galleria img{flex:none;width:100%;aspect-ratio:4/5;object-fit:contain;padding:4%;scroll-snap-align:center;}
+  .galleria img{flex:none;width:100%;height:min(40vh,360px);object-fit:contain;padding:2% 6%;scroll-snap-align:center;}
   .pallini{display:flex;gap:8px;justify-content:center;padding:10px 0 2px;}
   .pallini i{width:7px;height:7px;border-radius:50%;background:var(--chrome);opacity:.3;transition:opacity .2s;}
   .pallini i.on{opacity:1;background:var(--viola-chiaro);}
-  .scheda-corpo{padding:14px 22px 46px;max-width:520px;margin:0 auto;width:100%;display:flex;flex-direction:column;gap:18px;}
+  .scheda-corpo{padding:8px 22px 40px;max-width:520px;margin:0 auto;width:100%;display:flex;flex-direction:column;gap:14px;}
   .scheda-riga1{display:flex;justify-content:space-between;align-items:baseline;gap:12px;}
   .scheda-nome{font-family:'Anton',sans-serif;font-size:1.9rem;letter-spacing:.04em;text-transform:uppercase;color:var(--chrome);}
   .scheda-prezzo{font-size:1.2rem;font-weight:700;color:var(--viola-chiaro);white-space:nowrap;}
-  .tasti3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+  .tasti3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+  .tasti3 .chrome > span{height:42px;display:flex;align-items:center;justify-content:center;padding:0 4px;font-size:.56rem;}
   .compra{padding:3px;}
   .compra > span{background:var(--viola);color:var(--nero);font-family:'Anton',sans-serif;font-size:1.15rem;letter-spacing:.16em;padding:15px 8px;}
   .pagamenti{
@@ -277,7 +278,7 @@
     <div class="tasti3">
       <button class="chrome" data-popup="descrizione"><span>Descrizione</span></button>
       <button class="chrome" data-popup="misure"><span>Misure</span></button>
-      <button class="chrome" data-popup="spedizione"><span>Spedizione<br>e resi</span></button>
+      <button class="chrome" data-popup="spedizione"><span>Spedizioni</span></button>
     </div>
     <a class="chrome compra" id="scheda-compra" href="#"><span>Acquista</span></a>
     <div class="pagamenti">
@@ -465,7 +466,7 @@ window.addEventListener('resize', lampoFit);
 const PEZZI = [
   {
     nome:'Pezzo 1', prezzo:'\u20ac 29,90',
-    grafica:{tipo:'sprite', fogli:['pezzo1-spin-a.webp','pezzo1-spin-b.webp'], nfr:108, cols:9, perfoglio:54, fw:300, fh:617, giro:4200, larghezza:'46%'},
+    grafica:{tipo:'sprite', fogli:['pezzo1-spin-a.webp','pezzo1-spin-b.webp'], nfr:126, cols:9, perfoglio:63, fw:260, fh:431, giro:5000, larghezza:'50%'},
     foto:['pezzo1-capo.webp','pezzo1-indossata.webp'],
     misure:[['Taglia','M'],['Spalle','\u2014 cm'],['Petto','\u2014 cm'],['Lunghezza','\u2014 cm'],['Vestibilit\u00e0','Regular'],['Modello','\u2014 cm \u00b7 porta M']],
     descrizione:[
@@ -476,7 +477,7 @@ const PEZZI = [
   },
   {
     nome:'Pezzo 2', prezzo:'\u20ac 29,90',
-    grafica:{tipo:'sprite', fogli:['jeans-spin-a.webp','jeans-spin-b.webp'], nfr:108, cols:6, perfoglio:54, fw:480, fh:228, giro:4200, larghezza:'84%'},
+    grafica:{tipo:'sprite', fogli:['jeans-spin-a.webp','jeans-spin-b.webp'], nfr:222, cols:8, perfoglio:111, fw:400, fh:188, giro:5000, larghezza:'86%'},
     foto:['jeans-capo.webp'],
     misure:[['Taglia','W32'],['Vita','\u2014 cm'],['Cavallo','\u2014 cm'],['Gamba','\u2014 cm'],['Vestibilit\u00e0','Regular'],['Modello','\u2014 cm \u00b7 porta W32']],
     descrizione:[
