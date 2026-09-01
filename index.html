@@ -84,155 +84,120 @@
     transform-origin:center;
   }
 
-  /* ---- CATALOGO PEZZI UNICI ---- */
-  .catalogo{
-    max-width:520px;margin:0 auto;
-    padding:26px 18px 60px;
-    display:flex;flex-direction:column;gap:30px;
-  }
-  .capo{
-    display:flex;flex-direction:column;
-  }
-
-  /* Slideshow: 3 immagini che si alternano con dissolvenza */
+  /* ---- HOME: due pezzi in vista ---- */
+  .home{max-width:520px;margin:0 auto;padding:18px 16px 10px;}
+  .griglia{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .capo{cursor:pointer;-webkit-tap-highlight-color:transparent;}
   .slideshow{
-    position:relative;
-    aspect-ratio:4/5;
-    overflow:hidden;
-    background:var(--nero);
-    perspective:900px;
+    position:relative;aspect-ratio:4/5;overflow:hidden;
+    background:#100C16;perspective:900px;
   }
   .slide{
-    position:absolute;inset:0;
-    display:flex;align-items:center;justify-content:center;
-    opacity:0;
-    transition:opacity 1s ease;
+    position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    opacity:0;transition:opacity 1s ease;
   }
   .slide.attiva{opacity:1;}
-
-  /* Slide 1: grafica 3D che gira (segnaposto = logo) */
-  .grafica3d{
-    width:39%;
-    animation:giraY 5s linear infinite;
-    transform-style:preserve-3d;
-  }
+  .grafica3d{width:44%;animation:giraY 5s linear infinite;transform-style:preserve-3d;}
   .grafica3d img{width:100%;display:block;}
-  .grafica3d.larga{width:72%;}
-
-  /* Slide 2 e 3: segnaposto foto (da sostituire con <img>) */
-  .anteprima{
-    display:flex;flex-direction:column;align-items:center;gap:12px;
-    color:var(--chrome);
-    font-size:.62rem;letter-spacing:.3em;text-transform:uppercase;
-    text-align:center;padding:0 14px;
-  }
-  .anteprima svg{width:46%;height:auto;}
-  .anteprima span{opacity:.45;}
-
-  /* Se la slide contiene una foto vera, riempie tutto il riquadro */
-  .slide img.foto{
-    width:100%;height:100%;object-fit:cover;display:block;
-  }
-  .slide img.foto.contenuta{
-    object-fit:contain;padding:6%;box-sizing:border-box;
-  }
-
+  .grafica3d.larga{width:76%;}
+  .grafica-canvas{display:block;}
+  .slide img.foto{width:100%;height:100%;object-fit:contain;padding:7%;display:block;}
   .capo-info{
-    position:absolute;left:14px;bottom:12px;z-index:5;
-    display:flex;flex-direction:column;gap:2px;
-    pointer-events:none;
+    position:absolute;left:10px;bottom:9px;z-index:5;
+    display:flex;flex-direction:column;gap:1px;pointer-events:none;
     text-shadow:0 2px 8px rgba(13,10,18,.9);
   }
-  .capo-nome{
-    font-family:'Anton',sans-serif;
-    font-size:1.3rem;letter-spacing:.04em;text-transform:uppercase;
-    color:var(--chrome);
-  }
-  .capo-prezzo{
-    font-size:.9rem;font-weight:700;color:var(--viola-chiaro);
-  }
+  .capo-nome{font-family:'Anton',sans-serif;font-size:1.05rem;letter-spacing:.05em;text-transform:uppercase;color:var(--chrome);}
+  .capo-prezzo{font-size:.72rem;font-weight:700;color:var(--viola-chiaro);}
 
-  .divisore{
-    position:relative;height:96px;
-    overflow:hidden;
+  /* ---- TASTI CHROME ---- */
+  .chrome{
+    position:relative;display:block;width:100%;padding:3px;border:none;cursor:pointer;
+    font:inherit;color:var(--chrome);text-decoration:none;
+    background:linear-gradient(135deg,#b8bcc8 0%,#f5f6fa 18%,#7c8190 38%,#fafbfd 52%,#8e93a3 68%,#dfe2ea 84%,#b8bcc8 100%);
+    background-size:260% 260%;
+    animation:luccica 3.6s linear infinite;
+    -webkit-tap-highlight-color:transparent;
   }
-  .divisore img{
-    position:absolute;bottom:2px;height:88px;width:auto;
-    animation:corsa 7.5s linear infinite;
+  .chrome > span{
+    display:block;background:#100C16;
+    padding:13px 4px;font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;
+    text-align:center;line-height:1.4;
   }
-  .divisore:nth-of-type(2) img{animation-delay:-2.6s;}
-  .divisore:nth-of-type(3) img{animation-delay:-5.1s;}
-  /* corre verso sinistra; uscita di scena -> rientra da destra (loop continuo) */
-  @keyframes corsa{
-    from{left:100%;}
-    to{left:-125px;}
+  .chrome:active{transform:scale(.985);}
+  @keyframes luccica{from{background-position:0% 0%}to{background-position:100% 100%}}
+  .shopnow{margin:22px auto 6px;width:min(72%,300px);}
+  .shopnow > span{font-family:'Anton',sans-serif;font-size:1.15rem;letter-spacing:.2em;padding:15px 8px;}
+
+  .divisore{position:relative;height:96px;overflow:hidden;}
+  .divisore img{position:absolute;bottom:2px;height:88px;width:auto;animation:corsa 7.5s linear infinite;}
+  .divisore.sfasato img{animation-delay:-3.7s;}
+  @keyframes corsa{from{left:100%;} to{left:-125px;}}
+
+  /* ---- CATALOGO (tutti i pezzi) ---- */
+  .schermata{
+    position:fixed;inset:0;z-index:600;background:var(--nero);
+    display:none;flex-direction:column;overflow-y:auto;
+  }
+  .schermata.aperta{display:flex;}
+  .schermata-testa{
+    position:sticky;top:0;z-index:5;background:var(--nero);
+    display:flex;align-items:center;justify-content:space-between;padding:10px 12px;
+  }
+  .tasto-icona{
+    background:none;border:none;color:var(--chrome);cursor:pointer;
+    font-family:'Space Mono',monospace;font-size:1.7rem;line-height:1;padding:6px 10px;
+  }
+  .schermata-titolo{
+    font-family:'Anton',sans-serif;font-size:1.35rem;letter-spacing:.08em;text-transform:uppercase;color:var(--chrome);
+  }
+  .catalogo-corpo{max-width:520px;margin:0 auto;width:100%;padding:6px 16px 40px;}
+  .catalogo-conta{
+    text-align:center;font-size:.6rem;letter-spacing:.24em;text-transform:uppercase;
+    color:var(--chrome);opacity:.5;margin-bottom:16px;
   }
 
   /* ---- SCHEDA PRODOTTO ---- */
-  #scheda{
-    position:fixed;inset:0;z-index:600;
-    background:var(--nero);
-    display:none;flex-direction:column;
-    overflow-y:auto;
-  }
-  #scheda.aperta{display:flex;}
-  .scheda-chiudi{
-    position:sticky;top:0;align-self:flex-end;z-index:5;
-    background:none;border:none;color:var(--chrome);
-    font-size:1.9rem;line-height:1;padding:14px 18px;cursor:pointer;
-    font-family:'Space Mono',monospace;
-  }
-  .galleria{
-    display:flex;overflow-x:auto;
-    scroll-snap-type:x mandatory;
-    -webkit-overflow-scrolling:touch;
-    scrollbar-width:none;
-  }
+  .galleria{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
   .galleria::-webkit-scrollbar{display:none;}
-  .galleria img{
-    flex:none;width:100%;
-    aspect-ratio:4/5;object-fit:contain;
-    scroll-snap-align:center;
-  }
-  .pallini{
-    display:flex;gap:8px;justify-content:center;padding:12px 0 4px;
-  }
-  .pallini i{
-    width:7px;height:7px;border-radius:50%;
-    background:var(--chrome);opacity:.3;transition:opacity .2s;
-  }
+  .galleria img{flex:none;width:100%;aspect-ratio:4/5;object-fit:contain;padding:4%;scroll-snap-align:center;}
+  .pallini{display:flex;gap:8px;justify-content:center;padding:10px 0 2px;}
+  .pallini i{width:7px;height:7px;border-radius:50%;background:var(--chrome);opacity:.3;transition:opacity .2s;}
   .pallini i.on{opacity:1;background:var(--viola-chiaro);}
-  .scheda-corpo{
-    padding:10px 22px 46px;max-width:520px;margin:0 auto;width:100%;
-    display:flex;flex-direction:column;gap:16px;
+  .scheda-corpo{padding:14px 22px 46px;max-width:520px;margin:0 auto;width:100%;display:flex;flex-direction:column;gap:18px;}
+  .scheda-riga1{display:flex;justify-content:space-between;align-items:baseline;gap:12px;}
+  .scheda-nome{font-family:'Anton',sans-serif;font-size:1.9rem;letter-spacing:.04em;text-transform:uppercase;color:var(--chrome);}
+  .scheda-prezzo{font-size:1.2rem;font-weight:700;color:var(--viola-chiaro);white-space:nowrap;}
+  .tasti3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+  .compra > span{background:var(--viola);color:var(--nero);font-family:'Anton',sans-serif;font-size:1.15rem;letter-spacing:.16em;padding:15px 8px;}
+  .pagamenti{
+    display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;
+    font-size:.68rem;color:var(--chrome);margin-top:-6px;
   }
-  .scheda-riga1{display:flex;justify-content:space-between;align-items:baseline;}
-  .scheda-nome{
-    font-family:'Anton',sans-serif;font-size:1.9rem;
-    letter-spacing:.04em;text-transform:uppercase;color:var(--chrome);
+  .pagamenti svg{width:22px;height:15px;}
+  .pagamenti b{font-weight:700;letter-spacing:.02em;}
+  .pagamenti a{color:var(--viola-chiaro);font-size:.62rem;text-decoration:underline;text-underline-offset:3px;}
+  .altri-titolo{
+    text-align:center;font-size:.6rem;letter-spacing:.26em;text-transform:uppercase;
+    color:var(--chrome);opacity:.5;margin-top:10px;
   }
-  .scheda-prezzo{font-size:1.25rem;font-weight:700;color:var(--viola-chiaro);}
-  .scheda-etichette{display:flex;flex-wrap:wrap;gap:8px;}
-  .scheda-etichette span{
-    font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;
-    border:1px solid rgba(139,95,199,.5);color:var(--bianco);
-    padding:6px 10px;
+  .altri{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+
+  /* ---- POPUP centrale ---- */
+  #popup{position:fixed;inset:0;z-index:700;display:none;align-items:center;justify-content:center;padding:26px;background:rgba(5,4,8,.72);}
+  #popup.aperto{display:flex;}
+  .popup-box{
+    width:100%;max-width:400px;max-height:72vh;overflow-y:auto;
+    background:var(--card);border:1px solid #a4a8b6;padding:20px 20px 22px;position:relative;
   }
-  .scheda-desc{
-    font-size:.8rem;line-height:1.75;color:var(--bianco);opacity:.85;
-  }
-  .compra{
-    display:block;text-align:center;text-decoration:none;
-    font-family:'Anton',sans-serif;font-size:1.05rem;
-    letter-spacing:.14em;text-transform:uppercase;
-    background:var(--viola);color:var(--nero);
-    padding:16px 10px;margin-top:6px;
-  }
-  .compra:active{transform:scale(.985);}
-  .scheda-note{
-    font-size:.64rem;letter-spacing:.12em;text-transform:uppercase;
-    color:var(--chrome);opacity:.55;text-align:center;
-  }
+  .popup-chiudi{position:absolute;top:8px;right:10px;background:none;border:none;color:var(--chrome);font-size:1.25rem;cursor:pointer;font-family:'Space Mono',monospace;}
+  .popup-titolo{font-family:'Anton',sans-serif;font-size:1.3rem;letter-spacing:.08em;text-transform:uppercase;color:var(--chrome);margin-bottom:12px;}
+  .popup-righe div{display:flex;justify-content:space-between;gap:14px;padding:9px 0;border-bottom:1px solid rgba(139,95,199,.22);font-size:.72rem;}
+  .popup-righe div span:first-child{color:var(--chrome);opacity:.7;}
+  .popup-righe div span:last-child{text-align:right;color:var(--bianco);font-weight:700;}
+  .popup-testo{font-size:.76rem;line-height:1.75;color:var(--bianco);opacity:.88;}
+  .popup-testo p + p{margin-top:9px;}
+  .popup-nota{display:block;text-align:center;margin-top:16px;font-size:.7rem;color:var(--viola-chiaro);text-decoration:none;}
 
   footer{
     text-align:center;
@@ -264,71 +229,34 @@
   </div>
 </div>
 
-<main class="catalogo">
-
-  <!-- ============================================================
-       ARTICOLO = slideshow di 3 immagini (cambio ogni 3 secondi):
-       1. grafica 3D che gira (per ora segnaposto col logo)
-       2. foto del capo integro   → sostituisci il segnaposto con:
-          <img class="foto" src="NOMEFILE.jpg" alt="...">
-       3. foto indossata          → idem
-       ============================================================ -->
-
-  <article class="capo" style="cursor:pointer">
-    <div class="slideshow">
-      <div class="slide attiva">
-        <div class="grafica3d"><img loading="lazy" decoding="async" src="pezzo1-grafica.webp" alt="Grafica del pezzo 1"></div>
-      </div>
-      <div class="slide">
-        <img class="foto contenuta" loading="lazy" decoding="async" src="pezzo1-capo.webp" alt="Il capo steso">
-      </div>
-      <div class="capo-info">
-        <h2 class="capo-nome">Pezzo 1</h2>
-        <span class="capo-prezzo">€ 29,90</span>
-      </div>
-    </div>
-  </article>
-
-  <div class="divisore" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png" alt=""></div>
-
-  <article class="capo" style="cursor:pointer">
-    <div class="slideshow">
-      <div class="slide attiva">
-        <div class="grafica3d larga"><img loading="lazy" decoding="async" src="jeans-grafica.webp" alt="Grafica del pezzo 2"></div>
-      </div>
-      <div class="slide">
-        <img class="foto contenuta" loading="lazy" decoding="async" src="jeans-capo.webp" alt="Il capo steso">
-      </div>
-      <div class="capo-info">
-        <h2 class="capo-nome">Pezzo 2</h2>
-        <span class="capo-prezzo">€ 29,90</span>
-      </div>
-    </div>
-  </article>
-
-  <div class="divisore skate" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png" alt=""></div>
-
-  <article class="capo" style="cursor:pointer">
-    <div class="slideshow">
-      <div class="slide attiva">
-        <div class="grafica3d"><img loading="lazy" decoding="async" src="pezzo2-grafica.webp" alt="Grafica del pezzo 2"></div>
-      </div>
-      <div class="slide">
-        <img class="foto contenuta" loading="lazy" decoding="async" src="pezzo2-capo.webp" alt="Il capo steso">
-      </div>
-      <div class="capo-info">
-        <h2 class="capo-nome">Pezzo 3</h2>
-        <span class="capo-prezzo">€ 29,90</span>
-      </div>
-    </div>
-  </article>
-
-  <div class="divisore skate" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png" alt=""></div>
-
+<main class="home">
+  <div class="griglia" id="home-griglia"></div>
+  <a class="chrome shopnow" id="shopnow" href="#catalogo"><span>SHOP NOW</span></a>
 </main>
 
-<div id="scheda" role="dialog" aria-modal="true">
-  <button class="scheda-chiudi" aria-label="Chiudi">✕</button>
+<div class="divisore" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png" alt=""></div>
+
+<!-- CATALOGO -->
+<div class="schermata" id="catalogo" aria-label="Tutti i pezzi">
+  <div class="schermata-testa">
+    <button class="tasto-icona" data-chiudi="catalogo" aria-label="Torna alla home">&larr;</button>
+    <div class="schermata-titolo">Tutti i pezzi</div>
+    <span style="width:44px"></span>
+  </div>
+  <div class="catalogo-corpo">
+    <div class="catalogo-conta" id="catalogo-conta"></div>
+    <div class="griglia" id="catalogo-griglia"></div>
+  </div>
+  <div class="divisore sfasato" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png" alt=""></div>
+</div>
+
+<!-- SCHEDA PRODOTTO -->
+<div class="schermata" id="scheda" role="dialog" aria-modal="true">
+  <div class="schermata-testa">
+    <button class="tasto-icona" data-chiudi="scheda" aria-label="Chiudi">&larr;</button>
+    <span></span>
+    <button class="tasto-icona" data-chiudi="scheda" aria-label="Chiudi">&#10005;</button>
+  </div>
   <div class="galleria" id="scheda-galleria"></div>
   <div class="pallini" id="scheda-pallini"></div>
   <div class="scheda-corpo">
@@ -336,10 +264,28 @@
       <h2 class="scheda-nome" id="scheda-nome"></h2>
       <span class="scheda-prezzo" id="scheda-prezzo"></span>
     </div>
-    <div class="scheda-etichette" id="scheda-etichette"></div>
-    <p class="scheda-desc" id="scheda-desc"></p>
-    <a class="compra" id="scheda-compra" href="#">Ordina via email</a>
-    <p class="scheda-note">Pagamento online in arrivo · Spedizione tracciata in tutta Italia</p>
+    <div class="tasti3">
+      <button class="chrome" data-popup="descrizione"><span>Descrizione</span></button>
+      <button class="chrome" data-popup="misure"><span>Misure</span></button>
+      <button class="chrome" data-popup="spedizione"><span>Spedizione<br>e resi</span></button>
+    </div>
+    <a class="chrome compra" id="scheda-compra" href="#"><span>Acquista</span></a>
+    <div class="pagamenti">
+      <svg viewBox="0 0 24 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="1.5" width="22" height="13" rx="2"/><line x1="1" y1="5.5" x2="23" y2="5.5" stroke-width="2.5"/></svg>
+      <b>PayPal</b><span style="opacity:.4">&middot;</span>
+      <a href="#" data-popup="pagamenti">altri metodi di pagamento</a>
+    </div>
+    <div class="altri-titolo">&mdash; Altri pezzi &mdash;</div>
+    <div class="altri" id="scheda-altri"></div>
+  </div>
+</div>
+
+<!-- POPUP -->
+<div id="popup">
+  <div class="popup-box" role="dialog" aria-modal="true">
+    <button class="popup-chiudi" aria-label="Chiudi">&#10005;</button>
+    <div class="popup-titolo" id="popup-titolo"></div>
+    <div id="popup-contenuto"></div>
   </div>
 </div>
 
@@ -367,49 +313,50 @@ function entraNelSito(){
   document.body.classList.remove('bloccato');
 }
 
-/* render 3D a fotogrammi trasparenti in alta definizione:
-   144 frame da 640px (2.5 gradi l'uno), divisi su due fogli
-   per stare nei limiti di memoria degli iPhone.
-   Ogni frame viene pre-ritagliato in una bitmap: disegno istantaneo. */
+/* ---- MOTORE SPRITE 3D (usato dal logo e dalle grafiche dei pezzi) ---- */
+class Sprite3D {
+  constructor(o){ Object.assign(this, o); this.img = []; this.bitmap = null; this.caricato = false; this.pronti = 0; }
+  carica(cb){
+    if (this.caricato) return; this.caricato = true;
+    this.img = this.fogli.map(src => { const im = new Image(); im.src = src; return im; });
+    this.img.forEach(im => im.onload = async () => {
+      if (cb) cb();
+      if (++this.pronti < this.img.length) return;
+      try {
+        this.bitmap = await Promise.all(Array.from({length: this.nfr}, (_, i) =>
+          createImageBitmap(this.img[Math.floor(i / this.perfoglio)],
+            ((i % this.perfoglio) % this.cols) * this.fw, Math.floor((i % this.perfoglio) / this.cols) * this.fh, this.fw, this.fh)));
+      } catch(e) {}
+      if (cb) cb();
+    });
+  }
+  disegna(ctx, idx){
+    ctx.clearRect(0, 0, this.fw, this.fh);
+    if (this.bitmap){ ctx.drawImage(this.bitmap[idx], 0, 0); return; }
+    const foglio = this.img[Math.floor(idx / this.perfoglio)];
+    const loc = idx % this.perfoglio;
+    if (foglio && foglio.complete && foglio.naturalWidth)
+      ctx.drawImage(foglio, (loc % this.cols) * this.fw, Math.floor(loc / this.cols) * this.fh, this.fw, this.fh, 0, 0, this.fw, this.fh);
+  }
+}
+const LOGO = new Sprite3D({fogli:['logo-spin-a.webp','logo-spin-b.webp'], nfr:144, cols:12, perfoglio:72, fw:640, fh:360, giro:6000});
 const ctxSpin = document.getElementById('spin-canvas').getContext('2d');
 const ctxLogo = document.getElementById('logo-canvas').getContext('2d');
-const NFR = 144, COLS = 12, PERFOGLIO = 72, FW = 640, FH = 360;
-const FOGLI = ['logo-spin-a.webp', 'logo-spin-b.webp'].map(src => {
-  const im = new Image(); im.src = src; return im;
-});
-let BITMAP = null;
+const NFR = LOGO.nfr;
+function disegna(){ LOGO.disegna(ctxSpin, ((Math.round(rotY / (360 / NFR)) % NFR) + NFR) % NFR); }
+LOGO.carica(disegna);
 
-function frameSu(ctx, idx){
-  ctx.clearRect(0, 0, FW, FH);
-  if (BITMAP){ ctx.drawImage(BITMAP[idx], 0, 0); return; }
-  const foglio = FOGLI[Math.floor(idx / PERFOGLIO)];
-  const loc = idx % PERFOGLIO;
-  if (foglio.complete && foglio.naturalWidth)
-    ctx.drawImage(foglio, (loc % COLS) * FW, Math.floor(loc / COLS) * FH, FW, FH, 0, 0, FW, FH);
+/* canvas che ruotano da soli (logo in testata + grafiche dei pezzi) */
+const ROTANTI = [{sprite: LOGO, ctx: ctxLogo, ultimo: -1}];
+function giraTutti(t){
+  for (const r of ROTANTI){
+    if (!r.sprite.caricato) continue;
+    const idx = Math.floor((t % r.sprite.giro) / r.sprite.giro * r.sprite.nfr);
+    if (idx !== r.ultimo){ r.sprite.disegna(r.ctx, idx); r.ultimo = idx; }
+  }
+  requestAnimationFrame(giraTutti);
 }
-function disegna(){
-  frameSu(ctxSpin, ((Math.round(rotY / 2.5) % NFR) + NFR) % NFR);
-}
-let fogliPronti = 0;
-FOGLI.forEach(im => im.onload = async () => {
-  disegna();
-  if (++fogliPronti < FOGLI.length) return;
-  try {
-    BITMAP = await Promise.all(Array.from({length: NFR}, (_, i) =>
-      createImageBitmap(FOGLI[Math.floor(i / PERFOGLIO)],
-        ((i % PERFOGLIO) % COLS) * FW, Math.floor((i % PERFOGLIO) / COLS) * FH, FW, FH)));
-  } catch(e) {}
-  disegna();
-});
-
-/* testata: il logo ruota da solo, un giro ogni 6 secondi, 30 fps */
-let ultimoIdxLogo = -1;
-function giraLogo(t){
-  const idx = Math.floor((t % 6000) / 6000 * NFR);
-  if (idx !== ultimoIdxLogo){ frameSu(ctxLogo, idx); ultimoIdxLogo = idx; }
-  requestAnimationFrame(giraLogo);
-}
-requestAnimationFrame(giraLogo);
+requestAnimationFrame(giraTutti);
 let riallineo = false, target = 0;
 
 function frame(){
@@ -496,71 +443,175 @@ function lampoStep(){
 lampoStep();
 window.addEventListener('resize', lampoFit);
 
-/* ---- SCHEDA PRODOTTO ---- */
+/* ---- DATI DEI PEZZI ---- */
 const PEZZI = [
   {
     nome:'Pezzo 1', prezzo:'\u20ac 29,90',
-    etichette:['Taglia M','Vintage \u00b7 ottime condizioni','Pezzo unico'],
-    desc:'T-shirt Champion nera second-hand, rilavorata a mano da WEINERVILLE con grafica gotica. Un solo esemplare: quando \u00e8 venduto, \u00e8 venduto.',
-    foto:['pezzo1-grafica.webp','pezzo1-capo.webp','pezzo1-indossata.webp']
+    grafica:{tipo:'sprite', fogli:['pezzo1-spin-a.webp','pezzo1-spin-b.webp'], nfr:90, cols:9, perfoglio:45, fw:313, fh:520, giro:5000, larghezza:'52%'},
+    foto:['pezzo1-capo.webp','pezzo1-indossata.webp'],
+    misure:[['Taglia','M'],['Spalle','\u2014 cm'],['Petto','\u2014 cm'],['Lunghezza','\u2014 cm'],['Vestibilit\u00e0','Regular'],['Modello','\u2014 cm \u00b7 porta M']],
+    descrizione:[
+      'T-shirt Champion nera second-hand, rilavorata a mano da WEINERVILLE con grafica gotica. Un solo esemplare: quando \u00e8 venduto, \u00e8 venduto.',
+      'Composizione: \u2014. Condizioni: vintage, ottime, senza difetti rilevanti.',
+      'Lavaggio: a rovescio, 30\u00b0, niente asciugatrice.'
+    ]
   },
   {
     nome:'Pezzo 2', prezzo:'\u20ac 29,90',
-    etichette:['Taglia W32','Vintage \u00b7 ottime condizioni','Pezzo unico'],
-    desc:'Jeans grigi second-hand, rilavorati a mano da WEINERVILLE con grafica tribal sul retro. Un solo esemplare: quando \u00e8 venduto, \u00e8 venduto.',
-    foto:['jeans-grafica.webp','jeans-capo.webp']
+    grafica:{tipo:'sprite', fogli:['jeans-spin-a.webp','jeans-spin-b.webp'], nfr:96, cols:8, perfoglio:48, fw:560, fh:268, giro:5000, larghezza:'82%'},
+    foto:['jeans-capo.webp'],
+    misure:[['Taglia','W32'],['Vita','\u2014 cm'],['Cavallo','\u2014 cm'],['Gamba','\u2014 cm'],['Vestibilit\u00e0','Regular'],['Modello','\u2014 cm \u00b7 porta W32']],
+    descrizione:[
+      'Jeans grigi second-hand, rilavorati a mano da WEINERVILLE con grafica tribal sul retro. Un solo esemplare: quando \u00e8 venduto, \u00e8 venduto.',
+      'Composizione: denim, \u2014. Condizioni: vintage, ottime, senza difetti rilevanti.',
+      'Lavaggio: a rovescio, 30\u00b0, niente asciugatrice.'
+    ]
   },
   {
     nome:'Pezzo 3', prezzo:'\u20ac 29,90',
-    etichette:['Taglia M','Vintage \u00b7 ottime condizioni','Pezzo unico'],
-    desc:'Polo Levi\u2019s blu navy second-hand, rilavorata a mano da WEINERVILLE con grafica tribal ricamata. Un solo esemplare: quando \u00e8 venduto, \u00e8 venduto.',
-    foto:['pezzo2-grafica.webp','pezzo2-capo.webp']
+    grafica:{tipo:'img', src:'pezzo2-grafica.webp', larga:false},
+    foto:['pezzo2-capo.webp'],
+    misure:[['Taglia','M'],['Spalle','\u2014 cm'],['Petto','\u2014 cm'],['Lunghezza','\u2014 cm'],['Vestibilit\u00e0','Regular'],['Modello','\u2014 cm \u00b7 porta M']],
+    descrizione:[
+      'Polo Levi\u2019s blu navy second-hand, rilavorata a mano da WEINERVILLE con grafica tribal. Un solo esemplare: quando \u00e8 venduto, \u00e8 venduto.',
+      'Composizione: \u2014. Condizioni: vintage, ottime, senza difetti rilevanti.',
+      'Lavaggio: a rovescio, 30\u00b0, niente asciugatrice.'
+    ]
   }
 ];
+const SPEDIZIONE = [['Spedizione Italia','\u20ac 6,00'],['Tempi','2-4 giorni lavorativi'],['Corriere','tracciato'],
+                    ['Tracking','via email'],['Resi','entro 14 giorni'],['Rimborso','completo']];
+const PAGAMENTI = [['PayPal','\u2713'],['Carte','Visa \u00b7 Mastercard \u00b7 Amex'],['Apple Pay','\u2713'],['Google Pay','\u2713']];
+const EMAIL = 'ordini@weinervillestar.com';
+
+/* ---- CARD ARTICOLO (usata in home e catalogo) ---- */
+const SPRITES = new Map();
+function spriteDi(p){
+  if (!SPRITES.has(p)) SPRITES.set(p, new Sprite3D(p.grafica));
+  return SPRITES.get(p);
+}
+function creaCard(i){
+  const p = PEZZI[i];
+  const art = document.createElement('article');
+  art.className = 'capo';
+  let slide1;
+  if (p.grafica.tipo === 'sprite'){
+    slide1 = '<canvas class="grafica-canvas" width="' + p.grafica.fw + '" height="' + p.grafica.fh + '" style="width:' + p.grafica.larghezza + '"></canvas>';
+  } else {
+    slide1 = '<div class="grafica3d' + (p.grafica.larga ? ' larga' : '') + '"><img src="' + p.grafica.src + '" alt=""></div>';
+  }
+  art.innerHTML =
+    '<div class="slideshow">' +
+      '<div class="slide attiva">' + slide1 + '</div>' +
+      '<div class="slide"><img class="foto" loading="lazy" decoding="async" src="' + p.foto[0] + '" alt="' + p.nome + '"></div>' +
+      '<div class="capo-info"><h2 class="capo-nome">' + p.nome + '</h2><span class="capo-prezzo">' + p.prezzo + '</span></div>' +
+    '</div>';
+  art.addEventListener('click', () => apriScheda(i));
+  const cv = art.querySelector('canvas');
+  if (cv){
+    const sp = spriteDi(p);
+    ROTANTI.push({sprite: sp, ctx: cv.getContext('2d'), ultimo: -1});
+    // carico i fotogrammi solo quando la card e' in vista
+    new IntersectionObserver((e, obs) => {
+      if (e.some(x => x.isIntersecting)){ sp.carica(); obs.disconnect(); }
+    }, {rootMargin:'200px'}).observe(art);
+  }
+  const slides = art.querySelectorAll('.slide');
+  let k = 0;
+  setInterval(() => { slides[k].classList.remove('attiva'); k = (k + 1) % slides.length; slides[k].classList.add('attiva'); }, 3000);
+  return art;
+}
+const homeGriglia = document.getElementById('home-griglia');
+PEZZI.slice(0, 2).forEach((_, i) => homeGriglia.appendChild(creaCard(i)));
+const catGriglia = document.getElementById('catalogo-griglia');
+PEZZI.forEach((_, i) => catGriglia.appendChild(creaCard(i)));
+document.getElementById('catalogo-conta').textContent = PEZZI.length + ' pezzi unici disponibili';
+
+/* ---- SCHERMATE (catalogo, scheda) ---- */
+function apriSchermata(id){
+  document.getElementById(id).classList.add('aperta');
+  document.body.classList.add('bloccato');
+}
+function chiudiSchermata(id){
+  document.getElementById(id).classList.remove('aperta');
+  if (!document.querySelector('.schermata.aperta')) document.body.classList.remove('bloccato');
+}
+document.getElementById('shopnow').addEventListener('click', e => { e.preventDefault(); apriSchermata('catalogo'); });
+document.querySelectorAll('[data-chiudi]').forEach(b => b.addEventListener('click', () => chiudiSchermata(b.dataset.chiudi)));
+
+/* ---- SCHEDA PRODOTTO ---- */
+let pezzoAperto = 0;
 const scheda = document.getElementById('scheda');
 const galleria = document.getElementById('scheda-galleria');
 const pallini = document.getElementById('scheda-pallini');
-
 function apriScheda(i){
+  pezzoAperto = i;
   const p = PEZZI[i];
   document.getElementById('scheda-nome').textContent = p.nome;
   document.getElementById('scheda-prezzo').textContent = p.prezzo;
-  document.getElementById('scheda-etichette').innerHTML =
-    p.etichette.map(e => '<span>' + e + '</span>').join('');
-  document.getElementById('scheda-desc').textContent = p.desc;
   const oggetto = encodeURIComponent('Ordine ' + p.nome + ' - WEINERVILLE');
   const corpo = encodeURIComponent('Ciao! Vorrei ordinare il ' + p.nome + ' (' + p.prezzo.replace('\u20ac','EUR') + ').\n\nNome e cognome:\nIndirizzo di spedizione:\nTelefono:');
-  document.getElementById('scheda-compra').href =
-    'mailto:ordini@weinervillestar.com?subject=' + oggetto + '&body=' + corpo;
+  document.getElementById('scheda-compra').href = 'mailto:' + EMAIL + '?subject=' + oggetto + '&body=' + corpo;
   galleria.innerHTML = p.foto.map(f => '<img src="' + f + '" alt="">').join('');
   pallini.innerHTML = p.foto.map((_, j) => '<i' + (j === 0 ? ' class="on"' : '') + '></i>').join('');
+  pallini.style.display = p.foto.length > 1 ? 'flex' : 'none';
   galleria.scrollLeft = 0;
-  scheda.classList.add('aperta');
-  document.body.classList.add('bloccato');
+  const altri = document.getElementById('scheda-altri');
+  altri.innerHTML = '';
+  PEZZI.forEach((q, j) => {
+    if (j === i) return;
+    const a = document.createElement('article');
+    a.className = 'capo';
+    a.innerHTML = '<div class="slideshow"><div class="slide attiva"><img class="foto" loading="lazy" src="' + q.foto[0] + '" alt="' + q.nome + '"></div>' +
+                  '<div class="capo-info"><h2 class="capo-nome">' + q.nome + '</h2><span class="capo-prezzo">' + q.prezzo + '</span></div></div>';
+    a.addEventListener('click', () => { apriScheda(j); scheda.scrollTop = 0; });
+    altri.appendChild(a);
+  });
+  scheda.scrollTop = 0;
+  apriSchermata('scheda');
 }
-function chiudiScheda(){
-  scheda.classList.remove('aperta');
-  document.body.classList.remove('bloccato');
-}
-document.querySelector('.scheda-chiudi').addEventListener('click', chiudiScheda);
-window.addEventListener('keydown', e => { if (e.key === 'Escape') chiudiScheda(); });
-document.querySelectorAll('article.capo').forEach((a, i) => {
-  a.addEventListener('click', () => apriScheda(i));
-});
 galleria.addEventListener('scroll', () => {
   const idx = Math.round(galleria.scrollLeft / galleria.clientWidth);
   pallini.querySelectorAll('i').forEach((p, j) => p.classList.toggle('on', j === idx));
 }, {passive:true});
 
-/* ---- SLIDESHOW ARTICOLI: cambio ogni 3 secondi con dissolvenza ---- */
-document.querySelectorAll('.slideshow').forEach(box => {
-  const slides = box.querySelectorAll('.slide');
-  let i = 0;
-  setInterval(() => {
-    slides[i].classList.remove('attiva');
-    i = (i + 1) % slides.length;
-    slides[i].classList.add('attiva');
-  }, 3000);
+/* ---- POPUP ---- */
+const popup = document.getElementById('popup');
+function righeHTML(righe){
+  return '<div class="popup-righe">' + righe.map(r => '<div><span>' + r[0] + '</span><span>' + r[1] + '</span></div>').join('') + '</div>';
+}
+function apriPopup(tipo){
+  const p = PEZZI[pezzoAperto];
+  let titolo = '', html = '';
+  if (tipo === 'descrizione'){
+    titolo = 'Descrizione';
+    html = '<div class="popup-testo">' + p.descrizione.map(t => '<p>' + t + '</p>').join('') + '</div>';
+  } else if (tipo === 'misure'){
+    titolo = 'Misure';
+    html = righeHTML(p.misure) +
+      '<a class="popup-nota" href="mailto:' + EMAIL + '?subject=' + encodeURIComponent('Domanda taglia ' + p.nome) + '">Dubbi sulla taglia? Scrivici \u2192</a>';
+  } else if (tipo === 'spedizione'){
+    titolo = 'Spedizione e resi';
+    html = righeHTML(SPEDIZIONE) +
+      '<span class="popup-nota">Il pezzo torna nelle stesse condizioni in cui lo hai ricevuto</span>';
+  } else if (tipo === 'pagamenti'){
+    titolo = 'Metodi di pagamento';
+    html = righeHTML(PAGAMENTI) +
+      '<span class="popup-nota">Pagamento sicuro \u00b7 i dati non vengono mai salvati sul sito</span>';
+  }
+  document.getElementById('popup-titolo').textContent = titolo;
+  document.getElementById('popup-contenuto').innerHTML = html;
+  popup.classList.add('aperto');
+}
+function chiudiPopup(){ popup.classList.remove('aperto'); }
+document.querySelectorAll('[data-popup]').forEach(b => b.addEventListener('click', e => { e.preventDefault(); apriPopup(b.dataset.popup); }));
+document.querySelector('.popup-chiudi').addEventListener('click', chiudiPopup);
+popup.addEventListener('click', e => { if (e.target === popup) chiudiPopup(); });
+window.addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  if (popup.classList.contains('aperto')) chiudiPopup();
+  else if (scheda.classList.contains('aperta')) chiudiSchermata('scheda');
+  else chiudiSchermata('catalogo');
 });
 </script>
 
