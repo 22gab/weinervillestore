@@ -180,6 +180,8 @@
   .tasti3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
   .tasti3 .chrome > span{height:42px;display:flex;align-items:center;justify-content:center;padding:0 4px;font-size:.56rem;}
   .compra{padding:3px;}
+  .compra.venduto{pointer-events:none;opacity:.55;}
+  .compra.venduto > span{background:#2a2236;color:var(--chrome);}
   .compra > span{background:var(--viola);color:var(--nero);font-family:'Anton',sans-serif;font-size:1.15rem;letter-spacing:.16em;padding:15px 8px;}
   .pagamenti{
     display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;
@@ -465,7 +467,7 @@ window.addEventListener('resize', lampoFit);
 /* ---- DATI DEI PEZZI ---- */
 const PEZZI = [
   {
-    nome:'Champion tee custom', prezzo:'\u20ac 29,90',
+    nome:'Champion tee custom', prezzo:'\u20ac 29,90', stripe:'https://buy.stripe.com/fZu8wRbvR8yI2sO7RzfAc00',
     grafica:{tipo:'sprite', fogli:['pezzo1-spin-a.webp','pezzo1-spin-b.webp'], nfr:150, cols:8, perfoglio:75, fw:320, fh:530, giro:5000, larghezza:'50%'},
     foto:['pezzo1-capo.webp','pezzo1-indossata.webp'],
     misure:[['Taglia','M'],['Spalle','\u2014 cm'],['Petto','\u2014 cm'],['Lunghezza','\u2014 cm'],['Vestibilit\u00e0','Regular'],['Modello','\u2014 cm \u00b7 porta M']],
@@ -476,7 +478,7 @@ const PEZZI = [
     ]
   },
   {
-    nome:'Jeans vintage tribal love', prezzo:'\u20ac 29,90',
+    nome:'Jeans vintage tribal love', prezzo:'\u20ac 29,90', stripe:'https://buy.stripe.com/9B68wRgQbbKU9VgefXfAc01',
     grafica:{tipo:'sprite', fogli:['jeans-spin-a.webp','jeans-spin-b.webp'], nfr:200, cols:8, perfoglio:100, fw:480, fh:229, giro:5000, larghezza:'86%'},
     foto:['jeans-capo.webp'],
     misure:[['Taglia','W32'],['Vita','\u2014 cm'],['Cavallo','\u2014 cm'],['Gamba','\u2014 cm'],['Vestibilit\u00e0','Regular'],['Modello','\u2014 cm \u00b7 porta W32']],
@@ -487,7 +489,7 @@ const PEZZI = [
     ]
   },
   {
-    nome:'Polo Levi\u2019s custom', prezzo:'\u20ac 29,90',
+    nome:'Polo Levi\u2019s custom', prezzo:'\u20ac 29,90', stripe:'https://buy.stripe.com/4gMfZj1VhbKU1oK0p7fAc02',
     grafica:{tipo:'img', src:'pezzo2-grafica.webp', larga:false},
     foto:['pezzo2-capo.webp'],
     misure:[['Taglia','M'],['Spalle','\u2014 cm'],['Petto','\u2014 cm'],['Lunghezza','\u2014 cm'],['Vestibilit\u00e0','Regular'],['Modello','\u2014 cm \u00b7 porta M']],
@@ -577,9 +579,18 @@ function apriScheda(i){
   const p = PEZZI[i];
   document.getElementById('scheda-nome').textContent = p.nome;
   document.getElementById('scheda-prezzo').textContent = p.prezzo;
-  const oggetto = encodeURIComponent('Ordine ' + p.nome + ' - WEINERVILLE');
-  const corpo = encodeURIComponent('Ciao! Vorrei ordinare il ' + p.nome + ' (' + p.prezzo.replace('\u20ac','EUR') + ').\n\nNome e cognome:\nIndirizzo di spedizione:\nTelefono:');
-  document.getElementById('scheda-compra').href = 'mailto:' + EMAIL + '?subject=' + oggetto + '&body=' + corpo;
+  const compra = document.getElementById('scheda-compra');
+  if (p.venduto){
+    compra.href = '#'; compra.querySelector('span').textContent = 'Venduto'; compra.classList.add('venduto');
+  } else if (p.stripe){
+    compra.href = p.stripe; compra.target = '_blank'; compra.rel = 'noopener';
+    compra.querySelector('span').textContent = 'Acquista'; compra.classList.remove('venduto');
+  } else {
+    const oggetto = encodeURIComponent('Ordine ' + p.nome + ' - WEINERVILLE');
+    const corpo = encodeURIComponent('Ciao! Vorrei ordinare il ' + p.nome + ' (' + p.prezzo.replace('\u20ac','EUR') + ').\n\nNome e cognome:\nIndirizzo di spedizione:\nTelefono:');
+    compra.href = 'mailto:' + EMAIL + '?subject=' + oggetto + '&body=' + corpo; compra.removeAttribute('target');
+    compra.querySelector('span').textContent = 'Ordina via email'; compra.classList.remove('venduto');
+  }
   galleria.innerHTML = p.foto.map(f => '<img src="' + f + '" alt="">').join('');
   pallini.innerHTML = p.foto.map((_, j) => '<i' + (j === 0 ? ' class="on"' : '') + '></i>').join('');
   pallini.style.display = p.foto.length > 1 ? 'flex' : 'none';
@@ -625,7 +636,7 @@ function apriPopup(tipo){
   } else if (tipo === 'pagamenti'){
     titolo = 'Metodi di pagamento';
     html = righeHTML(PAGAMENTI) +
-      '<span class="popup-nota">Pagamento sicuro \u00b7 i dati non vengono mai salvati sul sito</span>';
+      '<span class="popup-nota">Pagamento sicuro gestito da Stripe \u00b7 i dati della carta non passano mai dal sito</span>';
   }
   document.getElementById('popup-titolo').textContent = titolo;
   document.getElementById('popup-contenuto').innerHTML = html;
