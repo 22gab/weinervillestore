@@ -84,6 +84,52 @@
     transform-origin:center;
   }
 
+
+  /* ---- MENU METALLICO IN ALTO A SINISTRA ---- */
+  .menu-btn{
+    position:fixed;top:12px;left:12px;z-index:620;
+    width:44px;height:44px;border:none;cursor:pointer;border-radius:11px;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+    background:linear-gradient(145deg,#eef0f5 0%,#9297a6 30%,#f6f7fa 50%,#7c8190 70%,#c4c8d3 100%);
+    background-size:200% 200%;
+    box-shadow:0 2px 8px rgba(0,0,0,.4), inset 0 1px 1px rgba(255,255,255,.6);
+    animation:brillaMenu 3.4s ease-in-out infinite;
+    -webkit-tap-highlight-color:transparent;
+  }
+  @keyframes brillaMenu{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+  .menu-btn i{display:block;width:20px;height:2px;background:#1a1622;border-radius:2px;transition:.25s;}
+  .menu-btn.aperto i:nth-child(1){transform:translateY(6px) rotate(45deg);}
+  .menu-btn.aperto i:nth-child(2){opacity:0;}
+  .menu-btn.aperto i:nth-child(3){transform:translateY(-6px) rotate(-45deg);}
+
+  .tendina{
+    position:fixed;top:0;left:0;z-index:615;
+    width:min(78vw,290px);height:100%;
+    background:rgba(13,10,18,.97);border-right:1px solid rgba(201,204,214,.28);
+    transform:translateX(-105%);transition:transform .3s ease;
+    padding:66px 0 24px;display:flex;flex-direction:column;
+    overflow-y:auto;
+  }
+  .tendina.aperta{transform:translateX(0);}
+  .tendina button{
+    background:none;border:none;text-align:left;cursor:pointer;
+    font-family:'Anton',sans-serif;font-size:1.02rem;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--chrome);padding:15px 22px;border-bottom:1px solid rgba(201,204,214,.12);
+    -webkit-tap-highlight-color:transparent;transition:background .2s,color .2s;
+  }
+  .tendina button:hover,.tendina button:active{background:rgba(139,95,199,.16);color:var(--viola-chiaro);}
+  .tendina .sub{font-size:.62rem;letter-spacing:.02em;text-transform:none;color:var(--viola-chiaro);opacity:.65;font-family:'Space Mono',monospace;margin-top:3px;display:block;}
+  #tendina-scrim{position:fixed;inset:0;z-index:610;background:rgba(5,4,8,.6);opacity:0;visibility:hidden;transition:.3s;}
+  #tendina-scrim.on{opacity:1;visibility:visible;}
+
+  /* ---- PAGINE TESTO (contatti, sicurezza, legali) ---- */
+  .pagina-corpo{max-width:520px;margin:0 auto;width:100%;padding:14px 24px 50px;}
+  .pagina-corpo h1{font-family:'Anton',sans-serif;font-size:1.7rem;letter-spacing:.04em;text-transform:uppercase;color:var(--chrome);margin-bottom:16px;}
+  .pagina-corpo h2{font-family:'Anton',sans-serif;font-size:.92rem;letter-spacing:.08em;text-transform:uppercase;color:var(--viola-chiaro);margin:20px 0 7px;}
+  .pagina-corpo p{font-size:.78rem;line-height:1.75;color:var(--bianco);opacity:.86;margin-bottom:9px;}
+  .pagina-corpo a{color:var(--viola-chiaro);text-decoration:underline;text-underline-offset:3px;word-break:break-word;}
+  .pagina-corpo .grande{font-size:.9rem;font-weight:700;color:var(--bianco);opacity:1;}
+
   /* ---- HOME: due pezzi in vista ---- */
   .home{max-width:520px;margin:0 auto;padding:18px 16px 10px;}
   .griglia{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
@@ -258,8 +304,19 @@
   <p class="hint">Spin the logo to enter</p>
 </div>
 
+<!-- MENU -->
+<button class="menu-btn" id="menu-btn" aria-label="Menu"><i></i><i></i><i></i></button>
+<div id="tendina-scrim"></div>
+<nav class="tendina" id="tendina">
+  <button data-vai="catalogo">Tutti gli articoli</button>
+  <button data-pagina="contatti">Contatti</button>
+  <button data-link="https://www.instagram.com/weinervillestore/">Instagram<span class="sub">@weinervillestore</span></button>
+  <button data-pagina="sicurezza">Sicurezza del pagamento</button>
+  <button data-pagina="legali">Privacy, Cookie e Termini</button>
+</nav>
+
 <!-- SITO -->
-<div class="lampo" aria-label="Fatto in casa, marchio italiano, indipendente, piccola produzione, fatto per durare, fatto con cura, tradizione italiana, pensato in provincia, pezzi unici">
+<div class="lampo" aria-label="Marchio indipendente, pezzi unici">
   <span id="lampo-testo" aria-hidden="true"></span>
 </div>
 <div class="testata">
@@ -276,10 +333,10 @@
 <div class="divisore" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png" alt=""></div>
 
 <!-- CATALOGO -->
-<div class="schermata" id="catalogo" aria-label="Tutti i pezzi">
+<div class="schermata" id="catalogo" aria-label="Tutti gli articoli">
   <div class="schermata-testa">
     <button class="tasto-icona" data-chiudi="catalogo" aria-label="Torna alla home">&larr;</button>
-    <div class="schermata-titolo">Tutti i pezzi</div>
+    <div class="schermata-titolo">Tutti gli articoli</div>
     <span style="width:44px"></span>
   </div>
   <div class="catalogo-corpo">
@@ -287,6 +344,17 @@
     <div class="griglia" id="catalogo-griglia"></div>
   </div>
   <div class="divisore sfasato" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png" alt=""></div>
+</div>
+
+
+<!-- PAGINA TESTO -->
+<div class="schermata" id="pagina" role="dialog" aria-modal="true">
+  <div class="schermata-testa">
+    <button class="tasto-icona" data-chiudi="pagina" aria-label="Chiudi">&larr;</button>
+    <span></span>
+    <button class="tasto-icona" data-chiudi="pagina" aria-label="Chiudi">&#10005;</button>
+  </div>
+  <div class="pagina-corpo" id="pagina-corpo"></div>
 </div>
 
 <!-- SCHEDA PRODOTTO -->
@@ -463,10 +531,49 @@ logoSpin.addEventListener('keydown', e => {
   if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); entraNelSito(); }
 });
 
+
+/* ---- MENU A TENDINA + PAGINE ---- */
+const PAGINE = {
+  contatti: '<h1>Contact</h1>' +
+    '<p>Hai bisogno di aiuto con un ordine, una taglia, una spedizione o vuoi semplicemente metterti in contatto con noi?</p>' +
+    '<h2>Email</h2><p class="grande"><a href="mailto:weinervillestore@gmail.com">weinervillestore@gmail.com</a></p>' +
+    '<p>Rispondiamo alle richieste il prima possibile, generalmente entro 24/48 ore.</p>',
+  sicurezza: '<h1>Sicurezza del pagamento</h1>' +
+    '<p>I pagamenti sono gestiti da Stripe. I dati della tua carta vengono inseriti direttamente sulla pagina protetta di Stripe e non passano mai dal nostro sito, che non li vede n\u00e9 li conserva.</p>' +
+    '<p>Ogni transazione avviene tramite connessione cifrata.</p>',
+  legali: '<h1>Note legali</h1>' +
+    '<h2>Privacy</h2>' +
+    '<p>Raccogliamo solo i dati necessari a evadere il tuo ordine (nome, indirizzo di spedizione, email, telefono), forniti da te in fase di pagamento. Vengono usati esclusivamente per spedirti il capo e non sono ceduti a terzi. Il pagamento \u00e8 gestito da Stripe secondo la sua privacy policy.</p>' +
+    '<h2>Cookie</h2>' +
+    '<p>Questo sito non utilizza cookie di profilazione o di marketing. Eventuali cookie tecnici servono solo al funzionamento della pagina di pagamento Stripe.</p>' +
+    '<h2>Termini e condizioni</h2>' +
+    '<p>Ogni capo \u00e8 un pezzo unico vintage di seconda mano, selezionato e customizzato a mano. Le piccole imperfezioni dovute all\u2019usato fanno parte del prodotto. Il prezzo indicato include la spedizione (\u20ac 4,99).</p>' +
+    '<p>Spedizione in 2-4 giorni lavorativi con corriere tracciato. Diritto di reso entro 14 giorni dal ricevimento, con rimborso completo del prezzo del capo: il pezzo deve tornare nelle stesse condizioni in cui \u00e8 stato ricevuto.</p>' +
+    '<p>Per qualsiasi richiesta: <a href="mailto:weinervillestore@gmail.com">weinervillestore@gmail.com</a></p>'
+};
+const menuBtn = document.getElementById('menu-btn');
+const tendina = document.getElementById('tendina');
+const scrim = document.getElementById('tendina-scrim');
+function apriMenu(){ tendina.classList.add('aperta'); scrim.classList.add('on'); menuBtn.classList.add('aperto'); }
+function chiudiMenu(){ tendina.classList.remove('aperta'); scrim.classList.remove('on'); menuBtn.classList.remove('aperto'); }
+menuBtn.addEventListener('click', () => tendina.classList.contains('aperta') ? chiudiMenu() : apriMenu());
+scrim.addEventListener('click', chiudiMenu);
+function apriPagina(id){
+  document.getElementById('pagina-corpo').innerHTML = PAGINE[id];
+  document.getElementById('pagina').scrollTop = 0;
+  apriSchermata('pagina');
+}
+tendina.querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
+  chiudiMenu();
+  if (b.dataset.vai) apriSchermata(b.dataset.vai);
+  else if (b.dataset.pagina) apriPagina(b.dataset.pagina);
+  else if (b.dataset.link) window.open(b.dataset.link, '_blank', 'noopener');
+}));
+
 /* ---- BLOCCO LAMPO: frasi scritte a raffica, sempre a tutto riquadro ---- */
 const FRASI = ["Fatto in casa","Marchio italiano","Indipendente","Piccola produzione",
-               "Fatto per durare","Fatto con cura","Tradizione italiana",
-               "Pensato in provincia","Pezzi unici"];
+               "Affidabilit\u00e0","Fatto con cura","Seconda mano","Terza mano",
+               "Cacca","Pensato in provincia","Pezzi unici"];
 const lampoBox = document.querySelector('.lampo');
 const lampoTxt = document.getElementById('lampo-testo');
 let fIdx = 0, lIdx = 0;
@@ -496,7 +603,7 @@ window.addEventListener('resize', lampoFit);
 /* ---- DATI DEI PEZZI ---- */
 const PEZZI = [
   {
-    nome:'Champion tee custom', prezzo:'\u20ac 29,90', stripe:'https://buy.stripe.com/fZu8wRbvR8yI2sO7RzfAc00',
+    nome:'Tee Champion sigil custom', prezzo:'\u20ac 27,89', stripe:'https://buy.stripe.com/fZu8wRbvR8yI2sO7RzfAc00',
     grafica:{tipo:'sprite', fogli:['pezzo1-spin-a.webp','pezzo1-spin-b.webp'], nfr:150, cols:8, perfoglio:75, fw:320, fh:530, giro:5000, larghezza:'50%'},
     foto:['champion-capo.webp','champion-indossata.webp'],
     taglia:'M',
@@ -508,7 +615,7 @@ const PEZZI = [
     ]
   },
   {
-    nome:'Jeans vintage tribal love', prezzo:'\u20ac 29,90', stripe:'https://buy.stripe.com/9B68wRgQbbKU9VgefXfAc01',
+    nome:'Jeans tribal love Cache Cache custom', prezzo:'\u20ac 34,89', stripe:'https://buy.stripe.com/9B68wRgQbbKU9VgefXfAc01',
     grafica:{tipo:'sprite', fogli:['jeans-spin-a.webp','jeans-spin-b.webp'], nfr:200, cols:8, perfoglio:100, fw:480, fh:229, giro:5000, larghezza:'86%'},
     foto:['jeans-capo.webp','jeans-fronte.webp','jeans-indossato.webp'],
     taglia:'M',
@@ -522,7 +629,7 @@ const PEZZI = [
     ]
   },
   {
-    nome:'Polo Levi\u2019s custom', prezzo:'\u20ac 29,90', stripe:'https://buy.stripe.com/4gMfZj1VhbKU1oK0p7fAc02',
+    nome:'Polo Levi\u2019s affliction custom', prezzo:'\u20ac 29,89', stripe:'https://buy.stripe.com/4gMfZj1VhbKU1oK0p7fAc02',
     foto:['polo-capo.webp','polo-indossata.webp'],
     taglia:'M',
     misure:[['Larghezza','48 cm'],['Lunghezza','70 cm'],['Manica al collo','35 cm']],
@@ -534,7 +641,7 @@ const PEZZI = [
     ]
   }
 ];
-const SPEDIZIONE = [['Spedizione Italia','\u20ac 4,99'],['Tempi','2-4 giorni lavorativi'],['Corriere','tracciato'],
+const SPEDIZIONE = [['Spedizione','Inclusa nel prezzo (\u20ac 4,99)'],['Tempi','2-4 giorni lavorativi'],['Corriere','tracciato'],
                     ['Tracking','via email'],['Resi','entro 14 giorni'],['Rimborso','completo']];
 const EMAIL = 'ordini@weinervillestar.com';
 
@@ -680,6 +787,8 @@ window.addEventListener('keydown', e => {
   if (e.key !== 'Escape') return;
   if (popup.classList.contains('aperto')) chiudiPopup();
   else if (scheda.classList.contains('aperta')) chiudiSchermata('scheda');
+  else if (document.getElementById('pagina').classList.contains('aperta')) chiudiSchermata('pagina');
+  else if (tendina.classList.contains('aperta')) chiudiMenu();
   else chiudiSchermata('catalogo');
 });
 </script>
