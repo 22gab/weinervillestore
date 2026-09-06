@@ -87,8 +87,9 @@
 
   /* ---- MENU METALLICO IN ALTO A SINISTRA ---- */
   .menu-btn{
-    position:fixed;top:12px;left:12px;z-index:620;
-    width:44px;height:44px;border:none;cursor:pointer;border-radius:11px;
+    position:fixed;top:132px;left:12px;z-index:620;
+    width:34px;height:34px;border:none;cursor:pointer;border-radius:9px;
+    display:none;
     display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
     background:linear-gradient(145deg,#eef0f5 0%,#9297a6 30%,#f6f7fa 50%,#7c8190 70%,#c4c8d3 100%);
     background-size:200% 200%;
@@ -96,11 +97,12 @@
     animation:brillaMenu 3.4s ease-in-out infinite;
     -webkit-tap-highlight-color:transparent;
   }
+  body.entrato .menu-btn{display:flex;}
   @keyframes brillaMenu{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
-  .menu-btn i{display:block;width:20px;height:2px;background:#1a1622;border-radius:2px;transition:.25s;}
-  .menu-btn.aperto i:nth-child(1){transform:translateY(6px) rotate(45deg);}
+  .menu-btn i{display:block;width:16px;height:2px;background:#1a1622;border-radius:2px;transition:.25s;}
+  .menu-btn.aperto i:nth-child(1){transform:translateY(5px) rotate(45deg);}
   .menu-btn.aperto i:nth-child(2){opacity:0;}
-  .menu-btn.aperto i:nth-child(3){transform:translateY(-6px) rotate(-45deg);}
+  .menu-btn.aperto i:nth-child(3){transform:translateY(-5px) rotate(-45deg);}
 
   .tendina{
     position:fixed;top:0;left:0;z-index:615;
@@ -421,6 +423,7 @@ function entraNelSito(){
   entrato = true;
   ingresso.classList.add('chiuso');
   document.body.classList.remove('bloccato');
+  document.body.classList.add('entrato');
 }
 
 /* ---- MOTORE SPRITE 3D (usato dal logo e dalle grafiche dei pezzi) ---- */
@@ -573,7 +576,7 @@ tendina.querySelectorAll('button').forEach(b => b.addEventListener('click', () =
 /* ---- BLOCCO LAMPO: frasi scritte a raffica, sempre a tutto riquadro ---- */
 const FRASI = ["Fatto in casa","Marchio italiano","Indipendente","Piccola produzione",
                "Affidabilit\u00e0","Fatto con cura","Seconda mano","Terza mano",
-               "Cacca","Pensato in provincia","Pezzi unici"];
+               "Pensato in provincia","Pezzi unici"];
 const lampoBox = document.querySelector('.lampo');
 const lampoTxt = document.getElementById('lampo-testo');
 let fIdx = 0, lIdx = 0;
@@ -603,7 +606,7 @@ window.addEventListener('resize', lampoFit);
 /* ---- DATI DEI PEZZI ---- */
 const PEZZI = [
   {
-    nome:'Tee Champion sigil custom', prezzo:'\u20ac 27,89', stripe:'https://buy.stripe.com/fZu8wRbvR8yI2sO7RzfAc00',
+    nome:'Tee Champion sigil custom', prezzo:'\u20ac 27,89', stripe:'https://buy.stripe.com/6oUfZj7fBbKUaZk7RzfAc06',
     grafica:{tipo:'sprite', fogli:['pezzo1-spin-a.webp','pezzo1-spin-b.webp'], nfr:150, cols:8, perfoglio:75, fw:320, fh:530, giro:5000, larghezza:'50%'},
     foto:['champion-capo.webp','champion-indossata.webp'],
     taglia:'M',
@@ -615,7 +618,7 @@ const PEZZI = [
     ]
   },
   {
-    nome:'Jeans tribal love Cache Cache custom', prezzo:'\u20ac 34,89', stripe:'https://buy.stripe.com/9B68wRgQbbKU9VgefXfAc01',
+    nome:'Jeans tribal love Cache Cache custom', prezzo:'\u20ac 34,89', stripe:'https://buy.stripe.com/4gM4gBdDZ8yId7s2xffAc05',
     grafica:{tipo:'sprite', fogli:['jeans-spin-a.webp','jeans-spin-b.webp'], nfr:200, cols:8, perfoglio:100, fw:480, fh:229, giro:5000, larghezza:'86%'},
     foto:['jeans-capo.webp','jeans-fronte.webp','jeans-indossato.webp'],
     taglia:'M',
@@ -629,7 +632,7 @@ const PEZZI = [
     ]
   },
   {
-    nome:'Polo Levi\u2019s affliction custom', prezzo:'\u20ac 29,89', stripe:'https://buy.stripe.com/4gMfZj1VhbKU1oK0p7fAc02',
+    nome:'Polo Levi\u2019s affliction custom', prezzo:'\u20ac 29,89', stripe:'https://buy.stripe.com/00w14p6bxcOY1oKb3LfAc04',
     foto:['polo-capo.webp','polo-indossata.webp'],
     taglia:'M',
     misure:[['Larghezza','48 cm'],['Lunghezza','70 cm'],['Manica al collo','35 cm']],
