@@ -189,7 +189,7 @@
   }
   .pagamenti svg{width:22px;height:15px;}
   .pagamenti b{font-weight:700;letter-spacing:.02em;}
-  .pagamenti a{color:var(--viola-chiaro);font-size:.62rem;text-decoration:underline;text-underline-offset:3px;}
+  .pagamenti .altri-metodi{color:var(--chrome);opacity:.7;font-size:.62rem;}
   .altri-titolo{
     text-align:center;font-size:.6rem;letter-spacing:.26em;text-transform:uppercase;
     color:var(--chrome);opacity:.5;margin-top:10px;
@@ -197,20 +197,46 @@
   .altri{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
 
   /* ---- POPUP centrale ---- */
-  #popup{position:fixed;inset:0;z-index:700;display:none;align-items:center;justify-content:center;padding:26px;background:rgba(5,4,8,.72);}
+  #popup{position:fixed;inset:0;z-index:700;display:none;align-items:center;justify-content:center;padding:14px;background:rgba(5,4,8,.8);}
   #popup.aperto{display:flex;}
   .popup-box{
-    width:100%;max-width:400px;max-height:72vh;overflow-y:auto;
-    background:var(--card);border:1px solid #a4a8b6;padding:20px 20px 22px;position:relative;border-radius:18px;
+    position:relative;
+    width:min(96vw,430px);
+    max-width:calc(94vh * 0.98);
+    aspect-ratio:745/760;
   }
-  .popup-chiudi{position:absolute;top:8px;right:10px;background:none;border:none;color:var(--chrome);font-size:1.25rem;cursor:pointer;font-family:'Space Mono',monospace;}
-  .popup-titolo{font-family:'Anton',sans-serif;font-size:1.3rem;letter-spacing:.08em;text-transform:uppercase;color:var(--chrome);margin-bottom:12px;}
-  .popup-righe div{display:flex;justify-content:space-between;gap:14px;padding:9px 0;border-bottom:1px solid rgba(139,95,199,.22);font-size:.72rem;}
-  .popup-righe div span:first-child{color:var(--chrome);opacity:.7;}
+  .popup-cornice{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;user-select:none;}
+  /* la finestra interna della cornice */
+  .popup-finestra{
+    position:absolute;left:22.4%;right:21.2%;top:28.8%;bottom:30.8%;
+    background:#0D0A12;border-radius:9px;
+    overflow-y:auto;-webkit-overflow-scrolling:touch;
+    padding:9px 11px 11px;
+    scrollbar-width:none;
+  }
+  .popup-finestra::-webkit-scrollbar{display:none;}
+  /* il tasto chiudi coincide con la "x" disegnata sulla cornice */
+  .popup-chiudi{
+    position:absolute;left:59%;right:23.5%;top:1.5%;height:13%;
+    background:none;border:none;cursor:pointer;font-size:0;
+  }
+  .popup-titolo{
+    font-family:'Anton',sans-serif;font-size:.82rem;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--viola-chiaro);margin-bottom:7px;text-align:center;
+  }
+  .popup-righe div{display:flex;justify-content:space-between;gap:10px;padding:5px 0;border-bottom:1px solid rgba(139,95,199,.28);font-size:.6rem;}
+  .popup-righe div:last-child{border-bottom:none;}
+  .popup-righe div span:first-child{color:var(--chrome);opacity:.75;text-transform:uppercase;letter-spacing:.06em;}
   .popup-righe div span:last-child{text-align:right;color:var(--bianco);font-weight:700;}
-  .popup-testo{font-size:.76rem;line-height:1.75;color:var(--bianco);opacity:.88;}
-  .popup-testo p + p{margin-top:9px;}
-  .popup-nota{display:block;text-align:center;margin-top:16px;font-size:.7rem;color:var(--viola-chiaro);text-decoration:none;}
+  .popup-righe div.testa{
+    background:rgba(139,95,199,.22);border-bottom:1px solid rgba(139,95,199,.5);
+    padding:5px 7px;margin-bottom:2px;
+  }
+  .popup-righe div.testa span{font-family:'Anton',sans-serif;letter-spacing:.12em;font-size:.66rem;opacity:1;color:var(--chrome);}
+  .popup-righe div.testa span:last-child{color:var(--viola-chiaro);}
+  .popup-testo{font-size:.62rem;line-height:1.65;color:var(--bianco);opacity:.9;}
+  .popup-testo p + p{margin-top:6px;}
+  .popup-nota{display:block;text-align:center;margin-top:9px;font-size:.55rem;line-height:1.5;color:var(--viola-chiaro);text-decoration:none;}
 
   footer{
     text-align:center;
@@ -286,7 +312,7 @@
     <div class="pagamenti">
       <svg viewBox="0 0 24 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="1.5" width="22" height="13" rx="2"/><line x1="1" y1="5.5" x2="23" y2="5.5" stroke-width="2.5"/></svg>
       <b>PayPal</b><span style="opacity:.4">&middot;</span>
-      <a href="#" data-popup="pagamenti">altri metodi di pagamento</a>
+      <span class="altri-metodi">carte, Apple Pay e Google Pay</span>
     </div>
     <div class="altri-titolo">&mdash; Altri pezzi &mdash;</div>
     <div class="altri" id="scheda-altri"></div>
@@ -296,9 +322,12 @@
 <!-- POPUP -->
 <div id="popup">
   <div class="popup-box" role="dialog" aria-modal="true">
-    <button class="popup-chiudi" aria-label="Chiudi">&#10005;</button>
-    <div class="popup-titolo" id="popup-titolo"></div>
-    <div id="popup-contenuto"></div>
+    <img class="popup-cornice" src="cornice-w.webp" alt="">
+    <button class="popup-chiudi" aria-label="Chiudi">x</button>
+    <div class="popup-finestra">
+      <div class="popup-titolo" id="popup-titolo"></div>
+      <div id="popup-contenuto"></div>
+    </div>
   </div>
 </div>
 
@@ -469,40 +498,44 @@ const PEZZI = [
   {
     nome:'Champion tee custom', prezzo:'\u20ac 29,90', stripe:'https://buy.stripe.com/fZu8wRbvR8yI2sO7RzfAc00',
     grafica:{tipo:'sprite', fogli:['pezzo1-spin-a.webp','pezzo1-spin-b.webp'], nfr:150, cols:8, perfoglio:75, fw:320, fh:530, giro:5000, larghezza:'50%'},
-    foto:['pezzo1-capo.webp','pezzo1-indossata.webp'],
-    misure:[['Taglia','M'],['Spalle','\u2014 cm'],['Petto','\u2014 cm'],['Lunghezza','\u2014 cm'],['Vestibilit\u00e0','Regular'],['Modello','\u2014 cm \u00b7 porta M']],
+    foto:['champion-capo.webp','champion-indossata.webp'],
+    taglia:'M',
+    misure:[['Larghezza','48 cm'],['Lunghezza','70 cm'],['Manica al collo','37 cm']],
     descrizione:[
-      'T-shirt Champion nera second-hand, rilavorata a mano da WEINERVILLE con grafica gotica. Un solo esemplare: quando \u00e8 venduto, \u00e8 venduto.',
-      'Composizione: \u2014. Condizioni: vintage, ottime, senza difetti rilevanti.',
-      'Lavaggio: a rovescio, 30\u00b0, niente asciugatrice.'
+      'Maglia Champion nera 100% cotone, custom vintage.',
+      'Pezzo unico 1/1,',
+      'Ottime condizioni.'
     ]
   },
   {
     nome:'Jeans vintage tribal love', prezzo:'\u20ac 29,90', stripe:'https://buy.stripe.com/9B68wRgQbbKU9VgefXfAc01',
     grafica:{tipo:'sprite', fogli:['jeans-spin-a.webp','jeans-spin-b.webp'], nfr:200, cols:8, perfoglio:100, fw:480, fh:229, giro:5000, larghezza:'86%'},
-    foto:['jeans-capo.webp'],
-    misure:[['Taglia','W32'],['Vita','\u2014 cm'],['Cavallo','\u2014 cm'],['Gamba','\u2014 cm'],['Vestibilit\u00e0','Regular'],['Modello','\u2014 cm \u00b7 porta W32']],
+    foto:['jeans-capo.webp','jeans-fronte.webp','jeans-indossato.webp'],
+    taglia:'M',
+    misure:[['Lunghezza','104 cm'],['Vita','37 cm'],['Caviglia','25 cm']],
     descrizione:[
-      'Jeans grigi second-hand, rilavorati a mano da WEINERVILLE con grafica tribal sul retro. Un solo esemplare: quando \u00e8 venduto, \u00e8 venduto.',
-      'Composizione: denim, \u2014. Condizioni: vintage, ottime, senza difetti rilevanti.',
-      'Lavaggio: a rovescio, 30\u00b0, niente asciugatrice.'
+      'Jeans Cache Cache vintage, custom.',
+      'Grigio con tribale a forma di cuore sulla parte alta posteriore.',
+      '66% cotone, 33% poliestere, 1% elastan.',
+      'Pezzo unico 1/1.',
+      'Marchio francese.'
     ]
   },
   {
     nome:'Polo Levi\u2019s custom', prezzo:'\u20ac 29,90', stripe:'https://buy.stripe.com/4gMfZj1VhbKU1oK0p7fAc02',
-    grafica:{tipo:'img', src:'pezzo2-grafica.webp', larga:false},
-    foto:['pezzo2-capo.webp'],
-    misure:[['Taglia','M'],['Spalle','\u2014 cm'],['Petto','\u2014 cm'],['Lunghezza','\u2014 cm'],['Vestibilit\u00e0','Regular'],['Modello','\u2014 cm \u00b7 porta M']],
+    foto:['polo-capo.webp','polo-indossata.webp'],
+    taglia:'M',
+    misure:[['Larghezza','48 cm'],['Lunghezza','70 cm'],['Manica al collo','35 cm']],
     descrizione:[
-      'Polo Levi\u2019s blu navy second-hand, rilavorata a mano da WEINERVILLE con grafica tribal. Un solo esemplare: quando \u00e8 venduto, \u00e8 venduto.',
-      'Composizione: \u2014. Condizioni: vintage, ottime, senza difetti rilevanti.',
-      'Lavaggio: a rovescio, 30\u00b0, niente asciugatrice.'
+      'Polo Levi\u2019s vintage custom.',
+      'Taglia M, 100% cotone.',
+      'Colore blu navy.',
+      'Ottime condizioni.'
     ]
   }
 ];
-const SPEDIZIONE = [['Spedizione Italia','\u20ac 6,00'],['Tempi','2-4 giorni lavorativi'],['Corriere','tracciato'],
+const SPEDIZIONE = [['Spedizione Italia','\u20ac 4,99'],['Tempi','2-4 giorni lavorativi'],['Corriere','tracciato'],
                     ['Tracking','via email'],['Resi','entro 14 giorni'],['Rimborso','completo']];
-const PAGAMENTI = [['PayPal','\u2713'],['Carte','Visa \u00b7 Mastercard \u00b7 Amex'],['Apple Pay','\u2713'],['Google Pay','\u2713']];
 const EMAIL = 'ordini@weinervillestar.com';
 
 /* ---- CARD ARTICOLO (usata in home e catalogo) ---- */
@@ -513,7 +546,7 @@ function spriteDi(p){
 }
 function creaCard(i, soloFoto){
   const p = PEZZI[i];
-  if (soloFoto){
+  if (soloFoto || !p.grafica){
     const a = document.createElement('article');
     a.className = 'capo';
     a.innerHTML = '<div class="slideshow"><div class="slide attiva"><img class="foto" loading="lazy" decoding="async" src="' + p.foto[0] + '" alt="' + p.nome + '"></div></div>' +
@@ -626,17 +659,14 @@ function apriPopup(tipo){
     titolo = 'Descrizione';
     html = '<div class="popup-testo">' + p.descrizione.map(t => '<p>' + t + '</p>').join('') + '</div>';
   } else if (tipo === 'misure'){
-    titolo = 'Misure';
-    html = righeHTML(p.misure) +
+    titolo = 'Tabella misure';
+    html = '<div class="popup-righe"><div class="testa"><span>Taglia</span><span>' + p.taglia + '</span></div>' +
+      p.misure.map(r => '<div><span>' + r[0] + '</span><span>' + r[1] + '</span></div>').join('') + '</div>' +
       '<a class="popup-nota" href="mailto:' + EMAIL + '?subject=' + encodeURIComponent('Domanda taglia ' + p.nome) + '">Dubbi sulla taglia? Scrivici \u2192</a>';
   } else if (tipo === 'spedizione'){
     titolo = 'Spedizione e resi';
     html = righeHTML(SPEDIZIONE) +
       '<span class="popup-nota">Il pezzo torna nelle stesse condizioni in cui lo hai ricevuto</span>';
-  } else if (tipo === 'pagamenti'){
-    titolo = 'Metodi di pagamento';
-    html = righeHTML(PAGAMENTI) +
-      '<span class="popup-nota">Pagamento sicuro gestito da Stripe \u00b7 i dati della carta non passano mai dal sito</span>';
   }
   document.getElementById('popup-titolo').textContent = titolo;
   document.getElementById('popup-contenuto').innerHTML = html;
