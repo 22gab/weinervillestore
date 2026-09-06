@@ -89,8 +89,7 @@
   .menu-btn{
     position:fixed;top:132px;left:12px;z-index:620;
     width:34px;height:34px;border:none;cursor:pointer;border-radius:9px;
-    display:none;
-    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+    display:none;flex-direction:column;align-items:center;justify-content:center;gap:4px;
     background:linear-gradient(145deg,#eef0f5 0%,#9297a6 30%,#f6f7fa 50%,#7c8190 70%,#c4c8d3 100%);
     background-size:200% 200%;
     box-shadow:0 2px 8px rgba(0,0,0,.4), inset 0 1px 1px rgba(255,255,255,.6);
@@ -456,8 +455,8 @@ class Sprite3D {
   }
 }
 const LOGO = new Sprite3D({fogli:['logo-spin-a.webp','logo-spin-b.webp'], nfr:120, cols:10, perfoglio:60, fw:640, fh:360, giro:6000});
-const ctxSpin = document.getElementById('spin-canvas').getContext('2d');
-const ctxLogo = document.getElementById('logo-canvas').getContext('2d');
+const ctxSpin = document.getElementById('spin-canvas').getContext('2d', {alpha:true, desynchronized:true});
+const ctxLogo = document.getElementById('logo-canvas').getContext('2d', {alpha:true, desynchronized:true});
 const NFR = LOGO.nfr;
 function disegna(){ LOGO.disegna(ctxSpin, ((Math.round(rotY / (360 / NFR)) % NFR) + NFR) % NFR); }
 LOGO.carica(disegna);
@@ -468,14 +467,18 @@ const inVista = new IntersectionObserver(e => e.forEach(x => {
   const r = ROTANTI.find(r => r.ctx.canvas === x.target); if (r) r.visibile = x.isIntersecting;
 }), {threshold: 0});
 inVista.observe(ctxLogo.canvas);
+let ultimoGiro = 0;
 function giraTutti(t){
+  requestAnimationFrame(giraTutti);
+  if (t - ultimoGiro < 33) return;      // ~30fps: fluido ma meta' del carico
+  ultimoGiro = t;
   for (const r of ROTANTI){
     if (!r.sprite.caricato || !r.visibile) continue;
     if (entrato === false && r.sprite !== LOGO) continue;
+    if (document.body.classList.contains('overlay-aperto') && r.ctx.canvas.closest('.schermata') === null && r.sprite !== LOGO) continue;
     const idx = Math.floor((t % r.sprite.giro) / r.sprite.giro * r.sprite.nfr);
     if (idx !== r.ultimo){ r.sprite.disegna(r.ctx, idx); r.ultimo = idx; }
   }
-  requestAnimationFrame(giraTutti);
 }
 requestAnimationFrame(giraTutti);
 let riallineo = false, target = 0;
@@ -704,10 +707,11 @@ document.getElementById('catalogo-conta').textContent = PEZZI.length + ' pezzi u
 function apriSchermata(id){
   document.getElementById(id).classList.add('aperta');
   document.body.classList.add('bloccato');
+  document.body.classList.add('overlay-aperto');
 }
 function chiudiSchermata(id){
   document.getElementById(id).classList.remove('aperta');
-  if (!document.querySelector('.schermata.aperta')) document.body.classList.remove('bloccato');
+  if (!document.querySelector('.schermata.aperta')){ document.body.classList.remove('bloccato'); document.body.classList.remove('overlay-aperto'); }
 }
 document.getElementById('shopnow').addEventListener('click', e => { e.preventDefault(); apriSchermata('catalogo'); });
 document.querySelectorAll('[data-chiudi]').forEach(b => b.addEventListener('click', () => chiudiSchermata(b.dataset.chiudi)));
