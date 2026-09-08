@@ -337,7 +337,7 @@
   <a class="chrome pieno shopnow" id="shopnow" href="#catalogo"><span>SHOP NOW</span></a>
 </main>
 
-<div class="divisore" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=9" alt=""></div>
+<div class="divisore" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=10" alt=""></div>
 
 <!-- CATALOGO -->
 <div class="schermata" id="catalogo" aria-label="Tutti gli articoli">
@@ -350,7 +350,7 @@
     <div class="catalogo-conta" id="catalogo-conta"></div>
     <div class="griglia" id="catalogo-griglia"></div>
   </div>
-  <div class="divisore sfasato" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=9" alt=""></div>
+  <div class="divisore sfasato" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=10" alt=""></div>
 </div>
 
 
@@ -397,7 +397,7 @@
 <!-- POPUP -->
 <div id="popup">
   <div class="popup-box" role="dialog" aria-modal="true">
-    <img class="popup-cornice" src="cornice-w.webp?v=9" alt="">
+    <img class="popup-cornice" src="cornice-w.webp?v=10" alt="">
     <button class="popup-chiudi" aria-label="Chiudi">x</button>
     <div class="popup-finestra">
       <div class="popup-titolo" id="popup-titolo"></div>
@@ -444,47 +444,39 @@ function avanzaCoda(){
 const TOUCH = matchMedia('(pointer:coarse)').matches;
 const LEGGERO = TOUCH && ((navigator.deviceMemory && navigator.deviceMemory <= 4) ||
                           (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4));
-const V = '?v=9';
+const V = '?v=10';
 const pausa = ms => new Promise(r => setTimeout(r, ms));
 class Sprite3D {
   constructor(o){
     Object.assign(this, o);
     if (LEGGERO){ this.fogli = this.fogli.map(f => f.replace('.webp', '-lo.webp')); this.fw = this.fw >> 1; this.fh = this.fh >> 1; }
-    this.img = []; this.bitmap = null; this.caricato = false; this.pronti = 0;
+    this.img = []; this.tele = []; this.caricato = false; this.completo = false;
   }
-  carica(cb){
+  async carica(cb){
     if (this.caricato) return; this.caricato = true;
-    this.img = this.fogli.map(src => { const im = new Image(); im.decoding = 'async'; im.src = src + V; return im; });
-    this.img.forEach(im => im.onload = async () => {
+    // Ogni tavola viene decodificata UNA volta sola e copiata in un canvas fuori schermo:
+    // niente piu' centinaia di ritagli che costringono il browser a ridecodificare l'immagine
+    for (const src of this.fogli){
+      const im = new Image(); im.decoding = 'async'; im.src = src + V;
+      try { await im.decode(); } catch(e) { await new Promise(r => { im.onload = r; im.onerror = r; }); }
+      if (!im.naturalWidth) continue;
+      const tela = document.createElement('canvas');
+      tela.width = im.naturalWidth; tela.height = im.naturalHeight;
+      tela.getContext('2d').drawImage(im, 0, 0);
+      this.tele.push(tela);
+      im.src = '';
       if (cb) cb();
-      if (++this.pronti < this.img.length) return;
-      try {
-        // taglio i fotogrammi a piccoli blocchi, lasciando respirare la pagina tra un blocco e l'altro
-        const bm = [];
-        for (let i = 0; i < this.nfr; i += 8){
-          const blocco = [];
-          for (let k = i; k < Math.min(i + 8, this.nfr); k++)
-            blocco.push(createImageBitmap(this.img[Math.floor(k / this.perfoglio)],
-              ((k % this.perfoglio) % this.cols) * this.fw, Math.floor((k % this.perfoglio) / this.cols) * this.fh, this.fw, this.fh));
-          bm.push(...await Promise.all(blocco));
-          await pausa(0);
-        }
-        this.bitmap = bm;
-        this.img.forEach(im => { im.src = ''; });   // libero la memoria dei fogli interi
-        this.img = [];
-      } catch(e) {}
-      this.completo = true;
-      if (cb) cb();
-    });
+      await pausa(0);
+    }
+    this.completo = true;
+    if (cb) cb();
   }
   disegna(ctx, idx){
     ctx.clearRect(0, 0, this.fw, this.fh);
-    if (this.bitmap){ ctx.drawImage(this.bitmap[idx], 0, 0); return; }
-    if (!this.img.length) return;
-    const foglio = this.img[Math.floor(idx / this.perfoglio)];
+    const tela = this.tele[Math.floor(idx / this.perfoglio)];
+    if (!tela) return;
     const loc = idx % this.perfoglio;
-    if (foglio && foglio.complete && foglio.naturalWidth)
-      ctx.drawImage(foglio, (loc % this.cols) * this.fw, Math.floor(loc / this.cols) * this.fh, this.fw, this.fh, 0, 0, this.fw, this.fh);
+    ctx.drawImage(tela, (loc % this.cols) * this.fw, Math.floor(loc / this.cols) * this.fh, this.fw, this.fh, 0, 0, this.fw, this.fh);
   }
 }
 const LOGO = new Sprite3D({fogli:['logo-spin-a.webp','logo-spin-b.webp'], nfr:120, cols:6, perfoglio:60, fw:640, fh:360, giro:6000});
