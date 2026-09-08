@@ -34,7 +34,6 @@
     display:flex;flex-direction:column;
     align-items:center;justify-content:center;gap:34px;
     transition:opacity .5s;
-    perspective:900px;
     touch-action:none;
   }
   #ingresso.chiuso{opacity:0;pointer-events:none;}
@@ -44,8 +43,6 @@
     user-select:none;-webkit-user-select:none;
     -webkit-touch-callout:none;
     touch-action:none;
-    will-change:transform;
-    transform-style:preserve-3d;
   }
   #logo-spin:active{cursor:grabbing;}
   #logo-spin canvas{width:100%;display:block;pointer-events:none;}
@@ -61,7 +58,6 @@
   .testata{
     padding:22px 20px 10px;
     display:flex;flex-direction:column;align-items:center;gap:14px;
-    perspective:900px;
   }
   .logo-sito{
     width:min(64vw,340px);
@@ -142,7 +138,7 @@
   .capo{cursor:pointer;-webkit-tap-highlight-color:transparent;}
   .slideshow{
     position:relative;aspect-ratio:4/5;overflow:hidden;
-    background:transparent;perspective:900px;
+    background:transparent;
   }
   .slide{
     position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
@@ -341,7 +337,7 @@
   <a class="chrome pieno shopnow" id="shopnow" href="#catalogo"><span>SHOP NOW</span></a>
 </main>
 
-<div class="divisore" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png" alt=""></div>
+<div class="divisore" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=9" alt=""></div>
 
 <!-- CATALOGO -->
 <div class="schermata" id="catalogo" aria-label="Tutti gli articoli">
@@ -354,7 +350,7 @@
     <div class="catalogo-conta" id="catalogo-conta"></div>
     <div class="griglia" id="catalogo-griglia"></div>
   </div>
-  <div class="divisore sfasato" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png" alt=""></div>
+  <div class="divisore sfasato" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=9" alt=""></div>
 </div>
 
 
@@ -401,7 +397,7 @@
 <!-- POPUP -->
 <div id="popup">
   <div class="popup-box" role="dialog" aria-modal="true">
-    <img class="popup-cornice" src="cornice-w.webp" alt="">
+    <img class="popup-cornice" src="cornice-w.webp?v=9" alt="">
     <button class="popup-chiudi" aria-label="Chiudi">x</button>
     <div class="popup-finestra">
       <div class="popup-titolo" id="popup-titolo"></div>
@@ -448,6 +444,7 @@ function avanzaCoda(){
 const TOUCH = matchMedia('(pointer:coarse)').matches;
 const LEGGERO = TOUCH && ((navigator.deviceMemory && navigator.deviceMemory <= 4) ||
                           (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4));
+const V = '?v=9';
 const pausa = ms => new Promise(r => setTimeout(r, ms));
 class Sprite3D {
   constructor(o){
@@ -457,7 +454,7 @@ class Sprite3D {
   }
   carica(cb){
     if (this.caricato) return; this.caricato = true;
-    this.img = this.fogli.map(src => { const im = new Image(); im.decoding = 'async'; im.src = src; return im; });
+    this.img = this.fogli.map(src => { const im = new Image(); im.decoding = 'async'; im.src = src + V; return im; });
     this.img.forEach(im => im.onload = async () => {
       if (cb) cb();
       if (++this.pronti < this.img.length) return;
@@ -722,7 +719,7 @@ function creaCard(i, soloFoto){
   if (soloFoto || !p.grafica){
     const a = document.createElement('article');
     a.className = 'capo';
-    a.innerHTML = '<div class="slideshow"><div class="slide attiva"><img class="foto" loading="lazy" decoding="async" src="' + p.foto[0] + '" alt="' + p.nome + '"></div></div>' +
+    a.innerHTML = '<div class="slideshow"><div class="slide attiva"><img class="foto" loading="lazy" decoding="async" src="' + p.foto[0] + V + '" alt="' + p.nome + '"></div></div>' +
                   '<div class="capo-info"><h2 class="capo-nome">' + p.nome + '</h2><span class="capo-prezzo">' + p.prezzo + '</span></div>';
     a.addEventListener('click', () => apriScheda(i));
     return a;
@@ -739,7 +736,7 @@ function creaCard(i, soloFoto){
   art.innerHTML =
     '<div class="slideshow">' +
       '<div class="slide attiva">' + slide1 + '</div>' +
-      '<div class="slide"><img class="foto" loading="lazy" decoding="async" src="' + p.foto[0] + '" alt="' + p.nome + '"></div>' +
+      '<div class="slide"><img class="foto" loading="lazy" decoding="async" src="' + p.foto[0] + V + '" alt="' + p.nome + '"></div>' +
     '</div>' +
     '<div class="capo-info"><h2 class="capo-nome">' + p.nome + '</h2><span class="capo-prezzo">' + p.prezzo + '</span></div>';
   art.addEventListener('click', () => apriScheda(i));
@@ -799,7 +796,7 @@ function apriScheda(i){
     compra.href = 'mailto:' + EMAIL + '?subject=' + oggetto + '&body=' + corpo; compra.removeAttribute('target');
     compra.querySelector('span').textContent = 'Ordina via email'; compra.classList.remove('venduto');
   }
-  galleria.innerHTML = p.foto.map(f => '<img src="' + f + '" alt="">').join('');
+  galleria.innerHTML = p.foto.map(f => '<img src="' + f + V + '" alt="">').join('');
   pallini.innerHTML = p.foto.map((_, j) => '<i' + (j === 0 ? ' class="on"' : '') + '></i>').join('');
   pallini.style.display = p.foto.length > 1 ? 'flex' : 'none';
   galleria.scrollLeft = 0;
@@ -809,7 +806,7 @@ function apriScheda(i){
     if (j === i) return;
     const a = document.createElement('article');
     a.className = 'capo';
-    a.innerHTML = '<div class="slideshow"><div class="slide attiva"><img class="foto" loading="lazy" src="' + q.foto[0] + '" alt="' + q.nome + '"></div></div>' +
+    a.innerHTML = '<div class="slideshow"><div class="slide attiva"><img class="foto" loading="lazy" src="' + q.foto[0] + V + '" alt="' + q.nome + '"></div></div>' +
                   '<div class="capo-info"><h2 class="capo-nome">' + q.nome + '</h2><span class="capo-prezzo">' + q.prezzo + '</span></div>';
     a.addEventListener('click', () => { apriScheda(j); scheda.scrollTop = 0; });
     altri.appendChild(a);
