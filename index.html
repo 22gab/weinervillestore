@@ -486,13 +486,18 @@ class Sprite3D {
       ctx.drawImage(foglio, (loc % this.cols) * this.fw, Math.floor(loc / this.cols) * this.fh, this.fw, this.fh, 0, 0, this.fw, this.fh);
   }
 }
-const LOGO = new Sprite3D({fogli:['logo-spin-a.webp','logo-spin-b.webp'], nfr:120, cols:10, perfoglio:60, fw:640, fh:360, giro:6000});
+const LOGO = new Sprite3D({fogli:['logo-spin-a.webp','logo-spin-b.webp'], nfr:120, cols:6, perfoglio:60, fw:640, fh:360, giro:6000});
 const ctxSpin = document.getElementById('spin-canvas').getContext('2d');
 const ctxLogo = document.getElementById('logo-canvas').getContext('2d');
 [ctxSpin, ctxLogo].forEach(c => { c.canvas.width = LOGO.fw; c.canvas.height = LOGO.fh; });
 const NFR = LOGO.nfr;
-function disegna(){ LOGO.disegna(ctxSpin, ((Math.round(rotY / (360 / NFR)) % NFR) + NFR) % NFR); }
-LOGO.carica(disegna);
+let ultimoSpin = -1;
+function disegna(forza){
+  const idx = ((Math.round(rotY / (360 / NFR)) % NFR) + NFR) % NFR;
+  if (idx === ultimoSpin && !forza) return;
+  ultimoSpin = idx; LOGO.disegna(ctxSpin, idx);
+}
+LOGO.carica(() => disegna(true));
 
 /* canvas che ruotano da soli (logo in testata + grafiche dei pezzi) */
 const ROTANTI = [{sprite: LOGO, ctx: ctxLogo, ultimo: -1, visibile: true}];
@@ -644,7 +649,7 @@ window.addEventListener('resize', lampoFit);
 const PEZZI = [
   {
     nome:'Tee Champion sigil custom', prezzo:'\u20ac 27,89', stripe:'https://buy.stripe.com/6oUfZj7fBbKUaZk7RzfAc06',
-    grafica:{tipo:'sprite', fogli:['pezzo1-spin-a.webp','pezzo1-spin-b.webp'], nfr:150, cols:8, perfoglio:75, fw:320, fh:530, giro:5000, larghezza:'50%'},
+    grafica:{tipo:'sprite', fogli:['pezzo1-spin-a.webp','pezzo1-spin-b.webp'], nfr:150, cols:12, perfoglio:75, fw:320, fh:530, giro:5000, larghezza:'50%'},
     foto:['champion-capo.webp','champion-indossata.webp'],
     taglia:'M',
     misure:[['Larghezza','48 cm'],['Lunghezza','70 cm'],['Manica al collo','37 cm']],
