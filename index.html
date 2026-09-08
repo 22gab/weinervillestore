@@ -441,8 +441,9 @@ function avanzaCoda(){
 
 /* ---- MOTORE SPRITE 3D (usato dal logo e dalle grafiche dei pezzi) ---- */
 /* MODALITA' LEGGERA: telefoni con poca memoria / CPU (molti Android) usano sprite a meta' risoluzione */
-const LEGGERO = (navigator.deviceMemory && navigator.deviceMemory <= 4) ||
-                (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4);
+const TOUCH = matchMedia('(pointer:coarse)').matches;
+const LEGGERO = TOUCH && ((navigator.deviceMemory && navigator.deviceMemory <= 4) ||
+                          (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4));
 const pausa = ms => new Promise(r => setTimeout(r, ms));
 class Sprite3D {
   constructor(o){
@@ -486,8 +487,8 @@ class Sprite3D {
   }
 }
 const LOGO = new Sprite3D({fogli:['logo-spin-a.webp','logo-spin-b.webp'], nfr:120, cols:10, perfoglio:60, fw:640, fh:360, giro:6000});
-const ctxSpin = document.getElementById('spin-canvas').getContext('2d', {alpha:true, desynchronized:true});
-const ctxLogo = document.getElementById('logo-canvas').getContext('2d', {alpha:true, desynchronized:true});
+const ctxSpin = document.getElementById('spin-canvas').getContext('2d');
+const ctxLogo = document.getElementById('logo-canvas').getContext('2d');
 [ctxSpin, ctxLogo].forEach(c => { c.canvas.width = LOGO.fw; c.canvas.height = LOGO.fh; });
 const NFR = LOGO.nfr;
 function disegna(){ LOGO.disegna(ctxSpin, ((Math.round(rotY / (360 / NFR)) % NFR) + NFR) % NFR); }
@@ -504,10 +505,11 @@ function giraTutti(t){
   requestAnimationFrame(giraTutti);
   if (t - ultimoGiro < 33) return;      // ~30fps: fluido ma meta' del carico
   ultimoGiro = t;
+  const coperto = document.body.classList.contains('overlay-aperto');
   for (const r of ROTANTI){
     if (!r.sprite.caricato || !r.visibile) continue;
     if (entrato === false && r.sprite !== LOGO) continue;
-    if (document.body.classList.contains('overlay-aperto') && r.ctx.canvas.closest('.schermata') === null && r.sprite !== LOGO) continue;
+    if (coperto && r.sprite !== LOGO && !r.inSchermata) continue;
     const idx = Math.floor((t % r.sprite.giro) / r.sprite.giro * r.sprite.nfr);
     if (idx !== r.ultimo){ r.sprite.disegna(r.ctx, idx); r.ultimo = idx; }
   }
@@ -718,7 +720,7 @@ function creaCard(i, soloFoto){
   const cv = art.querySelector('canvas');
   if (cv){
     const sp = spriteDi(p);
-    ROTANTI.push({sprite: sp, ctx: cv.getContext('2d'), ultimo: -1, visibile: false});
+    ROTANTI.push({sprite: sp, ctx: cv.getContext('2d'), ultimo: -1, visibile: false, inSchermata: !!cv.closest('.schermata')});
     inVista.observe(cv);
     // carico i fotogrammi solo dopo l'ingresso e quando la card e' in vista, uno sprite alla volta
     new IntersectionObserver((e, obs) => {
