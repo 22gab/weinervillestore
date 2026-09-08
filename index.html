@@ -190,9 +190,13 @@
   .shopnow > span{font-family:'Anton',sans-serif;font-size:1.2rem;letter-spacing:.22em;padding:14px 8px;color:var(--nero);text-shadow:0 1px 0 rgba(255,255,255,.35);}
 
   .divisore{position:relative;height:96px;overflow:hidden;}
-  .divisore img{position:absolute;bottom:2px;height:88px;width:auto;animation:corsa 7.5s linear infinite;}
+  .divisore img{position:absolute;bottom:2px;left:100%;height:88px;width:auto;animation:corsa 7.5s linear infinite;will-change:transform;}
   .divisore.sfasato img{animation-delay:-3.7s;}
-  @keyframes corsa{from{left:100%;} to{left:-125px;}}
+  @keyframes corsa{from{transform:translateX(0);} to{transform:translateX(calc(-100vw - 125px));}}
+
+  /* ---- MODALITA' RIDOTTA: si attiva da sola se il dispositivo non regge le animazioni ---- */
+  body.lento .lampo span, body.lento .divisore img, body.lento .chrome::after, body.lento .menu-btn{animation:none !important;}
+  body.lento .divisore img{left:auto;right:10px;transform:none;}
 
   /* ---- CATALOGO (tutti i pezzi) ---- */
   .schermata{
@@ -505,9 +509,24 @@ const inVista = new IntersectionObserver(e => e.forEach(x => {
   const r = ROTANTI.find(r => r.ctx.canvas === x.target); if (r) r.visibile = x.isIntersecting;
 }), {threshold: 0});
 inVista.observe(ctxLogo.canvas);
-let ultimoGiro = 0;
+let ultimoGiro = 0, LENTO = false, campioni = [], tPrec = 0;
+function controllaRitmo(t){
+  if (LENTO) return;
+  if (tPrec){ campioni.push(t - tPrec); if (campioni.length > 40) campioni.shift(); }
+  tPrec = t;
+  if (campioni.length >= 40){
+    const ord = [...campioni].sort((a,b)=>a-b), mediana = ord[20];
+    if (mediana > 90){            // meno di ~11 fps per un po': il dispositivo non regge
+      LENTO = true; document.body.classList.add('lento');
+      for (const r of ROTANTI) if (r.sprite.caricato) r.sprite.disegna(r.ctx, 0);   // fermo tutto sul primo fotogramma
+      clearTimeout(lampoTimer); lampoTxt.textContent = 'WEINERVILLE'; lampoFit();
+    }
+  }
+}
 function giraTutti(t){
   requestAnimationFrame(giraTutti);
+  controllaRitmo(t);
+  if (LENTO && entrato) return;         // in modalita' ridotta niente rotazioni
   if (t - ultimoGiro < 33) return;      // ~30fps: fluido ma meta' del carico
   ultimoGiro = t;
   const coperto = document.body.classList.contains('overlay-aperto');
@@ -631,16 +650,18 @@ function lampoFit(){
   lampoTxt.style.transform =
     'translate(-50%,-50%) scale(' + (bw/tw) + ',' + (bh/th) + ')';
 }
+let lampoTimer = 0;
 function lampoStep(){
+  if (LENTO) return;
   const frase = FRASI[fIdx].toUpperCase();
   lIdx++;
   if (lIdx > frase.length){
-    setTimeout(() => { fIdx = (fIdx+1) % FRASI.length; lIdx = 0; lampoStep(); }, 200);
+    lampoTimer = setTimeout(() => { fIdx = (fIdx+1) % FRASI.length; lIdx = 0; lampoStep(); }, 200);
     return;
   }
   lampoTxt.textContent = frase.slice(0, lIdx);
   lampoFit();
-  setTimeout(lampoStep, 50);
+  lampoTimer = setTimeout(lampoStep, 50);
 }
 lampoStep();
 window.addEventListener('resize', lampoFit);
