@@ -429,24 +429,49 @@ function entraNelSito(){
   ingresso.classList.add('chiuso');
   document.body.classList.remove('bloccato');
   document.body.classList.add('entrato');
+  setTimeout(avanzaCoda, 600);   // le grafiche dei pezzi partono dopo l'ingresso
+}
+const CODA_SPRITE = [];
+let codaAttiva = false;
+function avanzaCoda(){
+  if (!entrato || codaAttiva || !CODA_SPRITE.length) return;
+  const sp = CODA_SPRITE.shift(); codaAttiva = true;
+  sp.carica(() => { if (sp.completo){ codaAttiva = false; setTimeout(avanzaCoda, 300); } });
 }
 
 /* ---- MOTORE SPRITE 3D (usato dal logo e dalle grafiche dei pezzi) ---- */
+/* MODALITA' LEGGERA: telefoni con poca memoria / CPU (molti Android) usano sprite a meta' risoluzione */
+const LEGGERO = (navigator.deviceMemory && navigator.deviceMemory <= 4) ||
+                (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4);
+const pausa = ms => new Promise(r => setTimeout(r, ms));
 class Sprite3D {
-  constructor(o){ Object.assign(this, o); this.img = []; this.bitmap = null; this.caricato = false; this.pronti = 0; }
+  constructor(o){
+    Object.assign(this, o);
+    if (LEGGERO){ this.fogli = this.fogli.map(f => f.replace('.webp', '-lo.webp')); this.fw = this.fw >> 1; this.fh = this.fh >> 1; }
+    this.img = []; this.bitmap = null; this.caricato = false; this.pronti = 0;
+  }
   carica(cb){
     if (this.caricato) return; this.caricato = true;
-    this.img = this.fogli.map(src => { const im = new Image(); im.src = src; return im; });
+    this.img = this.fogli.map(src => { const im = new Image(); im.decoding = 'async'; im.src = src; return im; });
     this.img.forEach(im => im.onload = async () => {
       if (cb) cb();
       if (++this.pronti < this.img.length) return;
       try {
-        this.bitmap = await Promise.all(Array.from({length: this.nfr}, (_, i) =>
-          createImageBitmap(this.img[Math.floor(i / this.perfoglio)],
-            ((i % this.perfoglio) % this.cols) * this.fw, Math.floor((i % this.perfoglio) / this.cols) * this.fh, this.fw, this.fh)));
+        // taglio i fotogrammi a piccoli blocchi, lasciando respirare la pagina tra un blocco e l'altro
+        const bm = [];
+        for (let i = 0; i < this.nfr; i += 8){
+          const blocco = [];
+          for (let k = i; k < Math.min(i + 8, this.nfr); k++)
+            blocco.push(createImageBitmap(this.img[Math.floor(k / this.perfoglio)],
+              ((k % this.perfoglio) % this.cols) * this.fw, Math.floor((k % this.perfoglio) / this.cols) * this.fh, this.fw, this.fh));
+          bm.push(...await Promise.all(blocco));
+          await pausa(0);
+        }
+        this.bitmap = bm;
         this.img.forEach(im => { im.src = ''; });   // libero la memoria dei fogli interi
         this.img = [];
       } catch(e) {}
+      this.completo = true;
       if (cb) cb();
     });
   }
@@ -463,6 +488,7 @@ class Sprite3D {
 const LOGO = new Sprite3D({fogli:['logo-spin-a.webp','logo-spin-b.webp'], nfr:120, cols:10, perfoglio:60, fw:640, fh:360, giro:6000});
 const ctxSpin = document.getElementById('spin-canvas').getContext('2d', {alpha:true, desynchronized:true});
 const ctxLogo = document.getElementById('logo-canvas').getContext('2d', {alpha:true, desynchronized:true});
+[ctxSpin, ctxLogo].forEach(c => { c.canvas.width = LOGO.fw; c.canvas.height = LOGO.fh; });
 const NFR = LOGO.nfr;
 function disegna(){ LOGO.disegna(ctxSpin, ((Math.round(rotY / (360 / NFR)) % NFR) + NFR) % NFR); }
 LOGO.carica(disegna);
@@ -677,7 +703,8 @@ function creaCard(i, soloFoto){
   art.className = 'capo';
   let slide1;
   if (p.grafica.tipo === 'sprite'){
-    slide1 = '<canvas class="grafica-canvas" width="' + p.grafica.fw + '" height="' + p.grafica.fh + '" style="width:' + p.grafica.larghezza + '"></canvas>';
+    const spc = spriteDi(p);
+    slide1 = '<canvas class="grafica-canvas" width="' + spc.fw + '" height="' + spc.fh + '" style="width:' + p.grafica.larghezza + '"></canvas>';
   } else {
     slide1 = '<div class="grafica3d' + (p.grafica.larga ? ' larga' : '') + '"><img src="' + p.grafica.src + '" alt=""></div>';
   }
@@ -693,9 +720,9 @@ function creaCard(i, soloFoto){
     const sp = spriteDi(p);
     ROTANTI.push({sprite: sp, ctx: cv.getContext('2d'), ultimo: -1, visibile: false});
     inVista.observe(cv);
-    // carico i fotogrammi solo quando la card e' in vista
+    // carico i fotogrammi solo dopo l'ingresso e quando la card e' in vista, uno sprite alla volta
     new IntersectionObserver((e, obs) => {
-      if (e.some(x => x.isIntersecting)){ sp.carica(); obs.disconnect(); }
+      if (e.some(x => x.isIntersecting)){ obs.disconnect(); CODA_SPRITE.push(sp); avanzaCoda(); }
     }, {rootMargin:'200px'}).observe(art);
   }
   const slides = art.querySelectorAll('.slide');
