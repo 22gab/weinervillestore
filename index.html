@@ -359,7 +359,7 @@
   <a class="chrome pieno shopnow" id="shopnow" href="#catalogo"><span>SHOP NOW</span></a>
 </main>
 
-<div class="divisore" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=11" alt=""></div>
+<div class="divisore" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=12" alt=""></div>
 
 <!-- CATALOGO -->
 <div class="schermata" id="catalogo" aria-label="Tutti gli articoli">
@@ -377,7 +377,7 @@
       <div class="griglia" id="official-griglia"></div>
     </div>
   </div>
-  <div class="divisore sfasato" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=11" alt=""></div>
+  <div class="divisore sfasato" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=12" alt=""></div>
 </div>
 
 
@@ -426,7 +426,7 @@
 <!-- POPUP -->
 <div id="popup">
   <div class="popup-box" role="dialog" aria-modal="true">
-    <img class="popup-cornice" src="cornice-w.webp?v=11" alt="">
+    <img class="popup-cornice" src="cornice-w.webp?v=12" alt="">
     <button class="popup-chiudi" aria-label="Chiudi">x</button>
     <div class="popup-finestra">
       <div class="popup-titolo" id="popup-titolo"></div>
@@ -473,7 +473,7 @@ function avanzaCoda(){
 const TOUCH = matchMedia('(pointer:coarse)').matches;
 const LEGGERO = TOUCH && ((navigator.deviceMemory && navigator.deviceMemory <= 4) ||
                           (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4));
-const V = '?v=11';
+const V = '?v=12';
 const pausa = ms => new Promise(r => setTimeout(r, ms));
 class Sprite3D {
   constructor(o){
@@ -629,8 +629,8 @@ const PAGINE = {
     '<h2>Cookie</h2>' +
     '<p>Questo sito non utilizza cookie di profilazione o di marketing. Eventuali cookie tecnici servono solo al funzionamento della pagina di pagamento Stripe.</p>' +
     '<h2>Termini e condizioni</h2>' +
-    '<p>Ogni capo \u00e8 un pezzo unico vintage di seconda mano, selezionato e customizzato a mano. Le piccole imperfezioni dovute all\u2019usato fanno parte del prodotto. Il prezzo indicato include la spedizione (\u20ac 4,99).</p>' +
-    '<p>Spedizione in 2-4 giorni lavorativi con corriere tracciato. Diritto di reso entro 14 giorni dal ricevimento, con rimborso completo del prezzo del capo: il pezzo deve tornare nelle stesse condizioni in cui \u00e8 stato ricevuto.</p>' +
+    '<p>Ogni capo \u00e8 un pezzo unico vintage di seconda mano, selezionato e customizzato a mano. Le piccole imperfezioni dovute all\u2019usato fanno parte del prodotto. Il costo di spedizione viene calcolato al checkout in base al paese di destinazione e mostrato prima del pagamento.</p>' +
+    '<p>Spediamo in Italia e in Europa con corriere tracciato: 2-4 giorni lavorativi in Italia, 5-10 in Europa. Per consegne fuori dall\u2019Unione Europea eventuali dazi o imposte all\u2019arrivo sono a carico del cliente. Diritto di reso entro 14 giorni dal ricevimento, con rimborso completo del prezzo del capo: il pezzo deve tornare nelle stesse condizioni in cui \u00e8 stato ricevuto.</p>' +
     '<p>Per qualsiasi richiesta: <a href="mailto:weinervillestore@gmail.com">weinervillestore@gmail.com</a></p>'
 };
 const menuBtn = document.getElementById('menu-btn');
@@ -688,7 +688,7 @@ window.addEventListener('resize', lampoFit);
 /* ---- DATI DEI PEZZI ---- */
 const PEZZI = [
   {
-    nome:'Tee Champion sigil custom', prezzo:'\u20ac 27,89', stripe:'https://buy.stripe.com/bJe3cxeI33eogjEc7PfAc07',
+    nome:'Tee Champion sigil custom', prezzo:'\u20ac 24,90', stripe:'https://buy.stripe.com/bJe3cxeI33eogjEc7PfAc07',
     grafica:{tipo:'sprite', fogli:['pezzo1-spin-a.webp','pezzo1-spin-b.webp'], nfr:150, cols:12, perfoglio:75, fw:320, fh:530, giro:5000, larghezza:'50%'},
     foto:['champion-capo.webp','champion-indossata.webp'],
     taglia:'M',
@@ -714,7 +714,7 @@ const PEZZI = [
     ]
   },
   {
-    nome:'Polo Levi\u2019s affliction custom', prezzo:'\u20ac 29,89', stripe:'https://buy.stripe.com/4gM6oJczV6qA0kG2xffAc08',
+    nome:'Polo Levi\u2019s affliction custom', prezzo:'\u20ac 24,90', stripe:'https://buy.stripe.com/4gM6oJczV6qA0kG2xffAc08',
     foto:['polo-capo.webp','polo-indossata.webp'],
     taglia:'M',
     misure:[['Larghezza','48 cm'],['Lunghezza','70 cm'],['Manica al collo','35 cm']],
@@ -726,21 +726,21 @@ const PEZZI = [
     ]
   },
   {
-    nome:'Felpa WEINERVILLE', prezzo:'\u20ac 39,89', stripe:'https://buy.stripe.com/00w14p8jFeX6aZk6NvfAc09',
+    nome:'Tribal long sleeve WEINERVILLE', prezzo:'\u20ac 24,90', stripe:'https://buy.stripe.com/00w14p8jFeX6aZk6NvfAc09',
     ufficiale:true,
     foto:['felpa-capo.webp','felpa-indossata-1.webp','felpa-indossata-2.webp','felpa-indossata-3.webp','felpa-etichetta.webp'],
     taglie:[
-      { nome:'S', venduto:false, misure:[['Lunghezza','62 cm'],['Larghezza','58 cm'],['Manica al collo','78 cm']] },
-      { nome:'M', venduto:false, misure:[['Lunghezza','64 cm'],['Larghezza','59 cm'],['Manica al collo','80 cm']] }
+      { nome:'S', venduto:false, stripe:'', misure:[['Lunghezza','62 cm'],['Larghezza','58 cm'],['Manica al collo','78 cm']] },
+      { nome:'M', venduto:false, stripe:'', misure:[['Lunghezza','64 cm'],['Larghezza','59 cm'],['Manica al collo','80 cm']] }
     ],
     descrizione:[
       'Felpa WEINERVILLE, prima serie ufficiale.',
-      'Nera, girocollo, con grafica tribal a cuore sul petto ed etichetta WEINERVILLE.',
+      'Nera, girocollo, con grafica tribal a cuore ricamata sul petto ed etichetta WEINERVILLE.',
       'Disponibile in due taglie, un solo pezzo per taglia.'
     ]
   }
 ];
-const SPEDIZIONE = [['Spedizione','Inclusa nel prezzo (\u20ac 4,99)'],['Tempi','2-4 giorni lavorativi'],['Corriere','tracciato'],
+const SPEDIZIONE = [['Spedizione','Calcolata al checkout in base al paese'],['Zone','Italia ed Europa'],['Tempi','2-4 giorni in Italia, 5-10 in Europa'],['Corriere','tracciato'],
                     ['Tracking','via email'],['Resi','entro 14 giorni'],['Rimborso','completo']];
 const EMAIL = 'ordini@weinervillestar.com';
 
@@ -749,6 +749,15 @@ const SPRITES = new Map();
 function spriteDi(p){
   if (!SPRITES.has(p)) SPRITES.set(p, new Sprite3D(p.grafica));
   return SPRITES.get(p);
+}
+/* link di acquisto: se la taglia ha un suo link Stripe lo uso, altrimenti la taglia viaggia
+   nel link come "riferimento cliente" (compare nei dettagli del pagamento su Stripe) */
+function linkAcquisto(p){
+  if (!p.taglie) return p.stripe;
+  const t = p.taglie.find(x => x.nome === tagliaScelta);
+  if (t && t.stripe) return t.stripe;
+  const rif = (p.nome + ' taglia ' + (t ? t.nome : '')).replace(/[^A-Za-z0-9 _-]/g, '').trim().replace(/\s+/g, '-');
+  return p.stripe + (p.stripe.includes('?') ? '&' : '?') + 'client_reference_id=' + encodeURIComponent(rif);
 }
 function esaurito(p){ return p.venduto || (p.taglie && p.taglie.every(t => t.venduto)); }
 function badge(p){ return esaurito(p) ? '<span class="badge-esaurito">Esaurito</span>' : ''; }
@@ -841,16 +850,17 @@ function apriScheda(i){
         e.stopPropagation(); if (t.venduto) return;
         tagliaScelta = t.nome;
         boxT.querySelectorAll('button').forEach(x => x.classList.toggle('on', x.textContent === t.nome));
+        compra.href = linkAcquisto(p);
       });
       boxT.appendChild(b);
     });
     notaT.style.display = 'block';
-    notaT.textContent = prima ? 'Un solo pezzo per taglia \u00b7 scegli la taglia, poi indicala al checkout' : '';
+    notaT.textContent = prima ? 'Un solo pezzo per taglia' : '';
   }
   if (esaurito(p)){
     compra.href = '#'; compra.querySelector('span').textContent = 'Esaurito'; compra.classList.add('venduto');
   } else if (p.stripe){
-    compra.href = p.stripe; compra.target = '_blank'; compra.rel = 'noopener';
+    compra.href = linkAcquisto(p); compra.target = '_blank'; compra.rel = 'noopener';
     compra.querySelector('span').textContent = 'Acquista'; compra.classList.remove('venduto');
   } else {
     const oggetto = encodeURIComponent('Ordine ' + p.nome + ' - WEINERVILLE');
