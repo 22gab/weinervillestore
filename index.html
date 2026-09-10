@@ -151,6 +151,27 @@
   .grafica-canvas{display:block;}
   .slide img.foto{height:80%;width:auto;max-width:92%;object-fit:contain;display:block;}
   .capo{display:flex;flex-direction:column;}
+  .capo{position:relative;}
+  .capo.esaurito .slideshow{opacity:.45;}
+  .badge-esaurito{
+    position:absolute;top:10px;left:10px;z-index:6;
+    font-family:'Anton',sans-serif;font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--nero);background:var(--chrome);padding:4px 9px;border-radius:4px;
+  }
+  .taglie{display:flex;gap:8px;justify-content:center;margin:2px 0 10px;}
+  .taglie button{
+    min-width:48px;height:36px;border-radius:8px;cursor:pointer;
+    font-family:'Anton',sans-serif;font-size:.9rem;letter-spacing:.1em;
+    background:#1A1226;color:var(--chrome);border:1px solid rgba(201,204,214,.45);
+  }
+  .taglie button.on{background:var(--chrome);color:var(--nero);border-color:var(--chrome);}
+  .taglie button.esaurita{opacity:.35;text-decoration:line-through;cursor:not-allowed;}
+  .taglie-nota{text-align:center;font-size:.62rem;color:var(--viola-chiaro);margin:-4px 0 10px;}
+  .sezione-titolo{
+    font-family:'Anton',sans-serif;font-size:1.05rem;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--viola-chiaro);text-align:center;margin:34px 0 6px;
+  }
+  .sezione-sotto{text-align:center;font-size:.62rem;color:var(--chrome);opacity:.7;margin-bottom:14px;}
   .capo-info{
     display:flex;flex-direction:column;gap:2px;
     padding:10px 4px 0;pointer-events:none;
@@ -315,6 +336,7 @@
 <div id="tendina-scrim"></div>
 <nav class="tendina" id="tendina">
   <button data-vai="catalogo">Tutti gli articoli</button>
+  <button data-vai="official">WEINERVILLE official</button>
   <button data-pagina="contatti">Contatti</button>
   <button data-link="https://www.instagram.com/weinervillestore/">Instagram<span class="sub">@weinervillestore</span></button>
   <button data-link="https://www.vinted.it/member/98251816-weinervillestore">Vinted<span class="sub">weinervillestore</span></button>
@@ -337,7 +359,7 @@
   <a class="chrome pieno shopnow" id="shopnow" href="#catalogo"><span>SHOP NOW</span></a>
 </main>
 
-<div class="divisore" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=10" alt=""></div>
+<div class="divisore" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=11" alt=""></div>
 
 <!-- CATALOGO -->
 <div class="schermata" id="catalogo" aria-label="Tutti gli articoli">
@@ -349,8 +371,13 @@
   <div class="catalogo-corpo">
     <div class="catalogo-conta" id="catalogo-conta"></div>
     <div class="griglia" id="catalogo-griglia"></div>
+    <div id="official">
+      <div class="sezione-titolo">WEINERVILLE official</div>
+      <div class="sezione-sotto">I capi con il marchio WEINERVILLE</div>
+      <div class="griglia" id="official-griglia"></div>
+    </div>
   </div>
-  <div class="divisore sfasato" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=10" alt=""></div>
+  <div class="divisore sfasato" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=11" alt=""></div>
 </div>
 
 
@@ -383,6 +410,8 @@
       <button class="chrome" data-popup="misure"><span>Misure</span></button>
       <button class="chrome" data-popup="spedizione"><span>Spedizioni</span></button>
     </div>
+    <div class="taglie" id="scheda-taglie" style="display:none"></div>
+    <div class="taglie-nota" id="scheda-taglie-nota" style="display:none"></div>
     <a class="chrome compra" id="scheda-compra" href="#"><span>Acquista</span></a>
     <div class="pagamenti">
       <svg viewBox="0 0 24 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="1.5" width="22" height="13" rx="2"/><line x1="1" y1="5.5" x2="23" y2="5.5" stroke-width="2.5"/></svg>
@@ -397,7 +426,7 @@
 <!-- POPUP -->
 <div id="popup">
   <div class="popup-box" role="dialog" aria-modal="true">
-    <img class="popup-cornice" src="cornice-w.webp?v=10" alt="">
+    <img class="popup-cornice" src="cornice-w.webp?v=11" alt="">
     <button class="popup-chiudi" aria-label="Chiudi">x</button>
     <div class="popup-finestra">
       <div class="popup-titolo" id="popup-titolo"></div>
@@ -444,7 +473,7 @@ function avanzaCoda(){
 const TOUCH = matchMedia('(pointer:coarse)').matches;
 const LEGGERO = TOUCH && ((navigator.deviceMemory && navigator.deviceMemory <= 4) ||
                           (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4));
-const V = '?v=10';
+const V = '?v=11';
 const pausa = ms => new Promise(r => setTimeout(r, ms));
 class Sprite3D {
   constructor(o){
@@ -618,7 +647,8 @@ function apriPagina(id){
 }
 tendina.querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
   chiudiMenu();
-  if (b.dataset.vai) apriSchermata(b.dataset.vai);
+  if (b.dataset.vai === 'official'){ apriSchermata('catalogo'); setTimeout(() => document.getElementById('official').scrollIntoView({behavior:'smooth', block:'start'}), 80); }
+  else if (b.dataset.vai) apriSchermata(b.dataset.vai);
   else if (b.dataset.pagina) apriPagina(b.dataset.pagina);
   else if (b.dataset.link) window.open(b.dataset.link, '_blank', 'noopener');
 }));
@@ -658,7 +688,7 @@ window.addEventListener('resize', lampoFit);
 /* ---- DATI DEI PEZZI ---- */
 const PEZZI = [
   {
-    nome:'Tee Champion sigil custom', prezzo:'\u20ac 27,89', stripe:'https://buy.stripe.com/6oUfZj7fBbKUaZk7RzfAc06',
+    nome:'Tee Champion sigil custom', prezzo:'\u20ac 27,89', stripe:'https://buy.stripe.com/bJe3cxeI33eogjEc7PfAc07',
     grafica:{tipo:'sprite', fogli:['pezzo1-spin-a.webp','pezzo1-spin-b.webp'], nfr:150, cols:12, perfoglio:75, fw:320, fh:530, giro:5000, larghezza:'50%'},
     foto:['champion-capo.webp','champion-indossata.webp'],
     taglia:'M',
@@ -670,7 +700,7 @@ const PEZZI = [
     ]
   },
   {
-    nome:'Jeans tribal love Cache Cache custom', prezzo:'\u20ac 34,89', stripe:'https://buy.stripe.com/4gM4gBdDZ8yId7s2xffAc05',
+    nome:'Jeans tribal love Cache Cache custom', prezzo:'\u20ac 34,89', stripe:'https://buy.stripe.com/4gM4gBdDZ8yId7s2xffAc05', venduto:true,
     grafica:{tipo:'sprite', fogli:['jeans-spin-a.webp','jeans-spin-b.webp'], nfr:200, cols:8, perfoglio:100, fw:480, fh:229, giro:5000, larghezza:'86%'},
     foto:['jeans-capo.webp','jeans-fronte.webp','jeans-indossato.webp'],
     taglia:'M',
@@ -684,7 +714,7 @@ const PEZZI = [
     ]
   },
   {
-    nome:'Polo Levi\u2019s affliction custom', prezzo:'\u20ac 29,89', stripe:'https://buy.stripe.com/00w14p6bxcOY1oKb3LfAc04',
+    nome:'Polo Levi\u2019s affliction custom', prezzo:'\u20ac 29,89', stripe:'https://buy.stripe.com/4gM6oJczV6qA0kG2xffAc08',
     foto:['polo-capo.webp','polo-indossata.webp'],
     taglia:'M',
     misure:[['Larghezza','48 cm'],['Lunghezza','70 cm'],['Manica al collo','35 cm']],
@@ -693,6 +723,20 @@ const PEZZI = [
       'Taglia M, 100% cotone.',
       'Colore blu navy.',
       'Ottime condizioni.'
+    ]
+  },
+  {
+    nome:'Felpa WEINERVILLE', prezzo:'\u20ac 39,89', stripe:'https://buy.stripe.com/00w14p8jFeX6aZk6NvfAc09',
+    ufficiale:true,
+    foto:['felpa-capo.webp','felpa-indossata-1.webp','felpa-indossata-2.webp','felpa-indossata-3.webp','felpa-etichetta.webp'],
+    taglie:[
+      { nome:'S', venduto:false, misure:[['Lunghezza','62 cm'],['Larghezza','58 cm'],['Manica al collo','78 cm']] },
+      { nome:'M', venduto:false, misure:[['Lunghezza','64 cm'],['Larghezza','59 cm'],['Manica al collo','80 cm']] }
+    ],
+    descrizione:[
+      'Felpa WEINERVILLE, prima serie ufficiale.',
+      'Nera, girocollo, con grafica tribal a cuore sul petto ed etichetta WEINERVILLE.',
+      'Disponibile in due taglie, un solo pezzo per taglia.'
     ]
   }
 ];
@@ -706,18 +750,21 @@ function spriteDi(p){
   if (!SPRITES.has(p)) SPRITES.set(p, new Sprite3D(p.grafica));
   return SPRITES.get(p);
 }
+function esaurito(p){ return p.venduto || (p.taglie && p.taglie.every(t => t.venduto)); }
+function badge(p){ return esaurito(p) ? '<span class="badge-esaurito">Esaurito</span>' : ''; }
 function creaCard(i, soloFoto){
   const p = PEZZI[i];
   if (soloFoto || !p.grafica){
     const a = document.createElement('article');
     a.className = 'capo';
-    a.innerHTML = '<div class="slideshow"><div class="slide attiva"><img class="foto" loading="lazy" decoding="async" src="' + p.foto[0] + V + '" alt="' + p.nome + '"></div></div>' +
+    a.innerHTML = badge(p) + '<div class="slideshow"><div class="slide attiva"><img class="foto" loading="lazy" decoding="async" src="' + p.foto[0] + V + '" alt="' + p.nome + '"></div></div>' +
                   '<div class="capo-info"><h2 class="capo-nome">' + p.nome + '</h2><span class="capo-prezzo">' + p.prezzo + '</span></div>';
+    if (esaurito(p)) a.classList.add('esaurito');
     a.addEventListener('click', () => apriScheda(i));
     return a;
   }
   const art = document.createElement('article');
-  art.className = 'capo';
+  art.className = 'capo' + (esaurito(p) ? ' esaurito' : '');
   let slide1;
   if (p.grafica.tipo === 'sprite'){
     const spc = spriteDi(p);
@@ -725,7 +772,7 @@ function creaCard(i, soloFoto){
   } else {
     slide1 = '<div class="grafica3d' + (p.grafica.larga ? ' larga' : '') + '"><img src="' + p.grafica.src + '" alt=""></div>';
   }
-  art.innerHTML =
+  art.innerHTML = badge(p) +
     '<div class="slideshow">' +
       '<div class="slide attiva">' + slide1 + '</div>' +
       '<div class="slide"><img class="foto" loading="lazy" decoding="async" src="' + p.foto[0] + V + '" alt="' + p.nome + '"></div>' +
@@ -751,6 +798,8 @@ const homeGriglia = document.getElementById('home-griglia');
 PEZZI.slice(0, 2).forEach((_, i) => homeGriglia.appendChild(creaCard(i)));
 const catGriglia = document.getElementById('catalogo-griglia');
 PEZZI.forEach((_, i) => catGriglia.appendChild(creaCard(i, true)));
+const offGriglia = document.getElementById('official-griglia');
+PEZZI.forEach((p, i) => { if (p.ufficiale) offGriglia.appendChild(creaCard(i, true)); });
 document.getElementById('catalogo-conta').textContent = PEZZI.length + ' pezzi unici disponibili';
 
 /* ---- SCHERMATE (catalogo, scheda) ---- */
@@ -767,7 +816,7 @@ document.getElementById('shopnow').addEventListener('click', e => { e.preventDef
 document.querySelectorAll('[data-chiudi]').forEach(b => b.addEventListener('click', () => chiudiSchermata(b.dataset.chiudi)));
 
 /* ---- SCHEDA PRODOTTO ---- */
-let pezzoAperto = 0;
+let pezzoAperto = 0, tagliaScelta = null;
 const scheda = document.getElementById('scheda');
 const galleria = document.getElementById('scheda-galleria');
 const pallini = document.getElementById('scheda-pallini');
@@ -777,8 +826,29 @@ function apriScheda(i){
   document.getElementById('scheda-nome').textContent = p.nome;
   document.getElementById('scheda-prezzo').textContent = p.prezzo;
   const compra = document.getElementById('scheda-compra');
-  if (p.venduto){
-    compra.href = '#'; compra.querySelector('span').textContent = 'Venduto'; compra.classList.add('venduto');
+  const boxT = document.getElementById('scheda-taglie'), notaT = document.getElementById('scheda-taglie-nota');
+  boxT.style.display = notaT.style.display = 'none'; boxT.innerHTML = '';
+  if (p.taglie){
+    boxT.style.display = 'flex';
+    const prima = p.taglie.find(t => !t.venduto);
+    tagliaScelta = prima ? prima.nome : null;
+    p.taglie.forEach(t => {
+      const b = document.createElement('button');
+      b.textContent = t.nome; b.type = 'button';
+      if (t.venduto) b.classList.add('esaurita');
+      if (t.nome === tagliaScelta) b.classList.add('on');
+      b.addEventListener('click', e => {
+        e.stopPropagation(); if (t.venduto) return;
+        tagliaScelta = t.nome;
+        boxT.querySelectorAll('button').forEach(x => x.classList.toggle('on', x.textContent === t.nome));
+      });
+      boxT.appendChild(b);
+    });
+    notaT.style.display = 'block';
+    notaT.textContent = prima ? 'Un solo pezzo per taglia \u00b7 scegli la taglia, poi indicala al checkout' : '';
+  }
+  if (esaurito(p)){
+    compra.href = '#'; compra.querySelector('span').textContent = 'Esaurito'; compra.classList.add('venduto');
   } else if (p.stripe){
     compra.href = p.stripe; compra.target = '_blank'; compra.rel = 'noopener';
     compra.querySelector('span').textContent = 'Acquista'; compra.classList.remove('venduto');
@@ -824,8 +894,9 @@ function apriPopup(tipo){
     html = '<div class="popup-testo">' + p.descrizione.map(t => '<p>' + t + '</p>').join('') + '</div>';
   } else if (tipo === 'misure'){
     titolo = 'Tabella misure';
-    html = '<div class="popup-righe"><div class="testa"><span>Taglia</span><span>' + p.taglia + '</span></div>' +
-      p.misure.map(r => '<div><span>' + r[0] + '</span><span>' + r[1] + '</span></div>').join('') + '</div>' +
+    const gruppi = p.taglie ? p.taglie : [{nome: p.taglia, misure: p.misure}];
+    html = gruppi.map(g => '<div class="popup-righe"><div class="testa"><span>Taglia</span><span>' + g.nome + (g.venduto ? ' \u00b7 esaurita' : '') + '</span></div>' +
+      g.misure.map(r => '<div><span>' + r[0] + '</span><span>' + r[1] + '</span></div>').join('') + '</div>').join('<div style="height:8px"></div>') +
       '<a class="popup-nota" href="mailto:' + EMAIL + '?subject=' + encodeURIComponent('Domanda taglia ' + p.nome) + '">Dubbi sulla taglia? Scrivici \u2192</a>';
   } else if (tipo === 'spedizione'){
     titolo = 'Spedizione e resi';
