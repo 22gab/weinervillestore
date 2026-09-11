@@ -215,6 +215,21 @@
   body.lento .lampo span, body.lento .divisore img, body.lento .chrome::after, body.lento .menu-btn{animation:none !important;}
   body.lento .divisore img{left:auto;right:10px;transform:none;}
 
+  /* ---- AVVISAMI ---- */
+  .avvisami{max-width:440px;margin:6px auto 46px;padding:0 26px;text-align:center;}
+  .avvisami-titolo{font-family:'Anton',sans-serif;font-size:1.15rem;letter-spacing:.12em;text-transform:uppercase;color:var(--chrome);}
+  .avvisami-testo{font-size:.68rem;line-height:1.6;color:var(--bianco);opacity:.75;margin:8px 0 14px;}
+  #avvisami-form{display:flex;gap:8px;}
+  #avvisami-form input{
+    flex:1;min-width:0;height:42px;padding:0 12px;border-radius:9px;
+    background:#1A1226;border:1px solid rgba(201,204,214,.4);color:var(--bianco);
+    font-family:'Space Mono',monospace;font-size:.78rem;outline:none;
+  }
+  #avvisami-form input:focus{border-color:var(--viola-chiaro);}
+  #avvisami-form .chrome{padding:3px;height:42px;flex:0 0 auto;}
+  #avvisami-form .chrome > span{padding:0 16px;height:36px;display:flex;align-items:center;font-size:.85rem;}
+  .avvisami-esito{font-size:.66rem;color:var(--viola-chiaro);margin-top:10px;min-height:1em;}
+
   /* ---- CATALOGO (tutti i pezzi) ---- */
   .schermata{
     position:fixed;inset:0;z-index:600;background:var(--nero);
@@ -359,7 +374,18 @@
   <a class="chrome pieno shopnow" id="shopnow" href="#catalogo"><span>SHOP NOW</span></a>
 </main>
 
-<div class="divisore" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=12" alt=""></div>
+<div class="divisore" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=13" alt=""></div>
+
+<!-- AVVISAMI DEL PROSSIMO PEZZO -->
+<section class="avvisami" id="avvisami">
+  <div class="avvisami-titolo">Avvisami del prossimo pezzo</div>
+  <p class="avvisami-testo">Pezzi unici: quando escono, spariscono. Lascia la tua email e sei il primo a saperlo.</p>
+  <form id="avvisami-form" novalidate>
+    <input type="email" id="avvisami-email" placeholder="la tua email" autocomplete="email" required>
+    <button type="submit" class="chrome"><span>Avvisami</span></button>
+  </form>
+  <div class="avvisami-esito" id="avvisami-esito"></div>
+</section>
 
 <!-- CATALOGO -->
 <div class="schermata" id="catalogo" aria-label="Tutti gli articoli">
@@ -377,7 +403,7 @@
       <div class="griglia" id="official-griglia"></div>
     </div>
   </div>
-  <div class="divisore sfasato" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=12" alt=""></div>
+  <div class="divisore sfasato" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=13" alt=""></div>
 </div>
 
 
@@ -426,7 +452,7 @@
 <!-- POPUP -->
 <div id="popup">
   <div class="popup-box" role="dialog" aria-modal="true">
-    <img class="popup-cornice" src="cornice-w.webp?v=12" alt="">
+    <img class="popup-cornice" src="cornice-w.webp?v=13" alt="">
     <button class="popup-chiudi" aria-label="Chiudi">x</button>
     <div class="popup-finestra">
       <div class="popup-titolo" id="popup-titolo"></div>
@@ -473,7 +499,7 @@ function avanzaCoda(){
 const TOUCH = matchMedia('(pointer:coarse)').matches;
 const LEGGERO = TOUCH && ((navigator.deviceMemory && navigator.deviceMemory <= 4) ||
                           (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4));
-const V = '?v=12';
+const V = '?v=13';
 const pausa = ms => new Promise(r => setTimeout(r, ms));
 class Sprite3D {
   constructor(o){
@@ -614,6 +640,26 @@ logoSpin.addEventListener('keydown', e => {
 });
 
 
+/* ---- AVVISAMI ---- */
+const AVVISAMI_ENDPOINT = '';   // es. 'https://formspree.io/f/xxxxxx' — vuoto = apre l'email
+document.getElementById('avvisami-form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const inp = document.getElementById('avvisami-email'), esito = document.getElementById('avvisami-esito');
+  const email = inp.value.trim();
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ esito.textContent = 'Controlla l\u2019email'; return; }
+  if (AVVISAMI_ENDPOINT){
+    esito.textContent = 'Un attimo\u2026';
+    try {
+      const r = await fetch(AVVISAMI_ENDPOINT, {method:'POST', headers:{'Accept':'application/json','Content-Type':'application/json'}, body: JSON.stringify({email, oggetto:'Avvisami del prossimo pezzo'})});
+      esito.textContent = r.ok ? 'Fatto. Ti avvisiamo noi.' : 'Non \u00e8 andata, riprova.';
+      if (r.ok) inp.value = '';
+    } catch(_) { esito.textContent = 'Non \u00e8 andata, riprova.'; }
+  } else {
+    location.href = 'mailto:' + EMAIL + '?subject=' + encodeURIComponent('Avvisami del prossimo pezzo') + '&body=' + encodeURIComponent('Avvisami quando esce il prossimo pezzo: ' + email);
+    esito.textContent = 'Si apre la tua email: basta premere invia.';
+  }
+});
+
 /* ---- MENU A TENDINA + PAGINE ---- */
 const PAGINE = {
   contatti: '<h1>Contact</h1>' +
@@ -742,7 +788,7 @@ const PEZZI = [
 ];
 const SPEDIZIONE = [['Spedizione','Calcolata al checkout in base al paese'],['Zone','Italia ed Europa'],['Tempi','2-4 giorni in Italia, 5-10 in Europa'],['Corriere','tracciato'],
                     ['Tracking','via email'],['Resi','entro 14 giorni'],['Rimborso','completo']];
-const EMAIL = 'ordini@weinervillestar.com';
+const EMAIL = 'weinervillestore@gmail.com';
 
 /* ---- CARD ARTICOLO (usata in home e catalogo) ---- */
 const SPRITES = new Map();
