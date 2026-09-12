@@ -374,7 +374,7 @@
   <a class="chrome pieno shopnow" id="shopnow" href="#catalogo"><span>SHOP NOW</span></a>
 </main>
 
-<div class="divisore" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=13" alt=""></div>
+<div class="divisore" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=14" alt=""></div>
 
 <!-- AVVISAMI DEL PROSSIMO PEZZO -->
 <section class="avvisami" id="avvisami">
@@ -403,7 +403,7 @@
       <div class="griglia" id="official-griglia"></div>
     </div>
   </div>
-  <div class="divisore sfasato" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=13" alt=""></div>
+  <div class="divisore sfasato" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=14" alt=""></div>
 </div>
 
 
@@ -452,7 +452,7 @@
 <!-- POPUP -->
 <div id="popup">
   <div class="popup-box" role="dialog" aria-modal="true">
-    <img class="popup-cornice" src="cornice-w.webp?v=13" alt="">
+    <img class="popup-cornice" src="cornice-w.webp?v=14" alt="">
     <button class="popup-chiudi" aria-label="Chiudi">x</button>
     <div class="popup-finestra">
       <div class="popup-titolo" id="popup-titolo"></div>
@@ -499,7 +499,7 @@ function avanzaCoda(){
 const TOUCH = matchMedia('(pointer:coarse)').matches;
 const LEGGERO = TOUCH && ((navigator.deviceMemory && navigator.deviceMemory <= 4) ||
                           (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4));
-const V = '?v=13';
+const V = '?v=14';
 const pausa = ms => new Promise(r => setTimeout(r, ms));
 class Sprite3D {
   constructor(o){
@@ -784,6 +784,30 @@ const PEZZI = [
       'Nera, girocollo, con grafica tribal a cuore ricamata sul petto ed etichetta WEINERVILLE.',
       'Disponibile in due taglie, un solo pezzo per taglia.'
     ]
+  },
+  {
+    nome:'WEINERVILLE tee', prezzo:'\u20ac 24,90', nonDisponibile:true,
+    ufficiale:true,
+    foto:['wtee-capo.webp','wtee-indossata.webp','wtee-dettagli.webp'],
+    taglia:'M',
+    misure:[['Larghezza','52 cm'],['Lunghezza','70 cm'],['Manica al collo','38 cm']],
+    descrizione:[
+      'Tee WEINERVILLE, prima serie ufficiale.',
+      'Nera, 100% cotone, con logo WEINERVILLE in stile metal serigrafato sul petto ed etichetta WEINERVILLE.',
+      'Pezzo unico 1/1. Non in vendita.'
+    ]
+  },
+  {
+    nome:'WEINERVILLE arched tee', prezzo:'\u20ac 24,90', nonDisponibile:true,
+    ufficiale:true,
+    foto:['atee-capo.webp'],
+    taglia:'M',
+    misure:[['Larghezza','56 cm'],['Lunghezza','72 cm'],['Manica al collo','40 cm']],
+    descrizione:[
+      'Tee WEINERVILLE, prima serie ufficiale.',
+      'Nera, vestibilit\u00e0 oversize, con logo WEINERVILLE ad arco e stelle sul petto ed etichetta WEINERVILLE.',
+      'Pezzo unico 1/1. Non in vendita.'
+    ]
   }
 ];
 const SPEDIZIONE = [['Spedizione','Calcolata al checkout in base al paese'],['Zone','Italia ed Europa'],['Tempi','2-4 giorni in Italia, 5-10 in Europa'],['Corriere','tracciato'],
@@ -805,8 +829,9 @@ function linkAcquisto(p){
   const rif = (p.nome + ' taglia ' + (t ? t.nome : '')).replace(/[^A-Za-z0-9 _-]/g, '').trim().replace(/\s+/g, '-');
   return p.stripe + (p.stripe.includes('?') ? '&' : '?') + 'client_reference_id=' + encodeURIComponent(rif);
 }
-function esaurito(p){ return p.venduto || (p.taglie && p.taglie.every(t => t.venduto)); }
-function badge(p){ return esaurito(p) ? '<span class="badge-esaurito">Esaurito</span>' : ''; }
+function esaurito(p){ return p.venduto || p.nonDisponibile || (p.taglie && p.taglie.every(t => t.venduto)); }
+function etichettaStato(p){ return p.nonDisponibile ? 'Non disponibile' : 'Esaurito'; }
+function badge(p){ return esaurito(p) ? '<span class="badge-esaurito">' + etichettaStato(p) + '</span>' : ''; }
 function creaCard(i, soloFoto){
   const p = PEZZI[i];
   if (soloFoto || !p.grafica){
@@ -904,7 +929,7 @@ function apriScheda(i){
     notaT.textContent = prima ? 'Un solo pezzo per taglia' : '';
   }
   if (esaurito(p)){
-    compra.href = '#'; compra.querySelector('span').textContent = 'Esaurito'; compra.classList.add('venduto');
+    compra.href = '#'; compra.querySelector('span').textContent = etichettaStato(p); compra.classList.add('venduto');
   } else if (p.stripe){
     compra.href = linkAcquisto(p); compra.target = '_blank'; compra.rel = 'noopener';
     compra.querySelector('span').textContent = 'Acquista'; compra.classList.remove('venduto');
