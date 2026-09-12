@@ -3,20 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="color-scheme" content="dark">
+<meta name="color-scheme" content="light">
 <title>WEINERVILLESTORE</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --nero:#0D0A12;        /* nero-viola di fondo */
-    --card:#1A1226;        /* viola scurissimo delle card */
+    --nero:#FFFFFF;        /* fondo del sito (bianco) */
+    --scuro:#0D0A12;       /* testo scuro */
+    --card:#F1EFF5;        /* grigio-lilla chiarissimo delle card */
     --viola:#8B5FC7;       /* viola del logo */
-    --viola-chiaro:#B98FE8;
-    --chrome:#C9CCD6;      /* argento chrome */
-    --bianco:#F2F0F7;
+    --viola-chiaro:#7C52B9;/* viola per i testi */
+    --chrome:#4B4F5C;      /* acciaio scuro per i testi */
+    --bianco:#0D0A12;      /* colore del testo principale */
   }
-  html{color-scheme:dark;}
+  html{color-scheme:light;}
   *{margin:0;padding:0;box-sizing:border-box;}
   html{scroll-behavior:smooth;}
   body{
@@ -75,7 +76,7 @@
   .lampo span{
     position:absolute;left:50%;top:50%;
     font-family:'Anton',sans-serif;
-    color:var(--nero);white-space:nowrap;
+    color:var(--scuro);white-space:nowrap;
     font-size:52px;line-height:1;
     transform-origin:center;
   }
@@ -92,7 +93,7 @@
     pointer-events:auto;
     background:linear-gradient(145deg,#eef0f5 0%,#9297a6 30%,#f6f7fa 50%,#7c8190 70%,#c4c8d3 100%);
     background-size:200% 200%;
-    box-shadow:0 2px 8px rgba(0,0,0,.4), inset 0 1px 1px rgba(255,255,255,.6);
+    box-shadow:0 2px 8px rgba(0,0,0,.25), inset 0 1px 1px rgba(255,255,255,.6);border:1px solid rgba(0,0,0,.12);
     animation:brillaMenu 3.4s ease-in-out infinite;
     -webkit-tap-highlight-color:transparent;
   }
@@ -107,7 +108,7 @@
   .tendina{
     position:fixed;top:0;left:0;z-index:615;
     width:min(78vw,290px);height:100%;
-    background:rgba(13,10,18,.97);border-right:1px solid rgba(201,204,214,.28);
+    background:rgba(255,255,255,.97);border-right:1px solid rgba(75,79,92,.2);
     transform:translateX(-105%);transition:transform .3s ease;
     padding:66px 0 24px;display:flex;flex-direction:column;
     overflow-y:auto;
@@ -116,12 +117,12 @@
   .tendina button{
     background:none;border:none;text-align:left;cursor:pointer;
     font-family:'Anton',sans-serif;font-size:1.02rem;letter-spacing:.06em;text-transform:uppercase;
-    color:var(--chrome);padding:15px 22px;border-bottom:1px solid rgba(201,204,214,.12);
+    color:var(--chrome);padding:15px 22px;border-bottom:1px solid rgba(75,79,92,.12);
     -webkit-tap-highlight-color:transparent;transition:background .2s,color .2s;
   }
   .tendina button:hover,.tendina button:active{background:rgba(139,95,199,.16);color:var(--viola-chiaro);}
   .tendina .sub{font-size:.62rem;letter-spacing:.02em;text-transform:none;color:var(--viola-chiaro);opacity:.65;font-family:'Space Mono',monospace;margin-top:3px;display:block;}
-  #tendina-scrim{position:fixed;inset:0;z-index:610;background:rgba(5,4,8,.6);opacity:0;visibility:hidden;transition:.3s;}
+  #tendina-scrim{position:fixed;inset:0;z-index:610;background:rgba(0,0,0,.35);opacity:0;visibility:hidden;transition:.3s;}
   #tendina-scrim.on{opacity:1;visibility:visible;}
 
   /* ---- PAGINE TESTO (contatti, sicurezza, legali) ---- */
@@ -156,15 +157,15 @@
   .badge-esaurito{
     position:absolute;top:10px;left:10px;z-index:6;
     font-family:'Anton',sans-serif;font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;
-    color:var(--nero);background:var(--chrome);padding:4px 9px;border-radius:4px;
+    color:var(--scuro);background:var(--chrome);padding:4px 9px;border-radius:4px;
   }
   .taglie{display:flex;gap:8px;justify-content:center;margin:2px 0 10px;}
   .taglie button{
     min-width:48px;height:36px;border-radius:8px;cursor:pointer;
     font-family:'Anton',sans-serif;font-size:.9rem;letter-spacing:.1em;
-    background:#1A1226;color:var(--chrome);border:1px solid rgba(201,204,214,.45);
+    background:var(--card);color:var(--chrome);border:1px solid rgba(75,79,92,.35);
   }
-  .taglie button.on{background:var(--chrome);color:var(--nero);border-color:var(--chrome);}
+  .taglie button.on{background:var(--chrome);color:var(--scuro);border-color:var(--chrome);}
   .taglie button.esaurita{opacity:.35;text-decoration:line-through;cursor:not-allowed;}
   .taglie-nota{text-align:center;font-size:.62rem;color:var(--viola-chiaro);margin:-4px 0 10px;}
   .sezione-titolo{
@@ -195,7 +196,7 @@
     pointer-events:none;
   }
   .chrome > span{
-    display:block;background:#100C16;position:relative;
+    display:block;background:#FFFFFF;position:relative;
     padding:10px 4px;font-size:.56rem;letter-spacing:.14em;text-transform:uppercase;
     text-align:center;line-height:1.4;
   }
@@ -204,7 +205,7 @@
   .chrome:active{transform:scale(.985);}
   @keyframes luccica{0%{transform:translateX(-140%) rotate(12deg)} 60%{transform:translateX(520%) rotate(12deg)} 100%{transform:translateX(520%) rotate(12deg)}}
   .shopnow{margin:22px auto 6px;width:min(72%,300px);}
-  .shopnow > span{font-family:'Anton',sans-serif;font-size:1.2rem;letter-spacing:.22em;padding:14px 8px;color:var(--nero);text-shadow:0 1px 0 rgba(255,255,255,.35);}
+  .shopnow > span{font-family:'Anton',sans-serif;font-size:1.2rem;letter-spacing:.22em;padding:14px 8px;color:var(--scuro);}
 
   .divisore{position:relative;height:96px;overflow:hidden;}
   .divisore img{position:absolute;bottom:2px;left:100%;height:88px;width:auto;animation:corsa 7.5s linear infinite;will-change:transform;}
@@ -222,7 +223,7 @@
   #avvisami-form{display:flex;gap:8px;}
   #avvisami-form input{
     flex:1;min-width:0;height:42px;padding:0 12px;border-radius:9px;
-    background:#1A1226;border:1px solid rgba(201,204,214,.4);color:var(--bianco);
+    background:#FFFFFF;border:1px solid rgba(75,79,92,.35);color:var(--bianco);
     font-family:'Space Mono',monospace;font-size:.78rem;outline:none;
   }
   #avvisami-form input:focus{border-color:var(--viola-chiaro);}
@@ -269,8 +270,8 @@
   .tasti3 .chrome > span{height:42px;display:flex;align-items:center;justify-content:center;padding:0 4px;font-size:.56rem;}
   .compra{padding:3px;}
   .compra.venduto{pointer-events:none;opacity:.55;}
-  .compra.venduto > span{background:#2a2236;color:var(--chrome);}
-  .compra > span{background:var(--viola);color:var(--nero);font-family:'Anton',sans-serif;font-size:1.15rem;letter-spacing:.16em;padding:15px 8px;}
+  .compra.venduto > span{background:#E6E3EC;color:var(--chrome);}
+  .compra > span{background:var(--viola);color:var(--scuro);font-family:'Anton',sans-serif;font-size:1.15rem;letter-spacing:.16em;padding:15px 8px;}
   .pagamenti{
     display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;
     font-size:.68rem;color:var(--chrome);margin-top:-6px;
@@ -285,7 +286,7 @@
   .altri{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
 
   /* ---- POPUP centrale ---- */
-  #popup{position:fixed;inset:0;z-index:700;display:none;align-items:center;justify-content:center;padding:14px;background:rgba(5,4,8,.8);}
+  #popup{position:fixed;inset:0;z-index:700;display:none;align-items:center;justify-content:center;padding:14px;background:rgba(0,0,0,.55);}
   #popup.aperto{display:flex;}
   .popup-box{
     position:relative;
@@ -297,7 +298,7 @@
   /* la finestra interna della cornice */
   .popup-finestra{
     position:absolute;left:22.4%;right:21.2%;top:28.8%;bottom:30.8%;
-    background:#0D0A12;border-radius:9px;
+    background:#FFFFFF;border-radius:9px;
     overflow-y:auto;-webkit-overflow-scrolling:touch;
     padding:9px 11px 11px;
     scrollbar-width:none;
@@ -374,7 +375,7 @@
   <a class="chrome pieno shopnow" id="shopnow" href="#catalogo"><span>SHOP NOW</span></a>
 </main>
 
-<div class="divisore" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=14" alt=""></div>
+<div class="divisore" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=15" alt=""></div>
 
 <!-- AVVISAMI DEL PROSSIMO PEZZO -->
 <section class="avvisami" id="avvisami">
@@ -403,7 +404,7 @@
       <div class="griglia" id="official-griglia"></div>
     </div>
   </div>
-  <div class="divisore sfasato" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=14" alt=""></div>
+  <div class="divisore sfasato" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=15" alt=""></div>
 </div>
 
 
@@ -452,7 +453,7 @@
 <!-- POPUP -->
 <div id="popup">
   <div class="popup-box" role="dialog" aria-modal="true">
-    <img class="popup-cornice" src="cornice-w.webp?v=14" alt="">
+    <img class="popup-cornice" src="cornice-w.webp?v=15" alt="">
     <button class="popup-chiudi" aria-label="Chiudi">x</button>
     <div class="popup-finestra">
       <div class="popup-titolo" id="popup-titolo"></div>
@@ -499,7 +500,7 @@ function avanzaCoda(){
 const TOUCH = matchMedia('(pointer:coarse)').matches;
 const LEGGERO = TOUCH && ((navigator.deviceMemory && navigator.deviceMemory <= 4) ||
                           (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4));
-const V = '?v=14';
+const V = '?v=15';
 const pausa = ms => new Promise(r => setTimeout(r, ms));
 class Sprite3D {
   constructor(o){
@@ -830,7 +831,7 @@ function linkAcquisto(p){
   return p.stripe + (p.stripe.includes('?') ? '&' : '?') + 'client_reference_id=' + encodeURIComponent(rif);
 }
 function esaurito(p){ return p.venduto || p.nonDisponibile || (p.taglie && p.taglie.every(t => t.venduto)); }
-function etichettaStato(p){ return p.nonDisponibile ? 'Non disponibile' : 'Esaurito'; }
+function etichettaStato(p){ return 'Esaurito'; }
 function badge(p){ return esaurito(p) ? '<span class="badge-esaurito">' + etichettaStato(p) + '</span>' : ''; }
 function creaCard(i, soloFoto){
   const p = PEZZI[i];
