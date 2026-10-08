@@ -226,9 +226,11 @@
   #avvisami-form input{
     flex:1;min-width:0;height:42px;padding:0 12px;border-radius:9px;
     background:#1A1226;border:1px solid rgba(201,204,214,.4);color:var(--bianco);
-    font-family:'Space Mono',monospace;font-size:.78rem;outline:none;
+    font-family:'Space Mono',monospace;font-size:16px;outline:none;
+    touch-action:manipulation;-webkit-user-select:text;user-select:text;position:relative;z-index:2;
   }
   #avvisami-form input:focus{border-color:var(--viola-chiaro);}
+  .avvisami{position:relative;z-index:3;}
   #avvisami-form .chrome{padding:3px;height:42px;flex:0 0 auto;}
   #avvisami-form .chrome > span{padding:0 16px;height:36px;display:flex;align-items:center;font-size:.85rem;}
   .avvisami-esito{font-size:.66rem;color:var(--viola-chiaro);margin-top:10px;min-height:1em;}
@@ -381,7 +383,7 @@
   <a class="chrome pieno shopnow" id="shopnow" href="#catalogo"><span>SHOP NOW</span></a>
 </main>
 
-<div class="divisore" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=17" alt=""></div>
+<div class="divisore" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=18" alt=""></div>
 
 <!-- AVVISAMI DEL PROSSIMO PEZZO -->
 <section class="avvisami" id="avvisami">
@@ -410,7 +412,7 @@
       <div class="griglia" id="official-griglia"></div>
     </div>
   </div>
-  <div class="divisore sfasato" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=17" alt=""></div>
+  <div class="divisore sfasato" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=18" alt=""></div>
 </div>
 
 
@@ -459,7 +461,7 @@
 <!-- POPUP -->
 <div id="popup">
   <div class="popup-box" role="dialog" aria-modal="true">
-    <img class="popup-cornice" src="cornice-w.webp?v=17" alt="">
+    <img class="popup-cornice" src="cornice-w.webp?v=18" alt="">
     <button class="popup-chiudi" aria-label="Chiudi">x</button>
     <div class="popup-finestra">
       <div class="popup-titolo" id="popup-titolo"></div>
@@ -491,6 +493,7 @@ function entraNelSito(){
   ingresso.classList.add('chiuso');
   document.body.classList.remove('bloccato');
   document.body.classList.add('entrato');
+  setTimeout(() => { ingresso.style.display = 'none'; }, 600);   // via del tutto: non copre più i campi sotto
   setTimeout(avanzaCoda, 600);   // le grafiche dei pezzi partono dopo l'ingresso
 }
 const CODA_SPRITE = [];
@@ -506,7 +509,7 @@ function avanzaCoda(){
 const TOUCH = matchMedia('(pointer:coarse)').matches;
 const LEGGERO = TOUCH && ((navigator.deviceMemory && navigator.deviceMemory <= 4) ||
                           (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4));
-const V = '?v=17';
+const V = '?v=18';
 const pausa = ms => new Promise(r => setTimeout(r, ms));
 class Sprite3D {
   constructor(o){
@@ -784,12 +787,14 @@ const PEZZI = [
     foto:['felpa-capo.webp','felpa-indossata-1.webp','felpa-indossata-2.webp','felpa-indossata-3.webp','felpa-etichetta.webp'],
     taglie:[
       { nome:'S', venduto:false, stripe:'', misure:[['Lunghezza','62 cm'],['Larghezza','58 cm'],['Manica al collo','78 cm']] },
-      { nome:'M', venduto:false, stripe:'', misure:[['Lunghezza','64 cm'],['Larghezza','59 cm'],['Manica al collo','80 cm']] }
+      { nome:'M', venduto:false, stripe:'', misure:[['Lunghezza','64 cm'],['Larghezza','59 cm'],['Manica al collo','80 cm']] },
+      { nome:'L', venduto:false, stripe:'', misure:[['Lunghezza','66 cm'],['Larghezza','60 cm'],['Manica al collo','82 cm']] }
     ],
     descrizione:[
       'Felpa WEINERVILLE, prima serie ufficiale.',
       'Nera, girocollo, con grafica tribal a cuore ricamata sul petto ed etichetta WEINERVILLE.',
-      'Disponibile in due taglie, un solo pezzo per taglia.'
+      '100% cotone.',
+      'Disponibile nelle taglie S, M e L.'
     ]
   },
   {
@@ -932,8 +937,8 @@ function apriScheda(i){
       });
       boxT.appendChild(b);
     });
-    notaT.style.display = 'block';
-    notaT.textContent = prima ? 'Un solo pezzo per taglia' : '';
+    notaT.style.display = 'none';
+    notaT.textContent = '';
   }
   if (esaurito(p)){
     compra.href = '#'; compra.querySelector('span').textContent = etichettaStato(p); compra.classList.add('venduto');
