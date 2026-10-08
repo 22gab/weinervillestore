@@ -22,15 +22,11 @@
   *{margin:0;padding:0;box-sizing:border-box;}
   html{scroll-behavior:smooth;}
   body{
-    background-color:var(--fondo);
-    /* grana tipo cemento/carta fotografica, disegnata in CSS (nessun file in più) */
-    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.85  0 0 0 0 0.85  0 0 0 0 0.9  0 0 0 .13 0'/></filter><rect width='100%' height='100%' filter='url(%23g)'/></svg>");
-    background-size:220px 220px;
+    background:var(--nero);
     color:var(--bianco);
     font-family:'Space Mono',monospace;
     overflow-x:hidden;
   }
-  body.lento{background-image:none;}
   body.bloccato{overflow:hidden;}
 
   /* ---- INGRESSO ---- */
@@ -218,6 +214,7 @@
   @keyframes corsa{from{transform:translateX(0);} to{transform:translateX(calc(-100vw - 125px));}}
 
   /* ---- MODALITA' RIDOTTA: si attiva da sola se il dispositivo non regge le animazioni ---- */
+  body.lento .schermata{background-image:none;}
   body.lento .lampo span, body.lento .divisore img, body.lento .chrome::after, body.lento .menu-btn{animation:none !important;}
   body.lento .divisore img{left:auto;right:10px;transform:none;}
 
@@ -237,8 +234,12 @@
   .avvisami-esito{font-size:.66rem;color:var(--viola-chiaro);margin-top:10px;min-height:1em;}
 
   /* ---- CATALOGO (tutti i pezzi) ---- */
+  /* le schermate interne (shop, schede, pagine) sono antracite con grana: i capi neri si vedono */
   .schermata{
-    position:fixed;inset:0;z-index:600;background:var(--fondo);
+    position:fixed;inset:0;z-index:600;
+    background-color:var(--fondo);
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.85  0 0 0 0 0.85  0 0 0 0 0.9  0 0 0 .13 0'/></filter><rect width='100%' height='100%' filter='url(%23g)'/></svg>");
+    background-size:220px 220px;
     display:none;flex-direction:column;overflow-y:auto;
   }
   .schermata.aperta{display:flex;}
