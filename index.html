@@ -9,7 +9,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --nero:#0D0A12;        /* nero-viola di fondo */
+    --nero:#0D0A12;        /* nero-viola: schermata d'ingresso e popup */
+    --fondo:#2B292F;       /* antracite del sito (fa risaltare i capi neri) */
     --scuro:#0D0A12;       /* testo scuro sopra chrome e viola */
     --card:#1A1226;        /* viola scurissimo delle card */
     --viola:#8B5FC7;       /* viola del logo */
@@ -21,11 +22,15 @@
   *{margin:0;padding:0;box-sizing:border-box;}
   html{scroll-behavior:smooth;}
   body{
-    background:var(--nero);
+    background-color:var(--fondo);
+    /* grana tipo cemento/carta fotografica, disegnata in CSS (nessun file in più) */
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.85  0 0 0 0 0.85  0 0 0 0 0.9  0 0 0 .13 0'/></filter><rect width='100%' height='100%' filter='url(%23g)'/></svg>");
+    background-size:220px 220px;
     color:var(--bianco);
     font-family:'Space Mono',monospace;
     overflow-x:hidden;
   }
+  body.lento{background-image:none;}
   body.bloccato{overflow:hidden;}
 
   /* ---- INGRESSO ---- */
@@ -150,7 +155,7 @@
   .grafica3d img{width:100%;display:block;}
   .grafica3d.larga{width:76%;}
   .grafica-canvas{display:block;}
-  .slide img.foto{height:80%;width:auto;max-width:92%;object-fit:contain;display:block;}
+  .slide img.foto{height:80%;width:auto;max-width:92%;object-fit:contain;display:block;filter:drop-shadow(0 6px 14px rgba(0,0,0,.55));}
   .capo{display:flex;flex-direction:column;}
   .capo{position:relative;}
   .capo.esaurito .slideshow{opacity:.45;}
@@ -233,13 +238,13 @@
 
   /* ---- CATALOGO (tutti i pezzi) ---- */
   .schermata{
-    position:fixed;inset:0;z-index:600;background:var(--nero);
+    position:fixed;inset:0;z-index:600;background:var(--fondo);
     display:none;flex-direction:column;overflow-y:auto;
   }
   .schermata.aperta{display:flex;}
   .schermata > *{flex-shrink:0;}
   .schermata-testa{
-    position:sticky;top:0;z-index:5;background:var(--nero);
+    position:sticky;top:0;z-index:5;background:var(--fondo);
     display:flex;align-items:center;justify-content:space-between;padding:10px 12px;
   }
   .tasto-icona{
@@ -258,7 +263,7 @@
   /* ---- SCHEDA PRODOTTO ---- */
   .galleria{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
   .galleria::-webkit-scrollbar{display:none;}
-  .galleria img{flex:none;width:100%;height:min(40vh,360px);object-fit:contain;padding:2% 6%;scroll-snap-align:center;}
+  .galleria img{flex:none;width:100%;height:min(40vh,360px);object-fit:contain;padding:2% 6%;scroll-snap-align:center;filter:drop-shadow(0 8px 18px rgba(0,0,0,.55));}
   .pallini{display:flex;gap:8px;justify-content:center;padding:10px 0 2px;}
   .pallini i{width:7px;height:7px;border-radius:50%;background:var(--chrome);opacity:.3;transition:opacity .2s;}
   .pallini i.on{opacity:1;background:var(--viola-chiaro);}
@@ -375,7 +380,7 @@
   <a class="chrome pieno shopnow" id="shopnow" href="#catalogo"><span>SHOP NOW</span></a>
 </main>
 
-<div class="divisore" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=16" alt=""></div>
+<div class="divisore" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=17" alt=""></div>
 
 <!-- AVVISAMI DEL PROSSIMO PEZZO -->
 <section class="avvisami" id="avvisami">
@@ -404,7 +409,7 @@
       <div class="griglia" id="official-griglia"></div>
     </div>
   </div>
-  <div class="divisore sfasato" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=16" alt=""></div>
+  <div class="divisore sfasato" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=17" alt=""></div>
 </div>
 
 
@@ -453,7 +458,7 @@
 <!-- POPUP -->
 <div id="popup">
   <div class="popup-box" role="dialog" aria-modal="true">
-    <img class="popup-cornice" src="cornice-w.webp?v=16" alt="">
+    <img class="popup-cornice" src="cornice-w.webp?v=17" alt="">
     <button class="popup-chiudi" aria-label="Chiudi">x</button>
     <div class="popup-finestra">
       <div class="popup-titolo" id="popup-titolo"></div>
@@ -500,7 +505,7 @@ function avanzaCoda(){
 const TOUCH = matchMedia('(pointer:coarse)').matches;
 const LEGGERO = TOUCH && ((navigator.deviceMemory && navigator.deviceMemory <= 4) ||
                           (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4));
-const V = '?v=16';
+const V = '?v=17';
 const pausa = ms => new Promise(r => setTimeout(r, ms));
 class Sprite3D {
   constructor(o){
