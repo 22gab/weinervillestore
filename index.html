@@ -275,8 +275,25 @@
   .schermata .taglie button{background:#FFFFFF;color:var(--scuro);border:1px solid rgba(13,10,18,.45);}
   .schermata .taglie button.on{background:var(--scuro);color:var(--bianco);border-color:var(--scuro);}
   .schermata .divisore img{filter:invert(1);}
-  .sezione-blocco{margin-bottom:8px;}
-  .sezione-blocco .sezione-titolo{margin-top:14px;}
+  .sezione-blocco{margin-bottom:10px;}
+  /* targa SHOP: metallo che brilla, scritta incisa */
+  .targa{cursor:default;margin:4px auto 26px;width:min(78%,320px);padding:3px;border-radius:4px;}
+  .targa > span{
+    display:block;background:linear-gradient(180deg,#d9dce4 0%,#9ea3b2 45%,#c3c7d2 55%,#8b909f 100%);
+    font-family:'Anton',sans-serif;font-size:2.1rem;letter-spacing:.3em;padding:12px 8px 10px 14px;
+    text-align:center;text-transform:uppercase;color:#2b2a33;
+    text-shadow:0 1px 0 rgba(255,255,255,.55),0 -1px 0 rgba(0,0,0,.45);
+  }
+  .targa:active{transform:none;}
+  /* titoli di sezione: metallo inciso, piu' piccoli */
+  .sezione-metal{
+    font-family:'Anton',sans-serif;font-size:1.1rem;letter-spacing:.2em;text-transform:uppercase;text-align:center;
+    margin:22px auto 16px;padding:8px 14px;width:fit-content;max-width:100%;
+    color:#2b2a33;text-shadow:0 1px 0 rgba(255,255,255,.6),0 -1px 0 rgba(0,0,0,.35);
+    background:linear-gradient(180deg,#e6e8ee 0%,#b7bbc7 50%,#d4d7df 55%,#a5aab8 100%);
+    border:1px solid rgba(0,0,0,.25);border-radius:3px;
+    box-shadow:0 2px 6px rgba(0,0,0,.18), inset 0 1px 0 rgba(255,255,255,.7);
+  }
 
   /* ---- SCHEDA PRODOTTO ---- */
   .galleria{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
@@ -398,7 +415,7 @@
   <a class="chrome pieno shopnow" id="shopnow" href="#catalogo"><span>SHOP NOW</span></a>
 </main>
 
-<div class="divisore" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=28" alt=""></div>
+<div class="divisore" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=29" alt=""></div>
 
 <!-- AVVISAMI DEL PROSSIMO PEZZO -->
 <section class="avvisami" id="avvisami">
@@ -415,22 +432,21 @@
 <div class="schermata" id="catalogo" aria-label="Shop">
   <div class="schermata-testa">
     <button class="tasto-icona" data-chiudi="catalogo" aria-label="Torna alla home">&larr;</button>
-    <div class="schermata-titolo">Shop</div>
+    <span></span>
     <span style="width:44px"></span>
   </div>
   <div class="catalogo-corpo">
+    <div class="chrome targa shop-targa"><span>Shop</span></div>
     <div class="sezione-blocco" id="custom">
-      <div class="sezione-titolo">Articoli custom</div>
-      <div class="sezione-sotto">Pezzi vintage unici, customizzati a mano</div>
+      <h2 class="sezione-metal">Articoli custom</h2>
       <div class="griglia" id="catalogo-griglia"></div>
     </div>
     <div class="sezione-blocco" id="official">
-      <div class="sezione-titolo">WEINERVILLE official</div>
-      <div class="sezione-sotto">I capi con il marchio WEINERVILLE</div>
+      <h2 class="sezione-metal">WEINERVILLE official</h2>
       <div class="griglia" id="official-griglia"></div>
     </div>
   </div>
-  <div class="divisore sfasato" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=28" alt=""></div>
+  <div class="divisore sfasato" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=29" alt=""></div>
 </div>
 
 
@@ -479,7 +495,7 @@
 <!-- POPUP -->
 <div id="popup">
   <div class="popup-box" role="dialog" aria-modal="true">
-    <img class="popup-cornice" src="cornice-w.webp?v=28" alt="">
+    <img class="popup-cornice" src="cornice-w.webp?v=29" alt="">
     <button class="popup-chiudi" aria-label="Chiudi">x</button>
     <div class="popup-finestra">
       <div class="popup-titolo" id="popup-titolo"></div>
@@ -533,7 +549,7 @@ function avanzaCoda(){
 const TOUCH = matchMedia('(pointer:coarse)').matches;
 const LEGGERO = TOUCH && ((navigator.deviceMemory && navigator.deviceMemory <= 4) ||
                           (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4));
-const V = '?v=28';
+const V = '?v=29';
 const pausa = ms => new Promise(r => setTimeout(r, ms));
 class Sprite3D {
   constructor(o){
@@ -808,8 +824,7 @@ const PEZZI = [
   {
     nome:'Tribal long sleeve WEINERVILLE', prezzo:'\u20ac 24,90', stripe:'https://buy.stripe.com/00w14p8jFeX6aZk6NvfAc09',
     ufficiale:true,
-    copertina:'felpa-copertina.webp',
-    foto:['felpa-capo.webp','felpa-indossata-1.webp','felpa-indossata-2.webp','felpa-video.mp4'],
+    foto:['felpa-capo.webp','felpa-indossata-1.webp','felpa-video.mp4'],
     taglie:[
       { nome:'S', venduto:false, stripe:'', misure:[['Lunghezza','62 cm'],['Larghezza','58 cm'],['Manica al collo','78 cm']] },
       { nome:'M', venduto:false, stripe:'', misure:[['Lunghezza','64 cm'],['Larghezza','59 cm'],['Manica al collo','80 cm']] },
