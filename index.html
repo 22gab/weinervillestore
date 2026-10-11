@@ -214,7 +214,6 @@
   @keyframes corsa{from{transform:translateX(0);} to{transform:translateX(calc(-100vw - 125px));}}
 
   /* ---- MODALITA' RIDOTTA: si attiva da sola se il dispositivo non regge le animazioni ---- */
-  body.lento .schermata{background-image:none;}
   body.lento .lampo span, body.lento .divisore img, body.lento .chrome::after, body.lento .menu-btn{animation:none !important;}
   body.lento .divisore img{left:auto;right:10px;transform:none;}
 
@@ -236,18 +235,16 @@
   .avvisami-esito{font-size:.66rem;color:var(--viola-chiaro);margin-top:10px;min-height:1em;}
 
   /* ---- CATALOGO (tutti i pezzi) ---- */
-  /* le schermate interne (shop, schede, pagine) sono antracite con grana: i capi neri si vedono */
+  /* le schermate interne (shop, schede, pagine) sono bianche: i capi neri si vedono */
   .schermata{
     position:fixed;inset:0;z-index:600;
-    background-color:var(--fondo);
-    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.85  0 0 0 0 0.85  0 0 0 0 0.9  0 0 0 .13 0'/></filter><rect width='100%' height='100%' filter='url(%23g)'/></svg>");
-    background-size:220px 220px;
+    background:#FFFFFF;color:var(--scuro);
     display:none;flex-direction:column;overflow-y:auto;
   }
   .schermata.aperta{display:flex;}
   .schermata > *{flex-shrink:0;}
   .schermata-testa{
-    position:sticky;top:0;z-index:5;background:var(--fondo);
+    position:sticky;top:0;z-index:5;background:#FFFFFF;
     display:flex;align-items:center;justify-content:space-between;padding:10px 12px;
   }
   .tasto-icona{
@@ -263,10 +260,27 @@
     color:var(--chrome);opacity:.5;margin-bottom:16px;
   }
 
+  /* ---- TEMA CHIARO dentro le schermate ---- */
+  .schermata .tasto-icona,.schermata .schermata-titolo,.schermata .capo-nome,.schermata .scheda-nome,
+  .schermata .altri-titolo,.schermata .pagamenti,.schermata .pagamenti .altri-metodi,.schermata .sezione-sotto,
+  .schermata .pagina-corpo h1,.schermata .pagina-corpo p,.schermata .pagina-corpo .grande{color:var(--scuro);}
+  .schermata .pagina-corpo p{opacity:.9;}
+  .schermata .capo-prezzo,.schermata .scheda-prezzo,.schermata .sezione-titolo,.schermata .pagina-corpo h2,
+  .schermata .pagina-corpo a,.schermata .taglie-nota{color:var(--viola);}
+  .schermata .pallini i{background:var(--scuro);}
+  .schermata .pallini i.on{background:var(--viola);}
+  .schermata .badge-esaurito{background:var(--scuro);color:var(--bianco);}
+  .schermata .slide img.foto,.schermata .galleria img,.schermata .galleria video{filter:none;}
+  .schermata .taglie button{background:#FFFFFF;color:var(--scuro);border:1px solid rgba(13,10,18,.45);}
+  .schermata .taglie button.on{background:var(--scuro);color:var(--bianco);border-color:var(--scuro);}
+  .schermata .divisore img{filter:invert(1);}
+  .sezione-blocco{margin-bottom:8px;}
+  .sezione-blocco .sezione-titolo{margin-top:14px;}
+
   /* ---- SCHEDA PRODOTTO ---- */
   .galleria{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
   .galleria::-webkit-scrollbar{display:none;}
-  .galleria img{flex:none;width:100%;height:min(40vh,360px);object-fit:contain;padding:2% 6%;scroll-snap-align:center;filter:drop-shadow(0 8px 18px rgba(0,0,0,.55));}
+  .galleria img,.galleria video{flex:none;width:100%;height:min(40vh,360px);object-fit:contain;padding:2% 6%;scroll-snap-align:center;filter:drop-shadow(0 8px 18px rgba(0,0,0,.55));background:transparent;}
   .pallini{display:flex;gap:8px;justify-content:center;padding:10px 0 2px;}
   .pallini i{width:7px;height:7px;border-radius:50%;background:var(--chrome);opacity:.3;transition:opacity .2s;}
   .pallini i.on{opacity:1;background:var(--viola-chiaro);}
@@ -359,7 +373,7 @@
 <div class="menu-fisso" aria-hidden="false"><button class="menu-btn" id="menu-btn" aria-label="Menu"><i></i><i></i><i></i></button></div>
 <div id="tendina-scrim"></div>
 <nav class="tendina" id="tendina">
-  <button data-vai="catalogo">Tutti gli articoli</button>
+  <button data-vai="catalogo">Articoli custom</button>
   <button data-vai="official">WEINERVILLE official</button>
   <button data-pagina="contatti">Contatti</button>
   <button data-link="https://www.instagram.com/weinervillestore/">Instagram<span class="sub">@weinervillestore</span></button>
@@ -383,7 +397,7 @@
   <a class="chrome pieno shopnow" id="shopnow" href="#catalogo"><span>SHOP NOW</span></a>
 </main>
 
-<div class="divisore" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=18" alt=""></div>
+<div class="divisore" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=19" alt=""></div>
 
 <!-- AVVISAMI DEL PROSSIMO PEZZO -->
 <section class="avvisami" id="avvisami">
@@ -397,22 +411,25 @@
 </section>
 
 <!-- CATALOGO -->
-<div class="schermata" id="catalogo" aria-label="Tutti gli articoli">
+<div class="schermata" id="catalogo" aria-label="Shop">
   <div class="schermata-testa">
     <button class="tasto-icona" data-chiudi="catalogo" aria-label="Torna alla home">&larr;</button>
-    <div class="schermata-titolo">Tutti gli articoli</div>
+    <div class="schermata-titolo">Shop</div>
     <span style="width:44px"></span>
   </div>
   <div class="catalogo-corpo">
-    <div class="catalogo-conta" id="catalogo-conta"></div>
-    <div class="griglia" id="catalogo-griglia"></div>
-    <div id="official">
+    <div class="sezione-blocco" id="custom">
+      <div class="sezione-titolo">Articoli custom</div>
+      <div class="sezione-sotto">Pezzi vintage unici, customizzati a mano</div>
+      <div class="griglia" id="catalogo-griglia"></div>
+    </div>
+    <div class="sezione-blocco" id="official">
       <div class="sezione-titolo">WEINERVILLE official</div>
       <div class="sezione-sotto">I capi con il marchio WEINERVILLE</div>
       <div class="griglia" id="official-griglia"></div>
     </div>
   </div>
-  <div class="divisore sfasato" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=18" alt=""></div>
+  <div class="divisore sfasato" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=19" alt=""></div>
 </div>
 
 
@@ -461,7 +478,7 @@
 <!-- POPUP -->
 <div id="popup">
   <div class="popup-box" role="dialog" aria-modal="true">
-    <img class="popup-cornice" src="cornice-w.webp?v=18" alt="">
+    <img class="popup-cornice" src="cornice-w.webp?v=19" alt="">
     <button class="popup-chiudi" aria-label="Chiudi">x</button>
     <div class="popup-finestra">
       <div class="popup-titolo" id="popup-titolo"></div>
@@ -509,7 +526,7 @@ function avanzaCoda(){
 const TOUCH = matchMedia('(pointer:coarse)').matches;
 const LEGGERO = TOUCH && ((navigator.deviceMemory && navigator.deviceMemory <= 4) ||
                           (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4));
-const V = '?v=18';
+const V = '?v=19';
 const pausa = ms => new Promise(r => setTimeout(r, ms));
 class Sprite3D {
   constructor(o){
@@ -746,7 +763,7 @@ const PEZZI = [
   {
     nome:'Tee Champion sigil custom', prezzo:'\u20ac 24,90', stripe:'https://buy.stripe.com/bJe3cxeI33eogjEc7PfAc07',
     grafica:{tipo:'sprite', fogli:['pezzo1-spin-a.webp','pezzo1-spin-b.webp'], nfr:150, cols:12, perfoglio:75, fw:320, fh:530, giro:5000, larghezza:'50%'},
-    foto:['champion-capo.webp','champion-indossata.webp'],
+    foto:['champion-capo.webp','champion-indossata.webp','champion-dettaglio.webp'],
     taglia:'M',
     misure:[['Larghezza','48 cm'],['Lunghezza','70 cm'],['Manica al collo','37 cm']],
     descrizione:[
@@ -758,7 +775,7 @@ const PEZZI = [
   {
     nome:'Jeans tribal love Cache Cache custom', prezzo:'\u20ac 34,89', stripe:'https://buy.stripe.com/4gM4gBdDZ8yId7s2xffAc05', venduto:true,
     grafica:{tipo:'sprite', fogli:['jeans-spin-a.webp','jeans-spin-b.webp'], nfr:200, cols:8, perfoglio:100, fw:480, fh:229, giro:5000, larghezza:'86%'},
-    foto:['jeans-capo.webp','jeans-fronte.webp','jeans-indossato.webp'],
+    foto:['jeans-capo.webp','jeans-fronte.webp','jeans-indossato-1.webp','jeans-indossato-2.webp'],
     taglia:'M',
     misure:[['Lunghezza','104 cm'],['Vita','37 cm'],['Caviglia','25 cm']],
     descrizione:[
@@ -771,7 +788,7 @@ const PEZZI = [
   },
   {
     nome:'Polo Levi\u2019s affliction custom', prezzo:'\u20ac 24,90', stripe:'https://buy.stripe.com/4gM6oJczV6qA0kG2xffAc08',
-    foto:['polo-capo.webp','polo-indossata.webp'],
+    foto:['polo-capo.webp','polo-indossata.webp','polo-dettaglio-1.webp','polo-dettaglio-2.webp'],
     taglia:'M',
     misure:[['Larghezza','48 cm'],['Lunghezza','70 cm'],['Manica al collo','35 cm']],
     descrizione:[
@@ -784,11 +801,11 @@ const PEZZI = [
   {
     nome:'Tribal long sleeve WEINERVILLE', prezzo:'\u20ac 24,90', stripe:'https://buy.stripe.com/00w14p8jFeX6aZk6NvfAc09',
     ufficiale:true,
-    foto:['felpa-capo.webp','felpa-indossata-1.webp','felpa-indossata-2.webp','felpa-indossata-3.webp','felpa-etichetta.webp'],
+    foto:['felpa-video.mp4','felpa-capo.webp','felpa-indossata-1.webp','felpa-indossata-2.webp'],
     taglie:[
       { nome:'S', venduto:false, stripe:'', misure:[['Lunghezza','62 cm'],['Larghezza','58 cm'],['Manica al collo','78 cm']] },
       { nome:'M', venduto:false, stripe:'', misure:[['Lunghezza','64 cm'],['Larghezza','59 cm'],['Manica al collo','80 cm']] },
-      { nome:'L', venduto:false, stripe:'', misure:[['Lunghezza','66 cm'],['Larghezza','60 cm'],['Manica al collo','82 cm']] }
+      { nome:'L', venduto:false, stripe:'', misure:[['Lunghezza','65 cm'],['Larghezza','63 cm'],['Manica al collo','81 cm']] }
     ],
     descrizione:[
       'Felpa WEINERVILLE, prima serie ufficiale.',
@@ -810,15 +827,18 @@ const PEZZI = [
     ]
   },
   {
-    nome:'WEINERVILLE arched tee', prezzo:'\u20ac 24,90', nonDisponibile:true,
+    nome:'WEINERVILLE arched tee', prezzo:'\u20ac 24,90', stripe:'',
     ufficiale:true,
-    foto:['atee-capo.webp'],
-    taglia:'M',
-    misure:[['Larghezza','56 cm'],['Lunghezza','72 cm'],['Manica al collo','40 cm']],
+    foto:['atee-capo.webp','atee-indossata.webp','atee-dettaglio.webp'],
+    taglie:[
+      { nome:'S', venduto:false, stripe:'', misure:[['Lunghezza','76 cm'],['Larghezza','51 cm'],['Manica al collo','40 cm']] },
+      { nome:'M', venduto:false, stripe:'', misure:[['Lunghezza','77,5 cm'],['Larghezza','51 cm'],['Manica al collo','44 cm']] },
+      { nome:'L', venduto:false, stripe:'', misure:[['Lunghezza','82 cm'],['Larghezza','58 cm'],['Manica al collo','47 cm']] }
+    ],
     descrizione:[
       'Tee WEINERVILLE, prima serie ufficiale.',
-      'Nera, vestibilit\u00e0 oversize, con logo WEINERVILLE ad arco e stelle sul petto ed etichetta WEINERVILLE.',
-      'Pezzo unico 1/1. Non in vendita.'
+      'Nera, vestibilit\u00e0 oversize, con logo WEINERVILLE ad arco e stelle ricamato sul petto ed etichetta WEINERVILLE.',
+      'Disponibile nelle taglie S, M e L.'
     ]
   }
 ];
@@ -844,12 +864,22 @@ function linkAcquisto(p){
 function esaurito(p){ return p.venduto || p.nonDisponibile || (p.taglie && p.taglie.every(t => t.venduto)); }
 function etichettaStato(p){ return 'Esaurito'; }
 function badge(p){ return esaurito(p) ? '<span class="badge-esaurito">' + etichettaStato(p) + '</span>' : ''; }
+const isVideo = f => /\.(mp4|webm)$/i.test(f);
+const copertina = p => p.foto.find(f => !isVideo(f)) || p.foto[0];
+function mediaGalleria(f){
+  if (isVideo(f)){
+    const base = f.replace(/\.(mp4|webm)$/i, '');
+    return '<video poster="' + base + '-poster.webp' + V + '" muted playsinline loop autoplay preload="metadata">' +
+           '<source src="' + base + '.mp4' + V + '" type="video/mp4"><source src="' + base + '.webm' + V + '" type="video/webm"></video>';
+  }
+  return '<img src="' + f + V + '" alt="">';
+}
 function creaCard(i, soloFoto){
   const p = PEZZI[i];
   if (soloFoto || !p.grafica){
     const a = document.createElement('article');
     a.className = 'capo';
-    a.innerHTML = badge(p) + '<div class="slideshow"><div class="slide attiva"><img class="foto" loading="lazy" decoding="async" src="' + p.foto[0] + V + '" alt="' + p.nome + '"></div></div>' +
+    a.innerHTML = badge(p) + '<div class="slideshow"><div class="slide attiva"><img class="foto" loading="lazy" decoding="async" src="' + copertina(p) + V + '" alt="' + p.nome + '"></div></div>' +
                   '<div class="capo-info"><h2 class="capo-nome">' + p.nome + '</h2><span class="capo-prezzo">' + p.prezzo + '</span></div>';
     if (esaurito(p)) a.classList.add('esaurito');
     a.addEventListener('click', () => apriScheda(i));
@@ -867,7 +897,7 @@ function creaCard(i, soloFoto){
   art.innerHTML = badge(p) +
     '<div class="slideshow">' +
       '<div class="slide attiva">' + slide1 + '</div>' +
-      '<div class="slide"><img class="foto" loading="lazy" decoding="async" src="' + p.foto[0] + V + '" alt="' + p.nome + '"></div>' +
+      '<div class="slide"><img class="foto" loading="lazy" decoding="async" src="' + copertina(p) + V + '" alt="' + p.nome + '"></div>' +
     '</div>' +
     '<div class="capo-info"><h2 class="capo-nome">' + p.nome + '</h2><span class="capo-prezzo">' + p.prezzo + '</span></div>';
   art.addEventListener('click', () => apriScheda(i));
@@ -889,10 +919,9 @@ function creaCard(i, soloFoto){
 const homeGriglia = document.getElementById('home-griglia');
 PEZZI.slice(0, 2).forEach((_, i) => homeGriglia.appendChild(creaCard(i)));
 const catGriglia = document.getElementById('catalogo-griglia');
-PEZZI.forEach((_, i) => catGriglia.appendChild(creaCard(i, true)));
 const offGriglia = document.getElementById('official-griglia');
-PEZZI.forEach((p, i) => { if (p.ufficiale) offGriglia.appendChild(creaCard(i, true)); });
-document.getElementById('catalogo-conta').textContent = PEZZI.length + ' pezzi unici disponibili';
+const isOfficial = p => /weinerville/i.test(p.nome);
+PEZZI.forEach((p, i) => (isOfficial(p) ? offGriglia : catGriglia).appendChild(creaCard(i, true)));
 
 /* ---- SCHERMATE (catalogo, scheda) ---- */
 function apriSchermata(id){
@@ -933,7 +962,7 @@ function apriScheda(i){
         e.stopPropagation(); if (t.venduto) return;
         tagliaScelta = t.nome;
         boxT.querySelectorAll('button').forEach(x => x.classList.toggle('on', x.textContent === t.nome));
-        compra.href = linkAcquisto(p);
+        if (p.stripe) compra.href = linkAcquisto(p);
       });
       boxT.appendChild(b);
     });
@@ -951,7 +980,8 @@ function apriScheda(i){
     compra.href = 'mailto:' + EMAIL + '?subject=' + oggetto + '&body=' + corpo; compra.removeAttribute('target');
     compra.querySelector('span').textContent = 'Ordina via email'; compra.classList.remove('venduto');
   }
-  galleria.innerHTML = p.foto.map(f => '<img src="' + f + V + '" alt="">').join('');
+  galleria.innerHTML = p.foto.map(mediaGalleria).join('');
+  galleria.querySelectorAll('video').forEach(v => { const pr = v.play(); if (pr && pr.catch) pr.catch(() => {}); });
   pallini.innerHTML = p.foto.map((_, j) => '<i' + (j === 0 ? ' class="on"' : '') + '></i>').join('');
   pallini.style.display = p.foto.length > 1 ? 'flex' : 'none';
   galleria.scrollLeft = 0;
@@ -961,7 +991,7 @@ function apriScheda(i){
     if (j === i) return;
     const a = document.createElement('article');
     a.className = 'capo';
-    a.innerHTML = '<div class="slideshow"><div class="slide attiva"><img class="foto" loading="lazy" src="' + q.foto[0] + V + '" alt="' + q.nome + '"></div></div>' +
+    a.innerHTML = '<div class="slideshow"><div class="slide attiva"><img class="foto" loading="lazy" src="' + copertina(q) + V + '" alt="' + q.nome + '"></div></div>' +
                   '<div class="capo-info"><h2 class="capo-nome">' + q.nome + '</h2><span class="capo-prezzo">' + q.prezzo + '</span></div>';
     a.addEventListener('click', () => { apriScheda(j); scheda.scrollTop = 0; });
     altri.appendChild(a);
