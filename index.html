@@ -151,7 +151,7 @@
   .grafica3d img{width:100%;display:block;}
   .grafica3d.larga{width:76%;}
   .grafica-canvas{display:block;}
-  .slide img.foto{height:88%;width:100%;object-fit:contain;display:block;filter:drop-shadow(0 6px 14px rgba(0,0,0,.55));}
+  .slide img.foto{height:94%;width:100%;object-fit:contain;display:block;filter:drop-shadow(0 6px 14px rgba(0,0,0,.55));}
   .grafica-video{display:block;object-fit:contain;pointer-events:none;}
   .capo{display:flex;flex-direction:column;}
   .capo{position:relative;}
@@ -398,7 +398,7 @@
   <a class="chrome pieno shopnow" id="shopnow" href="#catalogo"><span>SHOP NOW</span></a>
 </main>
 
-<div class="divisore" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=22" alt=""></div>
+<div class="divisore" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=23" alt=""></div>
 
 <!-- AVVISAMI DEL PROSSIMO PEZZO -->
 <section class="avvisami" id="avvisami">
@@ -430,7 +430,7 @@
       <div class="griglia" id="official-griglia"></div>
     </div>
   </div>
-  <div class="divisore sfasato" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=22" alt=""></div>
+  <div class="divisore sfasato" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=23" alt=""></div>
 </div>
 
 
@@ -479,7 +479,7 @@
 <!-- POPUP -->
 <div id="popup">
   <div class="popup-box" role="dialog" aria-modal="true">
-    <img class="popup-cornice" src="cornice-w.webp?v=22" alt="">
+    <img class="popup-cornice" src="cornice-w.webp?v=23" alt="">
     <button class="popup-chiudi" aria-label="Chiudi">x</button>
     <div class="popup-finestra">
       <div class="popup-titolo" id="popup-titolo"></div>
@@ -533,7 +533,7 @@ function avanzaCoda(){
 const TOUCH = matchMedia('(pointer:coarse)').matches;
 const LEGGERO = TOUCH && ((navigator.deviceMemory && navigator.deviceMemory <= 4) ||
                           (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4));
-const V = '?v=22';
+const V = '?v=23';
 const pausa = ms => new Promise(r => setTimeout(r, ms));
 class Sprite3D {
   constructor(o){
@@ -769,7 +769,7 @@ window.addEventListener('resize', lampoFit);
 const PEZZI = [
   {
     nome:'Tee Champion sigil custom', prezzo:'\u20ac 24,90', stripe:'https://buy.stripe.com/bJe3cxeI33eogjEc7PfAc07',
-    grafica:{tipo:'video', src:'logo1-spin.mp4', larghezza:'62%'},
+    grafica:{tipo:'anim', src:'logo1-spin.webp', larghezza:'62%'},
     foto:['champion-capo.webp','champion-indossata.webp','champion-dettaglio.webp'],
     taglia:'M',
     misure:[['Larghezza','48 cm'],['Lunghezza','70 cm'],['Manica al collo','37 cm']],
@@ -781,7 +781,7 @@ const PEZZI = [
   },
   {
     nome:'Jeans tribal love Cache Cache custom', prezzo:'\u20ac 34,89', stripe:'https://buy.stripe.com/4gM4gBdDZ8yId7s2xffAc05', venduto:true,
-    grafica:{tipo:'video', src:'logo2-spin.mp4', larghezza:'96%'},
+    grafica:{tipo:'anim', src:'logo2-spin.webp', larghezza:'96%'},
     foto:['jeans-capo.webp','jeans-fronte.webp','jeans-indossato-1.webp','jeans-indossato-2.webp'],
     taglia:'M',
     misure:[['Lunghezza','104 cm'],['Vita','37 cm'],['Caviglia','25 cm']],
@@ -808,6 +808,7 @@ const PEZZI = [
   {
     nome:'Tribal long sleeve WEINERVILLE', prezzo:'\u20ac 24,90', stripe:'https://buy.stripe.com/00w14p8jFeX6aZk6NvfAc09',
     ufficiale:true,
+    copertina:'felpa-indossata-1.webp',
     foto:['felpa-capo.webp','felpa-indossata-1.webp','felpa-indossata-2.webp','felpa-video.mp4'],
     taglie:[
       { nome:'S', venduto:false, stripe:'', misure:[['Lunghezza','62 cm'],['Larghezza','58 cm'],['Manica al collo','78 cm']] },
@@ -872,7 +873,7 @@ function esaurito(p){ return p.venduto || p.nonDisponibile || (p.taglie && p.tag
 function etichettaStato(p){ return 'Esaurito'; }
 function badge(p){ return esaurito(p) ? '<span class="badge-esaurito">' + etichettaStato(p) + '</span>' : ''; }
 const isVideo = f => /\.(mp4|webm)$/i.test(f);
-const copertina = p => p.foto.find(f => !isVideo(f)) || p.foto[0];
+const copertina = p => p.copertina || p.foto.find(f => !isVideo(f)) || p.foto[0];
 function mediaGalleria(f){
   if (isVideo(f)){
     const base = f.replace(/\.(mp4|webm)$/i, '');
@@ -895,7 +896,9 @@ function creaCard(i, soloFoto){
   const art = document.createElement('article');
   art.className = 'capo' + (esaurito(p) ? ' esaurito' : '');
   let slide1;
-  if (p.grafica.tipo === 'video'){
+  if (p.grafica.tipo === 'anim'){
+    slide1 = '<img class="grafica-video" style="width:' + p.grafica.larghezza + ';max-height:96%" src="' + p.grafica.src + V + '" alt="" decoding="async">';
+  } else if (p.grafica.tipo === 'video'){
     const base = p.grafica.src.replace(/\.mp4$/, '');
     slide1 = '<video class="grafica-video" style="width:' + p.grafica.larghezza + ';max-height:96%" muted playsinline loop autoplay preload="auto">' +
              '<source src="' + base + '.mp4' + V + '" type="video/mp4"><source src="' + base + '.webm' + V + '" type="video/webm"></video>';
