@@ -398,7 +398,7 @@
   <a class="chrome pieno shopnow" id="shopnow" href="#catalogo"><span>SHOP NOW</span></a>
 </main>
 
-<div class="divisore" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=26" alt=""></div>
+<div class="divisore" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=27" alt=""></div>
 
 <!-- AVVISAMI DEL PROSSIMO PEZZO -->
 <section class="avvisami" id="avvisami">
@@ -430,7 +430,7 @@
       <div class="griglia" id="official-griglia"></div>
     </div>
   </div>
-  <div class="divisore sfasato" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=26" alt=""></div>
+  <div class="divisore sfasato" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=27" alt=""></div>
 </div>
 
 
@@ -479,7 +479,7 @@
 <!-- POPUP -->
 <div id="popup">
   <div class="popup-box" role="dialog" aria-modal="true">
-    <img class="popup-cornice" src="cornice-w.webp?v=26" alt="">
+    <img class="popup-cornice" src="cornice-w.webp?v=27" alt="">
     <button class="popup-chiudi" aria-label="Chiudi">x</button>
     <div class="popup-finestra">
       <div class="popup-titolo" id="popup-titolo"></div>
@@ -533,7 +533,7 @@ function avanzaCoda(){
 const TOUCH = matchMedia('(pointer:coarse)').matches;
 const LEGGERO = TOUCH && ((navigator.deviceMemory && navigator.deviceMemory <= 4) ||
                           (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4));
-const V = '?v=26';
+const V = '?v=27';
 const pausa = ms => new Promise(r => setTimeout(r, ms));
 class Sprite3D {
   constructor(o){
@@ -769,7 +769,7 @@ window.addEventListener('resize', lampoFit);
 const PEZZI = [
   {
     nome:'Tee Champion sigil custom', prezzo:'\u20ac 24,90', stripe:'https://buy.stripe.com/bJe3cxeI33eogjEc7PfAc07',
-    grafica:{tipo:'anim', src:'logo1-spin.webp', larghezza:'62%'},
+    grafica:{tipo:'sprite', fogli:['logo1-spin-a.webp','logo1-spin-b.webp'], nfr:180, cols:9, perfoglio:90, fw:216, fh:378, giro:6000, larghezza:'54%'},
     foto:['champion-capo.webp','champion-indossata.webp','champion-dettaglio.webp'],
     taglia:'M',
     misure:[['Larghezza','48 cm'],['Lunghezza','70 cm'],['Manica al collo','37 cm']],
@@ -781,7 +781,7 @@ const PEZZI = [
   },
   {
     nome:'Jeans tribal love Cache Cache custom', prezzo:'\u20ac 34,89', stripe:'https://buy.stripe.com/4gM4gBdDZ8yId7s2xffAc05', venduto:true,
-    grafica:{tipo:'anim', src:'logo2-spin.webp', larghezza:'96%'},
+    grafica:{tipo:'sprite', fogli:['logo2-spin-a.webp','logo2-spin-b.webp'], nfr:180, cols:9, perfoglio:90, fw:432, fh:202, giro:6000, larghezza:'96%'},
     foto:['jeans-capo.webp','jeans-fronte.webp','jeans-indossato-1.webp','jeans-indossato-2.webp'],
     taglia:'M',
     misure:[['Lunghezza','104 cm'],['Vita','37 cm'],['Caviglia','25 cm']],
