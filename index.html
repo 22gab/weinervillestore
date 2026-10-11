@@ -151,7 +151,7 @@
   .grafica3d img{width:100%;display:block;}
   .grafica3d.larga{width:76%;}
   .grafica-canvas{display:block;}
-  .slide img.foto{height:84%;width:92%;object-fit:contain;display:block;filter:drop-shadow(0 6px 14px rgba(0,0,0,.55));}
+  .slide img.foto{height:88%;width:100%;object-fit:contain;display:block;filter:drop-shadow(0 6px 14px rgba(0,0,0,.55));}
   .grafica-video{display:block;object-fit:contain;pointer-events:none;}
   .capo{display:flex;flex-direction:column;}
   .capo{position:relative;}
@@ -398,7 +398,7 @@
   <a class="chrome pieno shopnow" id="shopnow" href="#catalogo"><span>SHOP NOW</span></a>
 </main>
 
-<div class="divisore" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=20" alt=""></div>
+<div class="divisore" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=21" alt=""></div>
 
 <!-- AVVISAMI DEL PROSSIMO PEZZO -->
 <section class="avvisami" id="avvisami">
@@ -430,7 +430,7 @@
       <div class="griglia" id="official-griglia"></div>
     </div>
   </div>
-  <div class="divisore sfasato" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=20" alt=""></div>
+  <div class="divisore sfasato" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=21" alt=""></div>
 </div>
 
 
@@ -479,7 +479,7 @@
 <!-- POPUP -->
 <div id="popup">
   <div class="popup-box" role="dialog" aria-modal="true">
-    <img class="popup-cornice" src="cornice-w.webp?v=20" alt="">
+    <img class="popup-cornice" src="cornice-w.webp?v=21" alt="">
     <button class="popup-chiudi" aria-label="Chiudi">x</button>
     <div class="popup-finestra">
       <div class="popup-titolo" id="popup-titolo"></div>
@@ -527,7 +527,7 @@ function avanzaCoda(){
 const TOUCH = matchMedia('(pointer:coarse)').matches;
 const LEGGERO = TOUCH && ((navigator.deviceMemory && navigator.deviceMemory <= 4) ||
                           (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4));
-const V = '?v=20';
+const V = '?v=21';
 const pausa = ms => new Promise(r => setTimeout(r, ms));
 class Sprite3D {
   constructor(o){
