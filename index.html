@@ -151,7 +151,8 @@
   .grafica3d img{width:100%;display:block;}
   .grafica3d.larga{width:76%;}
   .grafica-canvas{display:block;}
-  .slide img.foto{height:80%;width:auto;max-width:92%;object-fit:contain;display:block;filter:drop-shadow(0 6px 14px rgba(0,0,0,.55));}
+  .slide img.foto{height:84%;width:92%;object-fit:contain;display:block;filter:drop-shadow(0 6px 14px rgba(0,0,0,.55));}
+  .grafica-video{display:block;object-fit:contain;pointer-events:none;}
   .capo{display:flex;flex-direction:column;}
   .capo{position:relative;}
   .capo.esaurito .slideshow{opacity:.45;}
@@ -397,7 +398,7 @@
   <a class="chrome pieno shopnow" id="shopnow" href="#catalogo"><span>SHOP NOW</span></a>
 </main>
 
-<div class="divisore" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=19" alt=""></div>
+<div class="divisore" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=20" alt=""></div>
 
 <!-- AVVISAMI DEL PROSSIMO PEZZO -->
 <section class="avvisami" id="avvisami">
@@ -429,7 +430,7 @@
       <div class="griglia" id="official-griglia"></div>
     </div>
   </div>
-  <div class="divisore sfasato" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=19" alt=""></div>
+  <div class="divisore sfasato" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=20" alt=""></div>
 </div>
 
 
@@ -478,7 +479,7 @@
 <!-- POPUP -->
 <div id="popup">
   <div class="popup-box" role="dialog" aria-modal="true">
-    <img class="popup-cornice" src="cornice-w.webp?v=19" alt="">
+    <img class="popup-cornice" src="cornice-w.webp?v=20" alt="">
     <button class="popup-chiudi" aria-label="Chiudi">x</button>
     <div class="popup-finestra">
       <div class="popup-titolo" id="popup-titolo"></div>
@@ -526,7 +527,7 @@ function avanzaCoda(){
 const TOUCH = matchMedia('(pointer:coarse)').matches;
 const LEGGERO = TOUCH && ((navigator.deviceMemory && navigator.deviceMemory <= 4) ||
                           (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4));
-const V = '?v=19';
+const V = '?v=20';
 const pausa = ms => new Promise(r => setTimeout(r, ms));
 class Sprite3D {
   constructor(o){
@@ -762,7 +763,7 @@ window.addEventListener('resize', lampoFit);
 const PEZZI = [
   {
     nome:'Tee Champion sigil custom', prezzo:'\u20ac 24,90', stripe:'https://buy.stripe.com/bJe3cxeI33eogjEc7PfAc07',
-    grafica:{tipo:'sprite', fogli:['pezzo1-spin-a.webp','pezzo1-spin-b.webp'], nfr:150, cols:12, perfoglio:75, fw:320, fh:530, giro:5000, larghezza:'50%'},
+    grafica:{tipo:'video', src:'logo1-spin.mp4', larghezza:'62%'},
     foto:['champion-capo.webp','champion-indossata.webp','champion-dettaglio.webp'],
     taglia:'M',
     misure:[['Larghezza','48 cm'],['Lunghezza','70 cm'],['Manica al collo','37 cm']],
@@ -774,7 +775,7 @@ const PEZZI = [
   },
   {
     nome:'Jeans tribal love Cache Cache custom', prezzo:'\u20ac 34,89', stripe:'https://buy.stripe.com/4gM4gBdDZ8yId7s2xffAc05', venduto:true,
-    grafica:{tipo:'sprite', fogli:['jeans-spin-a.webp','jeans-spin-b.webp'], nfr:200, cols:8, perfoglio:100, fw:480, fh:229, giro:5000, larghezza:'86%'},
+    grafica:{tipo:'video', src:'logo2-spin.mp4', larghezza:'96%'},
     foto:['jeans-capo.webp','jeans-fronte.webp','jeans-indossato-1.webp','jeans-indossato-2.webp'],
     taglia:'M',
     misure:[['Lunghezza','104 cm'],['Vita','37 cm'],['Caviglia','25 cm']],
@@ -801,7 +802,7 @@ const PEZZI = [
   {
     nome:'Tribal long sleeve WEINERVILLE', prezzo:'\u20ac 24,90', stripe:'https://buy.stripe.com/00w14p8jFeX6aZk6NvfAc09',
     ufficiale:true,
-    foto:['felpa-video.mp4','felpa-capo.webp','felpa-indossata-1.webp','felpa-indossata-2.webp'],
+    foto:['felpa-capo.webp','felpa-indossata-1.webp','felpa-indossata-2.webp','felpa-video.mp4'],
     taglie:[
       { nome:'S', venduto:false, stripe:'', misure:[['Lunghezza','62 cm'],['Larghezza','58 cm'],['Manica al collo','78 cm']] },
       { nome:'M', venduto:false, stripe:'', misure:[['Lunghezza','64 cm'],['Larghezza','59 cm'],['Manica al collo','80 cm']] },
@@ -888,7 +889,11 @@ function creaCard(i, soloFoto){
   const art = document.createElement('article');
   art.className = 'capo' + (esaurito(p) ? ' esaurito' : '');
   let slide1;
-  if (p.grafica.tipo === 'sprite'){
+  if (p.grafica.tipo === 'video'){
+    const base = p.grafica.src.replace(/\.mp4$/, '');
+    slide1 = '<video class="grafica-video" style="width:' + p.grafica.larghezza + ';max-height:96%" muted playsinline loop autoplay preload="auto">' +
+             '<source src="' + base + '.mp4' + V + '" type="video/mp4"><source src="' + base + '.webm' + V + '" type="video/webm"></video>';
+  } else if (p.grafica.tipo === 'sprite'){
     const spc = spriteDi(p);
     slide1 = '<canvas class="grafica-canvas" width="' + spc.fw + '" height="' + spc.fh + '" style="width:' + p.grafica.larghezza + '"></canvas>';
   } else {
