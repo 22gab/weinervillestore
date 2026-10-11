@@ -398,7 +398,7 @@
   <a class="chrome pieno shopnow" id="shopnow" href="#catalogo"><span>SHOP NOW</span></a>
 </main>
 
-<div class="divisore" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=21" alt=""></div>
+<div class="divisore" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=22" alt=""></div>
 
 <!-- AVVISAMI DEL PROSSIMO PEZZO -->
 <section class="avvisami" id="avvisami">
@@ -430,7 +430,7 @@
       <div class="griglia" id="official-griglia"></div>
     </div>
   </div>
-  <div class="divisore sfasato" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=21" alt=""></div>
+  <div class="divisore sfasato" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=22" alt=""></div>
 </div>
 
 
@@ -479,7 +479,7 @@
 <!-- POPUP -->
 <div id="popup">
   <div class="popup-box" role="dialog" aria-modal="true">
-    <img class="popup-cornice" src="cornice-w.webp?v=21" alt="">
+    <img class="popup-cornice" src="cornice-w.webp?v=22" alt="">
     <button class="popup-chiudi" aria-label="Chiudi">x</button>
     <div class="popup-finestra">
       <div class="popup-titolo" id="popup-titolo"></div>
@@ -512,8 +512,14 @@ function entraNelSito(){
   document.body.classList.remove('bloccato');
   document.body.classList.add('entrato');
   setTimeout(() => { ingresso.style.display = 'none'; }, 600);   // via del tutto: non copre più i campi sotto
+  avviaVideoLoghi();   // l'ingresso e' un tocco dell'utente: iOS in risparmio energetico accetta il play solo qui
   setTimeout(avanzaCoda, 600);   // le grafiche dei pezzi partono dopo l'ingresso
 }
+function avviaVideoLoghi(){
+  document.querySelectorAll('video.grafica-video').forEach(v => { const pr = v.play(); if (pr && pr.catch) pr.catch(() => {}); });
+}
+document.addEventListener('touchend', avviaVideoLoghi, {passive:true});
+document.addEventListener('click', avviaVideoLoghi, {passive:true});
 const CODA_SPRITE = [];
 let codaAttiva = false;
 function avanzaCoda(){
@@ -527,7 +533,7 @@ function avanzaCoda(){
 const TOUCH = matchMedia('(pointer:coarse)').matches;
 const LEGGERO = TOUCH && ((navigator.deviceMemory && navigator.deviceMemory <= 4) ||
                           (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4));
-const V = '?v=21';
+const V = '?v=22';
 const pausa = ms => new Promise(r => setTimeout(r, ms));
 class Sprite3D {
   constructor(o){
