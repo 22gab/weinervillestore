@@ -88,7 +88,7 @@
     position:fixed;top:0;left:0;width:100%;height:0;z-index:620;pointer-events:none;
   }
   .menu-btn{
-    position:absolute;top:52px;left:14px;
+    position:absolute;top:44px;left:14px;
     width:34px;height:34px;border:none;cursor:pointer;border-radius:9px;
     display:none;flex-direction:column;align-items:center;justify-content:center;gap:4px;
     pointer-events:auto;
@@ -123,6 +123,8 @@
   }
   .tendina button:hover,.tendina button:active{background:rgba(0,0,0,.06);color:var(--viola);}
   .tendina .sub{font-size:.62rem;letter-spacing:.02em;text-transform:none;color:var(--scuro);opacity:.55;font-family:'Space Mono',monospace;margin-top:3px;display:block;}
+  .tendina-chiudi{position:absolute;top:12px;right:10px;width:40px;height:40px;padding:0 !important;border:none !important;
+    font-family:'Space Mono',monospace !important;font-size:1.4rem !important;line-height:1;text-align:center !important;color:var(--scuro);background:none;}
   #tendina-scrim{position:fixed;inset:0;z-index:610;background:rgba(5,4,8,.6);opacity:0;visibility:hidden;transition:.3s;}
   #tendina-scrim.on{opacity:1;visibility:visible;}
 
@@ -222,6 +224,8 @@
   .avvisami{max-width:440px;margin:6px auto 46px;padding:0 26px;text-align:center;}
   .avvisami-titolo{font-family:'Anton',sans-serif;font-size:1.15rem;letter-spacing:.12em;text-transform:uppercase;color:var(--chrome);}
   .avvisami-testo{font-size:.68rem;line-height:1.6;color:var(--bianco);opacity:.75;margin:8px 0 14px;}
+  .avvisami-btn{display:block;width:min(72%,300px);margin:0 auto;padding:3px;}
+  .avvisami-btn > span{font-family:'Anton',sans-serif;font-size:1rem;letter-spacing:.2em;padding:12px 8px;}
   #avvisami-form{display:flex;gap:8px;}
   #avvisami-form input{
     flex:1;min-width:0;height:42px;padding:0 12px;border-radius:9px;
@@ -259,11 +263,11 @@
   /* ---- BARRA FISSA DELLO SHOP: menu | logo inciso | lente, carrello ---- */
   .barra-shop{
     position:sticky;top:0;z-index:6;background:#FFFFFF;
-    display:grid;grid-template-columns:44px 1fr 88px;align-items:center;
+    display:grid;grid-template-columns:88px 1fr 88px;align-items:center;
     padding:8px 12px;border-bottom:1px solid rgba(0,0,0,.12);box-shadow:0 2px 10px rgba(0,0,0,.08);
   }
   .barra-shop .menu-btn{position:static;display:flex !important;top:auto;left:auto;}
-  .logo-fermo{display:block;width:auto;height:54px;max-width:44vw;object-fit:contain;margin:0 auto;
+  .logo-fermo{display:block;width:100%;height:66px;object-fit:contain;margin:0 auto;
     filter:drop-shadow(0 1px 0 rgba(255,255,255,.9)) drop-shadow(0 -1px 0 rgba(0,0,0,.55)) drop-shadow(0 2px 3px rgba(0,0,0,.25));}
   .barra-icone{display:flex;gap:6px;justify-content:flex-end;}
   .icona-barra{
@@ -456,6 +460,7 @@
 <div class="menu-fisso" aria-hidden="false"><button class="menu-btn" id="menu-btn" aria-label="Menu"><i></i><i></i><i></i></button></div>
 <div id="tendina-scrim"></div>
 <nav class="tendina" id="tendina">
+  <button class="tendina-chiudi" id="tendina-chiudi" aria-label="Chiudi menu">&#10005;</button>
   <button data-home="1">Home</button>
   <button data-filtro="tutti">Shop</button>
   <button data-filtro="custom">Articoli custom</button>
@@ -482,16 +487,13 @@
   <a class="chrome pieno shopnow" id="shopnow" href="#catalogo"><span>SHOP NOW</span></a>
 </main>
 
-<div class="divisore" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=32" alt=""></div>
+<div class="divisore" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=34" alt=""></div>
 
 <!-- AVVISAMI DEL PROSSIMO PEZZO -->
 <section class="avvisami" id="avvisami">
   <div class="avvisami-titolo">Avvisami del prossimo pezzo</div>
-  <p class="avvisami-testo">Pezzi unici: quando escono, spariscono. Lascia la tua email e sei il primo a saperlo.</p>
-  <form id="avvisami-form" novalidate>
-    <input type="email" id="avvisami-email" placeholder="la tua email" autocomplete="email" inputmode="email" autocapitalize="off" required>
-    <button type="submit" class="chrome"><span>Avvisami</span></button>
-  </form>
+  <p class="avvisami-testo">Pezzi unici: quando escono, spariscono. Premi il tasto, parte una email già pronta: tu la invii e sei il primo a saperlo.</p>
+  <a class="chrome avvisami-btn" id="avvisami-btn" href="#"><span>Avvisami</span></a>
   <div class="avvisami-esito" id="avvisami-esito"></div>
 </section>
 
@@ -499,7 +501,7 @@
 <div class="schermata" id="catalogo" aria-label="Shop">
   <div class="barra-shop">
     <button class="menu-btn" id="menu-btn-shop" aria-label="Menu"><i></i><i></i><i></i></button>
-    <img class="logo-fermo" src="logo-fermo.webp?v=32" alt="WEINERVILLE">
+    <img class="logo-fermo" src="logo-fermo.webp?v=34" alt="WEINERVILLE">
     <div class="barra-icone">
       <button class="icona-barra" id="btn-cerca" aria-label="Cerca"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg></button>
       <button class="icona-barra" id="btn-carrello" aria-label="Carrello"><svg viewBox="0 0 24 24"><path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 2-1.5L21 8H6.2"/><circle cx="10" cy="20" r="1.4"/><circle cx="17" cy="20" r="1.4"/></svg><span class="conta" id="carrello-conta">0</span></button>
@@ -510,7 +512,7 @@
     <div class="griglia" id="catalogo-griglia"></div>
     <div class="catalogo-vuoto" id="catalogo-vuoto">Nessun articolo trovato</div>
   </div>
-  <div class="divisore sfasato" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=32" alt=""></div>
+  <div class="divisore sfasato" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=34" alt=""></div>
 </div>
 
 
@@ -570,7 +572,7 @@
 <!-- POPUP -->
 <div id="popup">
   <div class="popup-box" role="dialog" aria-modal="true">
-    <img class="popup-cornice" src="cornice-w.webp?v=32" alt="">
+    <img class="popup-cornice" src="cornice-w.webp?v=34" alt="">
     <button class="popup-chiudi" aria-label="Chiudi">x</button>
     <div class="popup-finestra">
       <div class="popup-titolo" id="popup-titolo"></div>
@@ -624,7 +626,7 @@ function avanzaCoda(){
 const TOUCH = matchMedia('(pointer:coarse)').matches;
 const LEGGERO = TOUCH && ((navigator.deviceMemory && navigator.deviceMemory <= 4) ||
                           (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4));
-const V = '?v=32';
+const V = '?v=34';
 const pausa = ms => new Promise(r => setTimeout(r, ms));
 class Sprite3D {
   constructor(o){
@@ -766,24 +768,10 @@ logoSpin.addEventListener('keydown', e => {
 
 
 /* ---- AVVISAMI ---- */
-const AVVISAMI_ENDPOINT = '';   // es. 'https://formspree.io/f/xxxxxx' — vuoto = apre l'email
-document.getElementById('avvisami').addEventListener('click', e => { if (!e.target.closest('button')) document.getElementById('avvisami-email').focus(); });
-document.getElementById('avvisami-form').addEventListener('submit', async e => {
+document.getElementById('avvisami-btn').addEventListener('click', e => {
   e.preventDefault();
-  const inp = document.getElementById('avvisami-email'), esito = document.getElementById('avvisami-esito');
-  const email = inp.value.trim();
-  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ esito.textContent = 'Controlla l\u2019email'; return; }
-  if (AVVISAMI_ENDPOINT){
-    esito.textContent = 'Un attimo\u2026';
-    try {
-      const r = await fetch(AVVISAMI_ENDPOINT, {method:'POST', headers:{'Accept':'application/json','Content-Type':'application/json'}, body: JSON.stringify({email, oggetto:'Avvisami del prossimo pezzo'})});
-      esito.textContent = r.ok ? 'Fatto. Ti avvisiamo noi.' : 'Non \u00e8 andata, riprova.';
-      if (r.ok) inp.value = '';
-    } catch(_) { esito.textContent = 'Non \u00e8 andata, riprova.'; }
-  } else {
-    location.href = 'mailto:' + EMAIL + '?subject=' + encodeURIComponent('Avvisami del prossimo pezzo') + '&body=' + encodeURIComponent('Avvisami quando esce il prossimo pezzo: ' + email);
-    esito.textContent = 'Si apre la tua email: basta premere invia.';
-  }
+  location.href = 'mailto:' + EMAIL + '?subject=' + encodeURIComponent('Avvisami del prossimo pezzo') + '&body=' + encodeURIComponent('Ciao! Avvisami quando esce il prossimo pezzo WEINERVILLE.');
+  document.getElementById('avvisami-esito').textContent = 'Si apre la tua email: basta premere invia.';
 });
 
 /* ---- MENU A TENDINA + PAGINE ---- */
@@ -811,6 +799,7 @@ const scrim = document.getElementById('tendina-scrim');
 function apriMenu(){ tendina.classList.add('aperta'); scrim.classList.add('on'); menuBtn.classList.add('aperto'); }
 function chiudiMenu(){ tendina.classList.remove('aperta'); scrim.classList.remove('on'); menuBtn.classList.remove('aperto'); }
 menuBtn.addEventListener('click', () => tendina.classList.contains('aperta') ? chiudiMenu() : apriMenu());
+document.getElementById('tendina-chiudi').addEventListener('click', e => { e.stopPropagation(); chiudiMenu(); });
 document.getElementById('menu-btn-shop').addEventListener('click', () => tendina.classList.contains('aperta') ? chiudiMenu() : apriMenu());
 scrim.addEventListener('click', chiudiMenu);
 function apriPagina(id){
