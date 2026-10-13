@@ -99,7 +99,7 @@
     -webkit-tap-highlight-color:transparent;
   }
   body.entrato .menu-fisso .menu-btn{display:flex;}
-  body.overlay-aperto .menu-btn{display:none !important;}
+  body.overlay-aperto .menu-fisso .menu-btn{display:none !important;}
   @keyframes brillaMenu{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
   .menu-btn i{display:block;width:16px;height:2px;background:#1a1622;border-radius:2px;transition:.25s;}
   .menu-btn.aperto i:nth-child(1){transform:translateY(5px) rotate(45deg);}
@@ -109,7 +109,7 @@
   .tendina{
     position:fixed;top:0;left:0;z-index:615;
     width:min(78vw,290px);height:100%;
-    background:rgba(13,10,18,.97);border-right:1px solid rgba(201,204,214,.28);
+    background:#FFFFFF;border-right:1px solid rgba(0,0,0,.15);box-shadow:4px 0 18px rgba(0,0,0,.25);
     transform:translateX(-105%);transition:transform .3s ease;
     padding:66px 0 24px;display:flex;flex-direction:column;
     overflow-y:auto;
@@ -118,11 +118,11 @@
   .tendina button{
     background:none;border:none;text-align:left;cursor:pointer;
     font-family:'Anton',sans-serif;font-size:1.02rem;letter-spacing:.06em;text-transform:uppercase;
-    color:var(--chrome);padding:15px 22px;border-bottom:1px solid rgba(201,204,214,.12);
+    color:var(--scuro);padding:15px 22px;border-bottom:1px solid rgba(0,0,0,.1);
     -webkit-tap-highlight-color:transparent;transition:background .2s,color .2s;
   }
-  .tendina button:hover,.tendina button:active{background:rgba(139,95,199,.16);color:var(--viola-chiaro);}
-  .tendina .sub{font-size:.62rem;letter-spacing:.02em;text-transform:none;color:var(--viola-chiaro);opacity:.65;font-family:'Space Mono',monospace;margin-top:3px;display:block;}
+  .tendina button:hover,.tendina button:active{background:rgba(0,0,0,.06);color:var(--viola);}
+  .tendina .sub{font-size:.62rem;letter-spacing:.02em;text-transform:none;color:var(--scuro);opacity:.55;font-family:'Space Mono',monospace;margin-top:3px;display:block;}
   #tendina-scrim{position:fixed;inset:0;z-index:610;background:rgba(5,4,8,.6);opacity:0;visibility:hidden;transition:.3s;}
   #tendina-scrim.on{opacity:1;visibility:visible;}
 
@@ -180,7 +180,7 @@
     padding:10px 4px 0;pointer-events:none;
   }
   .capo-nome{font-family:'Anton',sans-serif;font-size:.82rem;letter-spacing:.05em;text-transform:uppercase;color:var(--chrome);line-height:1.2;}
-  .capo-prezzo{font-size:.66rem;font-weight:700;color:var(--viola-chiaro);}
+  .capo-prezzo{font-size:.66rem;font-weight:700;color:var(--bianco);}
 
   /* ---- TASTI CHROME ---- */
   .chrome{
@@ -256,6 +256,56 @@
     font-family:'Anton',sans-serif;font-size:1.35rem;letter-spacing:.08em;text-transform:uppercase;color:var(--chrome);
   }
   .catalogo-corpo{max-width:520px;margin:0 auto;width:100%;padding:6px 16px 40px;}
+  /* ---- BARRA FISSA DELLO SHOP: menu | logo inciso | lente, carrello ---- */
+  .barra-shop{
+    position:sticky;top:0;z-index:6;background:#FFFFFF;
+    display:grid;grid-template-columns:44px 1fr 88px;align-items:center;
+    padding:8px 12px;border-bottom:1px solid rgba(0,0,0,.12);box-shadow:0 2px 10px rgba(0,0,0,.08);
+  }
+  .barra-shop .menu-btn{position:static;display:flex !important;top:auto;left:auto;}
+  .logo-fermo{display:block;width:auto;height:54px;max-width:44vw;object-fit:contain;margin:0 auto;
+    filter:drop-shadow(0 1px 0 rgba(255,255,255,.9)) drop-shadow(0 -1px 0 rgba(0,0,0,.55)) drop-shadow(0 2px 3px rgba(0,0,0,.25));}
+  .barra-icone{display:flex;gap:6px;justify-content:flex-end;}
+  .icona-barra{
+    position:relative;width:38px;height:38px;border:none;border-radius:9px;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(145deg,#eef0f5 0%,#9297a6 30%,#f6f7fa 50%,#7c8190 70%,#c4c8d3 100%);
+    box-shadow:0 2px 8px rgba(0,0,0,.3), inset 0 1px 1px rgba(255,255,255,.6);
+    -webkit-tap-highlight-color:transparent;
+  }
+  .icona-barra svg{width:19px;height:19px;stroke:#1a1622;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;}
+  .icona-barra .conta{
+    position:absolute;top:-6px;right:-6px;min-width:18px;height:18px;padding:0 5px;border-radius:9px;
+    background:var(--viola);color:#fff;font-family:'Space Mono',monospace;font-size:.62rem;font-weight:700;
+    display:none;align-items:center;justify-content:center;
+  }
+  .icona-barra .conta.on{display:flex;}
+  .cerca-riga{display:none;padding:8px 16px 2px;max-width:520px;margin:0 auto;width:100%;}
+  .cerca-riga.on{display:block;}
+  .cerca-riga input{
+    width:100%;height:42px;padding:0 14px;border-radius:9px;border:1px solid rgba(0,0,0,.3);
+    background:#fff;color:var(--scuro);font-family:'Space Mono',monospace;font-size:16px;outline:none;
+  }
+  .cerca-riga input:focus{border-color:var(--viola);}
+  .catalogo-vuoto{text-align:center;font-size:.72rem;color:var(--scuro);opacity:.6;padding:30px 0;display:none;}
+  .catalogo-vuoto.on{display:block;}
+  /* carrello */
+  .carrello-corpo{max-width:520px;margin:0 auto;width:100%;padding:14px 18px 40px;display:flex;flex-direction:column;gap:12px;}
+  .carrello-titolo{font-family:'Anton',sans-serif;font-size:1.4rem;letter-spacing:.08em;text-transform:uppercase;color:var(--scuro);text-align:center;margin:6px 0 4px;}
+  .carrello-voce{display:grid;grid-template-columns:76px 1fr auto;gap:12px;align-items:center;border:1px solid rgba(0,0,0,.12);border-radius:10px;padding:8px;}
+  .carrello-voce img{width:76px;height:76px;object-fit:contain;display:block;}
+  .carrello-nome{font-family:'Anton',sans-serif;font-size:.82rem;letter-spacing:.04em;text-transform:uppercase;color:var(--scuro);line-height:1.2;}
+  .carrello-dett{font-size:.64rem;color:var(--scuro);opacity:.7;margin-top:2px;}
+  .carrello-prezzo{font-size:.72rem;font-weight:700;color:var(--scuro);margin-top:4px;}
+  .carrello-azioni{display:flex;flex-direction:column;gap:6px;}
+  .carrello-azioni .chrome{padding:2px;}
+  .carrello-azioni .chrome > span{padding:6px 10px;font-size:.5rem;}
+  .carrello-azioni .via{background:none;border:none;color:var(--scuro);opacity:.55;font-family:'Space Mono',monospace;font-size:.6rem;cursor:pointer;text-decoration:underline;}
+  .carrello-tot{display:flex;justify-content:space-between;font-family:'Anton',sans-serif;font-size:1rem;letter-spacing:.06em;text-transform:uppercase;color:var(--scuro);border-top:1px solid rgba(0,0,0,.15);padding-top:12px;}
+  .carrello-nota{font-size:.62rem;line-height:1.6;color:var(--scuro);opacity:.65;text-align:center;}
+  .carrello-vuoto{text-align:center;font-size:.76rem;color:var(--scuro);opacity:.6;padding:40px 0;}
+  .scheda-carrello-btn{padding:3px;}
+  .scheda-carrello-btn > span{font-size:.62rem;letter-spacing:.14em;padding:11px 8px;}
   .catalogo-conta{
     text-align:center;font-size:.6rem;letter-spacing:.24em;text-transform:uppercase;
     color:var(--chrome);opacity:.5;margin-bottom:16px;
@@ -266,8 +316,8 @@
   .schermata .altri-titolo,.schermata .pagamenti,.schermata .pagamenti .altri-metodi,.schermata .sezione-sotto,
   .schermata .pagina-corpo h1,.schermata .pagina-corpo p,.schermata .pagina-corpo .grande{color:var(--scuro);}
   .schermata .pagina-corpo p{opacity:.9;}
-  .schermata .capo-prezzo,.schermata .scheda-prezzo,.schermata .sezione-titolo,.schermata .pagina-corpo h2,
-  .schermata .pagina-corpo a,.schermata .taglie-nota{color:var(--viola);}
+  .schermata .capo-prezzo,.schermata .scheda-prezzo{color:var(--scuro);}
+  .schermata .sezione-titolo,.schermata .pagina-corpo h2,.schermata .pagina-corpo a,.schermata .taglie-nota{color:var(--viola);}
   .schermata .pallini i{background:var(--scuro);}
   .schermata .pallini i.on{background:var(--viola);}
   .schermata .badge-esaurito{background:var(--scuro);color:var(--bianco);}
@@ -406,13 +456,15 @@
 <div class="menu-fisso" aria-hidden="false"><button class="menu-btn" id="menu-btn" aria-label="Menu"><i></i><i></i><i></i></button></div>
 <div id="tendina-scrim"></div>
 <nav class="tendina" id="tendina">
-  <button data-vai="catalogo">Articoli custom</button>
-  <button data-vai="official">WEINERVILLE official</button>
-  <button data-pagina="contatti">Contatti</button>
+  <button data-home="1">Home</button>
+  <button data-filtro="tutti">Shop</button>
+  <button data-filtro="custom">Articoli custom</button>
+  <button data-filtro="official">WEINERVILLE official</button>
   <button data-link="https://www.instagram.com/weinervillestore/">Instagram<span class="sub">@weinervillestore</span></button>
   <button data-link="https://www.vinted.it/member/98251816-weinervillestore">Vinted<span class="sub">weinervillestore</span></button>
   <button data-pagina="sicurezza">Sicurezza del pagamento</button>
   <button data-pagina="legali">Privacy, Cookie e Termini</button>
+  <button data-pagina="contatti">Contatti</button>
 </nav>
 
 <!-- SITO -->
@@ -430,14 +482,14 @@
   <a class="chrome pieno shopnow" id="shopnow" href="#catalogo"><span>SHOP NOW</span></a>
 </main>
 
-<div class="divisore" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=31" alt=""></div>
+<div class="divisore" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=32" alt=""></div>
 
 <!-- AVVISAMI DEL PROSSIMO PEZZO -->
 <section class="avvisami" id="avvisami">
   <div class="avvisami-titolo">Avvisami del prossimo pezzo</div>
   <p class="avvisami-testo">Pezzi unici: quando escono, spariscono. Lascia la tua email e sei il primo a saperlo.</p>
   <form id="avvisami-form" novalidate>
-    <input type="email" id="avvisami-email" placeholder="la tua email" autocomplete="email" required>
+    <input type="email" id="avvisami-email" placeholder="la tua email" autocomplete="email" inputmode="email" autocapitalize="off" required>
     <button type="submit" class="chrome"><span>Avvisami</span></button>
   </form>
   <div class="avvisami-esito" id="avvisami-esito"></div>
@@ -445,20 +497,20 @@
 
 <!-- CATALOGO -->
 <div class="schermata" id="catalogo" aria-label="Shop">
-  <div class="schermata-testa">
-    <button class="tasto-icona" data-chiudi="catalogo" aria-label="Torna alla home">&larr;</button>
-    <span></span>
-    <span style="width:44px"></span>
+  <div class="barra-shop">
+    <button class="menu-btn" id="menu-btn-shop" aria-label="Menu"><i></i><i></i><i></i></button>
+    <img class="logo-fermo" src="logo-fermo.webp?v=32" alt="WEINERVILLE">
+    <div class="barra-icone">
+      <button class="icona-barra" id="btn-cerca" aria-label="Cerca"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg></button>
+      <button class="icona-barra" id="btn-carrello" aria-label="Carrello"><svg viewBox="0 0 24 24"><path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 2-1.5L21 8H6.2"/><circle cx="10" cy="20" r="1.4"/><circle cx="17" cy="20" r="1.4"/></svg><span class="conta" id="carrello-conta">0</span></button>
+    </div>
   </div>
+  <div class="cerca-riga" id="cerca-riga"><input type="search" id="cerca-input" placeholder="cerca un articolo" autocomplete="off" autocapitalize="off"></div>
   <div class="catalogo-corpo">
-    <div class="sezione-blocco" id="custom">
-      <div class="griglia" id="catalogo-griglia"></div>
-    </div>
-    <div class="sezione-blocco" id="official">
-      <div class="griglia" id="official-griglia"></div>
-    </div>
+    <div class="griglia" id="catalogo-griglia"></div>
+    <div class="catalogo-vuoto" id="catalogo-vuoto">Nessun articolo trovato</div>
   </div>
-  <div class="divisore sfasato" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=31" alt=""></div>
+  <div class="divisore sfasato" aria-hidden="true"><img loading="lazy" decoding="async" src="skater.png?v=32" alt=""></div>
 </div>
 
 
@@ -494,6 +546,7 @@
     <div class="taglie" id="scheda-taglie" style="display:none"></div>
     <div class="taglie-nota" id="scheda-taglie-nota" style="display:none"></div>
     <a class="chrome compra" id="scheda-compra" href="#"><span>Acquista</span></a>
+    <button class="chrome scheda-carrello-btn" id="scheda-carrello" type="button"><span>Aggiungi al carrello</span></button>
     <div class="pagamenti">
       <svg viewBox="0 0 24 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="1.5" width="22" height="13" rx="2"/><line x1="1" y1="5.5" x2="23" y2="5.5" stroke-width="2.5"/></svg>
       <b>PayPal</b><span style="opacity:.4">&middot;</span>
@@ -504,10 +557,20 @@
   </div>
 </div>
 
+<!-- CARRELLO -->
+<div class="schermata" id="carrello" role="dialog" aria-modal="true">
+  <div class="schermata-testa">
+    <button class="tasto-icona" data-chiudi="carrello" aria-label="Chiudi">&larr;</button>
+    <span></span>
+    <button class="tasto-icona" data-chiudi="carrello" aria-label="Chiudi">&#10005;</button>
+  </div>
+  <div class="carrello-corpo" id="carrello-corpo"></div>
+</div>
+
 <!-- POPUP -->
 <div id="popup">
   <div class="popup-box" role="dialog" aria-modal="true">
-    <img class="popup-cornice" src="cornice-w.webp?v=31" alt="">
+    <img class="popup-cornice" src="cornice-w.webp?v=32" alt="">
     <button class="popup-chiudi" aria-label="Chiudi">x</button>
     <div class="popup-finestra">
       <div class="popup-titolo" id="popup-titolo"></div>
@@ -561,7 +624,7 @@ function avanzaCoda(){
 const TOUCH = matchMedia('(pointer:coarse)').matches;
 const LEGGERO = TOUCH && ((navigator.deviceMemory && navigator.deviceMemory <= 4) ||
                           (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4));
-const V = '?v=31';
+const V = '?v=32';
 const pausa = ms => new Promise(r => setTimeout(r, ms));
 class Sprite3D {
   constructor(o){
@@ -704,6 +767,7 @@ logoSpin.addEventListener('keydown', e => {
 
 /* ---- AVVISAMI ---- */
 const AVVISAMI_ENDPOINT = '';   // es. 'https://formspree.io/f/xxxxxx' — vuoto = apre l'email
+document.getElementById('avvisami').addEventListener('click', e => { if (!e.target.closest('button')) document.getElementById('avvisami-email').focus(); });
 document.getElementById('avvisami-form').addEventListener('submit', async e => {
   e.preventDefault();
   const inp = document.getElementById('avvisami-email'), esito = document.getElementById('avvisami-esito');
@@ -747,6 +811,7 @@ const scrim = document.getElementById('tendina-scrim');
 function apriMenu(){ tendina.classList.add('aperta'); scrim.classList.add('on'); menuBtn.classList.add('aperto'); }
 function chiudiMenu(){ tendina.classList.remove('aperta'); scrim.classList.remove('on'); menuBtn.classList.remove('aperto'); }
 menuBtn.addEventListener('click', () => tendina.classList.contains('aperta') ? chiudiMenu() : apriMenu());
+document.getElementById('menu-btn-shop').addEventListener('click', () => tendina.classList.contains('aperta') ? chiudiMenu() : apriMenu());
 scrim.addEventListener('click', chiudiMenu);
 function apriPagina(id){
   document.getElementById('pagina-corpo').innerHTML = PAGINE[id];
@@ -755,8 +820,8 @@ function apriPagina(id){
 }
 tendina.querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
   chiudiMenu();
-  if (b.dataset.vai === 'official'){ apriSchermata('catalogo'); setTimeout(() => document.getElementById('official').scrollIntoView({behavior:'smooth', block:'start'}), 80); }
-  else if (b.dataset.vai) apriSchermata(b.dataset.vai);
+  if (b.dataset.home){ ['carrello','scheda','pagina','catalogo'].forEach(chiudiSchermata); }
+  else if (b.dataset.filtro){ ['carrello','scheda','pagina'].forEach(chiudiSchermata); apriCatalogo(b.dataset.filtro); }
   else if (b.dataset.pagina) apriPagina(b.dataset.pagina);
   else if (b.dataset.link) window.open(b.dataset.link, '_blank', 'noopener');
 }));
@@ -960,9 +1025,74 @@ function creaCard(i, soloFoto){
 const homeGriglia = document.getElementById('home-griglia');
 PEZZI.slice(0, 2).forEach((_, i) => homeGriglia.appendChild(creaCard(i)));
 const catGriglia = document.getElementById('catalogo-griglia');
-const offGriglia = document.getElementById('official-griglia');
 const isOfficial = p => /weinerville/i.test(p.nome);
-PEZZI.forEach((p, i) => (isOfficial(p) ? offGriglia : catGriglia).appendChild(creaCard(i, true)));
+const CARD_CAT = PEZZI.map((p, i) => { const c = creaCard(i, true); c.dataset.tipo = isOfficial(p) ? 'official' : 'custom'; c.dataset.nome = p.nome.toLowerCase(); catGriglia.appendChild(c); return c; });
+let filtroAttivo = 'tutti';
+function filtraCatalogo(){
+  const q = document.getElementById('cerca-input').value.trim().toLowerCase();
+  let n = 0;
+  CARD_CAT.forEach(c => {
+    const ok = (filtroAttivo === 'tutti' || c.dataset.tipo === filtroAttivo) && (!q || c.dataset.nome.includes(q));
+    c.style.display = ok ? '' : 'none'; if (ok) n++;
+  });
+  document.getElementById('catalogo-vuoto').classList.toggle('on', n === 0);
+}
+function apriCatalogo(filtro){
+  filtroAttivo = filtro || 'tutti';
+  document.getElementById('cerca-input').value = ''; document.getElementById('cerca-riga').classList.remove('on');
+  filtraCatalogo();
+  document.getElementById('catalogo').scrollTop = 0;
+  apriSchermata('catalogo');
+}
+document.getElementById('btn-cerca').addEventListener('click', () => {
+  const r = document.getElementById('cerca-riga'); r.classList.toggle('on');
+  if (r.classList.contains('on')) setTimeout(() => document.getElementById('cerca-input').focus(), 50);
+  else { document.getElementById('cerca-input').value = ''; filtraCatalogo(); }
+});
+document.getElementById('cerca-input').addEventListener('input', filtraCatalogo);
+
+/* ---- CARRELLO (semplice: lista salvata sul telefono, ogni pezzo si paga col suo link) ---- */
+let CARRELLO = [];
+try { CARRELLO = JSON.parse(localStorage.getItem('wv-carrello') || '[]'); } catch(e) { CARRELLO = []; }
+function salvaCarrello(){ try { localStorage.setItem('wv-carrello', JSON.stringify(CARRELLO)); } catch(e) {} aggiornaConta(); }
+function aggiornaConta(){ const c = document.getElementById('carrello-conta'); c.textContent = CARRELLO.length; c.classList.toggle('on', CARRELLO.length > 0); }
+function prezzoNum(p){ return parseFloat(p.prezzo.replace(/[^0-9,]/g, '').replace(',', '.')) || 0; }
+function aggiungiAlCarrello(i, taglia){
+  CARRELLO.push({i, taglia: taglia || null});
+  salvaCarrello();
+  const b = document.getElementById('scheda-carrello');
+  b.querySelector('span').textContent = 'Aggiunto \u2713';
+  setTimeout(() => { b.querySelector('span').textContent = 'Aggiungi al carrello'; }, 1400);
+}
+function linkVoce(v){
+  const p = PEZZI[v.i]; if (!p.stripe) return '';
+  const t = p.taglie && p.taglie.find(x => x.nome === v.taglia);
+  if (t && t.stripe) return t.stripe;
+  if (!p.taglie) return p.stripe;
+  const rif = (p.nome + ' taglia ' + (v.taglia || '')).replace(/[^A-Za-z0-9 _-]/g, '').trim().replace(/\s+/g, '-');
+  return p.stripe + (p.stripe.includes('?') ? '&' : '?') + 'client_reference_id=' + encodeURIComponent(rif);
+}
+function disegnaCarrello(){
+  const box = document.getElementById('carrello-corpo');
+  box.innerHTML = '<div class="carrello-titolo">Carrello</div>';
+  if (!CARRELLO.length){ box.innerHTML += '<div class="carrello-vuoto">Il carrello \u00e8 vuoto.</div>'; return; }
+  let tot = 0;
+  CARRELLO.forEach((v, k) => {
+    const p = PEZZI[v.i]; tot += prezzoNum(p);
+    const link = linkVoce(v);
+    const voce = document.createElement('div'); voce.className = 'carrello-voce';
+    voce.innerHTML = '<img src="' + copertina(p) + V + '" alt="">' +
+      '<div><div class="carrello-nome">' + p.nome + '</div>' + (v.taglia ? '<div class="carrello-dett">Taglia ' + v.taglia + '</div>' : '') + '<div class="carrello-prezzo">' + p.prezzo + '</div></div>' +
+      '<div class="carrello-azioni">' + (link ? '<a class="chrome" href="' + link + '" target="_blank" rel="noopener"><span>Acquista</span></a>' : '') + '<button class="via" type="button">rimuovi</button></div>';
+    voce.querySelector('.via').addEventListener('click', () => { CARRELLO.splice(k, 1); salvaCarrello(); disegnaCarrello(); });
+    box.appendChild(voce);
+  });
+  box.innerHTML += '<div class="carrello-tot"><span>Totale</span><span>\u20ac ' + tot.toFixed(2).replace('.', ',') + '</span></div>' +
+                   '<div class="carrello-nota">Ogni pezzo \u00e8 unico e si paga con il suo link sicuro Stripe: premi Acquista su ciascun articolo.</div>';
+}
+document.getElementById('btn-carrello').addEventListener('click', () => { disegnaCarrello(); document.getElementById('carrello').scrollTop = 0; apriSchermata('carrello'); });
+document.getElementById('scheda-carrello').addEventListener('click', () => aggiungiAlCarrello(pezzoAperto, tagliaScelta));
+aggiornaConta();
 
 /* ---- SCHERMATE (catalogo, scheda) ---- */
 function apriSchermata(id){
@@ -974,7 +1104,7 @@ function chiudiSchermata(id){
   document.getElementById(id).classList.remove('aperta');
   if (!document.querySelector('.schermata.aperta')){ document.body.classList.remove('bloccato'); document.body.classList.remove('overlay-aperto'); }
 }
-document.getElementById('shopnow').addEventListener('click', e => { e.preventDefault(); apriSchermata('catalogo'); });
+document.getElementById('shopnow').addEventListener('click', e => { e.preventDefault(); apriCatalogo('tutti'); });
 document.querySelectorAll('[data-chiudi]').forEach(b => b.addEventListener('click', () => chiudiSchermata(b.dataset.chiudi)));
 
 /* ---- SCHEDA PRODOTTO ---- */
@@ -1010,6 +1140,7 @@ function apriScheda(i){
     notaT.style.display = 'none';
     notaT.textContent = '';
   }
+  document.getElementById('scheda-carrello').style.display = esaurito(p) ? 'none' : '';
   if (esaurito(p)){
     compra.href = '#'; compra.querySelector('span').textContent = etichettaStato(p); compra.classList.add('venduto');
   } else if (p.stripe){
@@ -1078,6 +1209,7 @@ popup.addEventListener('click', e => { if (e.target === popup) chiudiPopup(); })
 window.addEventListener('keydown', e => {
   if (e.key !== 'Escape') return;
   if (popup.classList.contains('aperto')) chiudiPopup();
+  else if (document.getElementById('carrello').classList.contains('aperta')) chiudiSchermata('carrello');
   else if (scheda.classList.contains('aperta')) chiudiSchermata('scheda');
   else if (document.getElementById('pagina').classList.contains('aperta')) chiudiSchermata('pagina');
   else if (tendina.classList.contains('aperta')) chiudiMenu();
